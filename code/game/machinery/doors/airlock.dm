@@ -6,6 +6,7 @@
 #define AIRLOCK_DENY     5
 #define AIRLOCK_EMAG     6
 var/list/airlock_overlays = list()
+var/global/list/wedge_icon_cache = list()
 
 /obj/machinery/door/airlock
 	name = "airlock"
@@ -49,6 +50,7 @@ var/list/airlock_overlays = list()
 	var/image/old_panel_overlay
 	var/image/old_weld_overlay
 	var/image/old_sparks_overlay
+	var/image/old_wedge_overlay
 
 	door_open_sound          = 'sound/machines/airlock/airlockToggle.ogg'
 	door_close_sound         = 'sound/machines/airlock/airlockToggle.ogg'
@@ -304,6 +306,12 @@ var/list/airlock_overlays = list()
 				panel_overlay = get_airlock_overlay("panel_opening", overlays_file)
 
 	// Doesn't used overlays.Cut() for performance reasons.
+	if(wedged_item)
+		var/image/wedge_overlay = generate_wedge_underlay()
+		if(wedge_overlay != old_wedge_overlay)
+			underlays -= old_wedge_overlay
+			underlays += wedge_overlay
+			old_wedge_overlay = wedge_overlay
 	if(frame_overlay != old_frame_overlay)
 		overlays -= old_frame_overlay
 		overlays += frame_overlay
@@ -640,6 +648,10 @@ var/list/airlock_overlays = list()
 			else
 				visible_message("<span class='userdanger'> [user] headbutts the airlock. Good thing they're wearing a helmet.</span>")
 			return
+
+	if(wedged_item && user.a_intent == I_GRAB && !user.get_active_hand())
+		take_out_wedged_item(user)
+		return
 
 	if(wires.interact(user))
 		return
@@ -1027,22 +1039,30 @@ var/list/airlock_overlays = list()
 
 /obj/machinery/door/airlock/do_afterclose()
 	for(var/turf/T in locs)
-		for(var/mob/living/M in T)
-			if(isrobot(M))
-				M.adjustBruteLoss(DOOR_CRUSH_DAMAGE)
-			else
-				M.adjustBruteLoss(DOOR_CRUSH_DAMAGE)
-				M.SetStunned(5)
-				M.SetWeakened(5)
-			M.visible_message("<span class='red'>[M] was crushed by the [src] door.</span>",
-			                  "<span class='danger'>[src] door crushed you.</span>")
-
-		for(var/obj/structure/window/W in T)
-			W.ex_act(2)
-
-		for(var/obj/effect/fluid/F in T)
-			qdel(F)
+		for(var/atom/movable/AM in T)
+			AM.airlock_crush(DOOR_CRUSH_DAMAGE, src)
 	..()
+
+/atom/movable/proc/crush_damage(damage, obj/machinery/door/airlock/crusher)
+	return
+
+/mob/living/crush_damage(damage, obj/machinery/door/airlock/crusher)
+	adjustBruteLoss(DOOR_CRUSH_DAMAGE)
+	SetStunned(5)
+	SetWeakened(5)
+	visible_message("<span class='warning'>[src] was crushed by the [crusher].</span>",
+			        "<span class='warning'>[crusher] crushed you.</span>")
+
+/mob/living/silicon/robot/crush_damage(damage, obj/machinery/door/airlock/crusher)
+	adjustBruteLoss(damage)
+	visible_message("<span class='warning'>[src] was crushed by the [crusher].</span>",
+			        "<span class='warning'>[crusher] crushed you.</span>")
+
+/obj/structure/window/crush_damage(damage, obj/machinery/door/airlock/crusher)
+	ex_act(2)
+
+/obj/effect/fluid/crush_damage(damage, obj/machinery/door/airlock/crusher)
+	qdel(src)
 
 /obj/machinery/door/airlock/proc/autoclose()
 	if(autoclose)
@@ -1119,6 +1139,89 @@ var/list/airlock_overlays = list()
 			icon          = 'icons/obj/doors/airlocks/highsec/highsec.dmi'
 			overlays_file = 'icons/obj/doors/airlocks/highsec/overlays.dmi'
 	update_icon()
+
+/obj/machinery/door/airlock/proc/force_wedge_item(obj/item/weapon/tool/T)
+	T.forceMove(src)
+	wedged_item = T
+	update_icon()
+	verbs -= /obj/machinery/door/airlock/proc/try_wedge_item
+	verbs += /obj/machinery/door/airlock/proc/take_out_wedged_item
+
+/obj/machinery/door/airlock/proc/try_wedge_item(mob/living/user)
+	set name = "Wedge item"
+	set category = "Object"
+	set src in view(1)
+
+	if(!user)
+		user = usr
+
+	var/obj/item/weapon/tool/T = usr.get_active_hand()
+	if(istype(T) && T.w_class >= ITEM_SIZE_NORMAL) // We do the checks before proc call, because see "proc overhead".
+		if(!density)
+			user.drop_item()
+			force_wedge_item(T)
+			to_chat(usr, "<span class='notice'>You wedge [T] into [src].</span>"))
+		else
+			to_chat(usr, "<span class='notice'>[T] can't be wedged into [src], while [src] is open.</span>")
+
+/obj/machinery/door/airlock/proc/take_out_wedged_item(mob/living/user)
+	set name = "Remove Blockage"
+	set category = "Object"
+	set src in view(1)
+
+	if(!user)
+		user = usr
+
+	if(wedged_item)
+		if(user && !do_after(user, 2 SECONDS, TRUE, src))
+			return
+		wedged_item.forceMove(loc)
+		if(user)
+			user.put_in_hands(wedged_item)
+			to_chat(user, SPAN_NOTICE("You took [wedged_item] out of [src]"))
+		wedged_item = null
+		verbs -= /obj/machinery/door/airlock/proc/take_out_wedged_item
+		verbs += /obj/machinery/door/airlock/proc/try_wedge_item
+		update_icon()
+
+/obj/machinery/door/airlock/MouseDrop(obj/over_object)
+	if(ishuman(usr) && usr == over_object && !usr.incapacitated() && Adjacent(usr))
+		take_out_wedged_item(usr)
+		return
+	return ..()
+
+/obj/machinery/door/airlock/examine(mob/user)
+	..()
+	if(wedged_item)
+		to_chat(user, "You can see [bicon(wedged_item)] [wedged_item] wedged into it.")
+
+/obj/machinery/door/airlock/proc/generate_wedge_overlay()
+	var/cache_string = "[wedged_item.icon]||[wedged_item.icon_state]"
+
+	if(!wedge_icon_cache[cache_string])
+		var/icon/I = icon(wedged_item.icon, wedged_item.icon_state)
+
+		// #define COOL_LOOKING_SHIFT_USING_CROWBAR_RIGHT 14, #define COOL_LOOKING_SHIFT_USING_CROWBAR_DOWN 6 - throw a rock at me if this looks less magic.
+		I.Shift(SOUTH, 6) // These numbers I got by sticking the crowbar in and looking what will look good.
+		I.Shift(EAST, 14)
+		I.Turn(45)
+
+		wedge_icon_cache[cache_string] = I
+		underlays += I
+	else
+		underlays += wedge_icon_cache[cache_string]
+
+/obj/machinery/door/airlock/close(forced = FALSE)
+	if(wedged_item)
+		if(isWireCut(AIRLOCK_WIRE_SAFETY))
+			visible_message("[bicon(src)] <span class='warning'>[wedged_item] is crushed by the weight of [src]</span>")
+			QDEL_NULL(wedged_item)
+			return FAlSE
+		else
+			wedged_item.airlock_crush(DOOR_CRUSH_DAMAGE)
+			return FALSE
+	else
+		return ..()
 
 /obj/structure/door_scrap
 	name = "Door Scrap"
