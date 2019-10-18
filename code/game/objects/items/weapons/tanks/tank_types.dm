@@ -16,6 +16,7 @@
 	icon_state = "oxygen"
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
+	hit_area_coeff = 0.5
 
 /obj/item/weapon/tank/oxygen/atom_init()
 	. = ..()

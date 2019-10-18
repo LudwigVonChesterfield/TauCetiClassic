@@ -99,28 +99,11 @@
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
 			playsound(src, 'sound/items/Wirecutter.ogg', VOL_EFFECTS_MASTER)
 			rigged = 0
+	else if(user.a_intent == I_HURT)
+		return ..()
+
 	else
 		return attack_hand(user)
-
-/obj/structure/closet/crate/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/obj/O in src.contents)
-				qdel(O)
-			qdel(src)
-			return
-		if(2.0)
-			for(var/obj/O in src.contents)
-				if(prob(50))
-					qdel(O)
-			qdel(src)
-			return
-		if(3.0)
-			if (prob(50))
-				qdel(src)
-			return
-		else
-	return
 
 /obj/structure/closet/crate/secure
 	desc = "A secure crate."
@@ -134,6 +117,8 @@
 	var/emag = "securecrateemag"
 	broken = 0
 	locked = 1
+
+	spawn_destruction_reagents = list("plasteel" = 80)
 
 /obj/structure/closet/crate/secure/atom_init()
 	. = ..()

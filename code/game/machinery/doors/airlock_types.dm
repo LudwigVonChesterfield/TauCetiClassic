@@ -121,21 +121,29 @@
 	icon = 'icons/obj/doors/airlocks/station/gold.dmi'
 	mineral = "gold"
 
+	spawn_destruction_reagents = list("gold" = 150)
+
 /obj/machinery/door/airlock/silver
 	name = "silver airlock"
 	icon = 'icons/obj/doors/airlocks/station/silver.dmi'
 	mineral = "silver"
+
+	spawn_destruction_reagents = list("silver" = 150)
 
 /obj/machinery/door/airlock/diamond
 	name = "diamond airlock"
 	icon = 'icons/obj/doors/airlocks/station/diamond.dmi'
 	mineral = "diamond"
 
+	spawn_destruction_reagents = list("diamond" = 150)
+
 /obj/machinery/door/airlock/uranium
 	name = "uranium airlock"
 	icon = 'icons/obj/doors/airlocks/station/uranium.dmi'
 	mineral = "uranium"
 	var/last_event = 0
+
+	spawn_destruction_reagents = list("uranium" = 150)
 
 /obj/machinery/door/airlock/uranium/process()
 	if(world.time > last_event + 20)
@@ -153,6 +161,8 @@
 	desc = "No way this can end badly."
 	icon = 'icons/obj/doors/airlocks/station/phoron.dmi'
 	mineral = "phoron"
+
+	spawn_destruction_reagents = list("phoron" = 150)
 
 /obj/machinery/door/airlock/phoron/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
@@ -178,7 +188,7 @@
 	for(var/obj/machinery/door/airlock/phoron/D in range(3, src))
 		D.ignite(temperature / 4)
 
-	new/obj/structure/door_assembly( src.loc )
+	default_deconstruct()
 	qdel(src)
 
 /obj/machinery/door/airlock/clown
@@ -188,10 +198,14 @@
 	door_open_sound = 'sound/items/bikehorn.ogg'
 	door_close_sound = 'sound/items/bikehorn.ogg'
 
+	spawn_destruction_reagents = list("bananium" = 150)
+
 /obj/machinery/door/airlock/sandstone
 	name = "sandstone airlock"
 	icon = 'icons/obj/doors/airlocks/station/sandstone.dmi'
 	mineral = "sandstone"
+
+	spawn_destruction_reagents = list("sandstone" = 150)
 
 
 /*******************************
@@ -203,35 +217,49 @@
 	opacity = FALSE
 	glass   = TRUE
 
+	spawn_destruction_reagents = list("gold" = 50, "glass" = 100)
+
 /obj/machinery/door/airlock/phoron/glass
 	name    = "glass phoron airlock"
 	opacity = FALSE
 	glass   = TRUE
+
+	spawn_destruction_reagents = list("phoron" = 50, "glass" = 100)
 
 /obj/machinery/door/airlock/silver/glass
 	name    = "glass silver airlock"
 	opacity = FALSE
 	glass   = TRUE
 
+	spawn_destruction_reagents = list("silver" = 50, "glass" = 100)
+
 /obj/machinery/door/airlock/diamond/glass
 	name    = "glass diamond airlock"
 	opacity = FALSE
 	glass   = TRUE
+
+	spawn_destruction_reagents = list("diamond" = 50, "glass" = 100)
 
 /obj/machinery/door/airlock/uranium/glass
 	name    = "glass uranium airlock"
 	opacity = FALSE
 	glass   = TRUE
 
+	spawn_destruction_reagents = list("uranium" = 50, "glass" = 100)
+
 /obj/machinery/door/airlock/clown/glass
 	name    = "glass bananium airlock"
 	opacity = FALSE
 	glass   = TRUE
 
+	spawn_destruction_reagents = list("bananium" = 50, "glass" = 100)
+
 /obj/machinery/door/airlock/sandstone/glass
 	name    = "glass sandstone airlock"
 	opacity = FALSE
 	glass   = TRUE
+
+	spawn_destruction_reagents = list("sandstone" = 50, "glass" = 100)
 
 
 /***********************
@@ -269,6 +297,8 @@
 
 	assembly_type = /obj/structure/door_assembly/door_assembly_vault
 
+	spawn_destruction_reagents = list("plasteel" = 150)
+
 
 /***************
 * Hatch airlocks
@@ -300,6 +330,7 @@
 
 	assembly_type = /obj/structure/door_assembly/door_assembly_highsecurity
 
+	spawn_destruction_reagents = list("plasteel" = 150)
 
 /*****************
 * Shuttle airlocks

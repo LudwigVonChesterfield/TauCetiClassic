@@ -124,6 +124,8 @@
 	sweep_step = 5
 	interupt_on_sweep_hit_types = list(/turf, /obj/machinery/disposal, /obj/structure/table, /obj/structure/rack, /obj/effect/effect/weapon_sweep)
 
+	hit_area_coeff = 0.3
+
 /obj/item/weapon/twohanded/fireaxe/atom_init()
 	. = ..()
 	hitsound = SOUNDIN_DESCERATION

@@ -33,6 +33,10 @@
 	verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
 /obj/item/weapon/reagent_containers/spray/afterattack(atom/A, mob/user)
+	if(user.a_intent == I_HURT)
+		..()
+		return
+
 	if(istype(A, /obj/structure/table) || istype(A, /obj/structure/rack) || istype(A, /obj/structure/closet) \
 	|| istype(A, /obj/item/weapon/reagent_containers) || istype(A, /obj/structure/sink) || istype(A, /obj/structure/stool/bed/chair/janitorialcart))
 		return

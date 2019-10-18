@@ -14,7 +14,7 @@
 	name = "oganic hammer"
 	desc = "A mass of tough, boney tissue,reminiscent of hammer."
 	canremove = 0
-	force = 15
+	force = 20
 	flags = ABSTRACT | DROPDEL
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "arm_hammer"

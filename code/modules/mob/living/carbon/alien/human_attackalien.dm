@@ -5,26 +5,16 @@ This is what happens, when alien attack.
 	..()
 	A.attack_alien(src)
 
-/atom/proc/attack_alien(mob/user)
-	attack_paw(user)
-	return
-
 // Baby aliens
 /mob/living/carbon/alien/facehugger/UnarmedAttack(atom/A)
 	if(ismob(A))
 		SetNextMove(CLICK_CD_MELEE)
 	A.attack_facehugger(src)
 
-/atom/proc/attack_facehugger(mob/user)
-	return
-
 /mob/living/carbon/alien/larva/UnarmedAttack(atom/A)
 	if(ismob(A))
 		SetNextMove(CLICK_CD_MELEE)
 	A.attack_larva(src)
-
-/atom/proc/attack_larva(mob/user)
-	return
 
 /mob/living/carbon/alien/larva/get_unarmed_attack()
 	var/retDam = 1

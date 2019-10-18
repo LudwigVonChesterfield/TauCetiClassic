@@ -16,6 +16,8 @@
 	var/hitstaken = 0
 	var/smashed = FALSE
 
+	spawn_destruction_reagents = list("plasteel" = 80, "glass" = 20)
+
 /obj/structure/closet/fireaxecabinet/Destroy()
 	fireaxe = null
 	return ..()
@@ -80,6 +82,8 @@
 				else
 					icon_state = text("fireaxe[][][][]closing", !!fireaxe, localopened, hitstaken, smashed)
 					addtimer(CALLBACK(src, .proc/update_icon), 10)
+	else if(user.a_intent == I_HURT)
+		return ..()
 	else
 		if(smashed)
 			return
@@ -104,6 +108,9 @@
 				addtimer(CALLBACK(src, .proc/update_icon), 10)
 
 /obj/structure/closet/fireaxecabinet/attack_hand(mob/user)
+	if(user.a_intent == I_HURT)
+		return ..()
+
 	if(user.is_busy(src))
 		return
 	user.SetNextMove(CLICK_CD_MELEE)
@@ -150,9 +157,6 @@
 		fireaxe = null
 		update_icon()
 		return
-	attack_hand(user)
-
-/obj/structure/closet/fireaxecabinet/attack_paw(mob/user)
 	attack_hand(user)
 
 /obj/structure/closet/fireaxecabinet/attack_ai(mob/user)

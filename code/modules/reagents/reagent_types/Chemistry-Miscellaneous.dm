@@ -227,7 +227,9 @@
 	taste_message = "floor cleaner"
 
 /datum/reagent/space_cleaner/reaction_obj(obj/O, volume)
-	if(istype(O,/obj/effect/decal/cleanable))
+	if(istype(O, /obj/effect/decal/cleanable))
+		qdel(O)
+	else if(istype(O, /obj/item/dust))
 		qdel(O)
 	else
 		if(O)
@@ -239,9 +241,11 @@
 			var/turf/simulated/S = T
 			S.dirt = 0
 		T.clean_blood()
+
 		for(var/obj/effect/decal/cleanable/C in T.contents)
 			reaction_obj(C, volume)
-			qdel(C)
+		for(var/obj/item/D in T.contents)
+			reaction_obj(D, volume)
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5,10))

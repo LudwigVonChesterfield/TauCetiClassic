@@ -11,6 +11,10 @@
 	storage = null
 	. = ..()
 
+/datum/storage_ui/proc/close(mob/user)
+	hide_from(user)
+	after_close(user)
+
 /datum/storage_ui/proc/show_to(var/mob/user)
 	return
 

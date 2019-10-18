@@ -450,7 +450,7 @@
 	id = "iron"
 	description = "Pure iron is a metal."
 	reagent_state = SOLID
-	color = "#c8a5dc" // rgb: 200, 165, 220
+	color = "#677482" // rgb: 103, 116, 130
 	overdose = REAGENTS_OVERDOSE
 	taste_message = "metal"
 
@@ -473,9 +473,9 @@
 /datum/reagent/uranium
 	name ="Uranium"
 	id = "uranium"
-	description = "A silvery-white metallic chemical element in the actinide series, weakly radioactive."
+	description = "A ghostly-green metallic chemical element in the actinide series, weakly radioactive."
 	reagent_state = SOLID
-	color = "#b8b8c0" // rgb: 184, 184, 192
+	color = "#6cd475" // rgb: 108, 212, 117
 	taste_message = "bonehurting juice"
 
 /datum/reagent/uranium/on_general_digest(mob/living/M)

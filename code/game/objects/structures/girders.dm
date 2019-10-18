@@ -4,21 +4,12 @@
 	density = 1
 	layer = 2.9
 	var/state = 0
-	var/health = 200
 
-
-/obj/structure/girder/bullet_act(obj/item/projectile/Proj)
-	if(istype(Proj, /obj/item/projectile/beam))
-		health -= Proj.damage
-		..()
-		if(health <= 0)
-			new /obj/item/stack/sheet/metal(get_turf(src))
-			qdel(src)
-
-		return
+	spawn_destruction_reagents = list("iron" = 50)
 
 /obj/structure/girder/attackby(obj/item/W, mob/user)
-	if(user.is_busy()) return
+	if(user.is_busy())
+		return
 	if(istype (W,/obj/item/weapon/changeling_hammer))
 		var/obj/item/weapon/changeling_hammer/C = W
 		visible_message("<span class='warning'><B>[user]</B> has punched \the <B>[src]!</B></span>")
@@ -166,53 +157,22 @@
 	else
 		..()
 
-
-/obj/structure/girder/blob_act()
-	if(prob(40))
-		qdel(src)
-
-
-/obj/structure/girder/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(30))
-				var/remains = pick(/obj/item/stack/rods,/obj/item/stack/sheet/metal)
-				new remains(loc)
-				qdel(src)
-			return
-		if(3.0)
-			if (prob(5))
-				var/remains = pick(/obj/item/stack/rods,/obj/item/stack/sheet/metal)
-				new remains(loc)
-				qdel(src)
-			return
-		else
-	return
-
-/obj/structure/girder/attack_animal(mob/living/simple_animal/M)
-	if(M.environment_smash)
-		..()
-		M.visible_message("<span class='warning'>[M] smashes against [src].</span>", \
-			 "<span class='warning'>You smash against [src].</span>", \
-			 "You hear twisting metal.")
-		playsound(src, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-		health -= M.melee_damage
-		if(health <= 0)
-			new /obj/item/stack/sheet/metal(get_turf(src))
-			qdel(src)
+/obj/structure/girder/on_destroy()
+	var/remains = pick(/obj/item/stack/rods,/obj/item/stack/sheet/metal)
+	new remains(loc)
+	..()
 
 /obj/structure/girder/displaced
 	icon_state = "displaced"
 	anchored = 0
-	health = 50
+
+	spawn_destruction_reagents = list("iron" = 50)
 
 /obj/structure/girder/reinforced
 	icon_state = "reinforced"
 	state = 2
-	health = 500
+
+	spawn_destruction_reagents = list("steel" = 50)
 
 /obj/structure/cultgirder
 	icon= 'icons/obj/cult.dmi'

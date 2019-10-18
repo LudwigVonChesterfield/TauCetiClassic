@@ -97,7 +97,7 @@ var/global/list/rad_collectors = list()
 		return 1
 
 
-/obj/machinery/power/rad_collector/ex_act(severity)
+/obj/machinery/power/rad_collector/ex_act(legacy_severity, turf/epicenter, severity, pressure_modifier)
 	switch(severity)
 		if(2, 3)
 			eject()

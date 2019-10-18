@@ -5,6 +5,8 @@
 	icon_closed = "syndicate"
 	icon_opened = "syndicateopen"
 
+	spawn_destruction_reagents = list("plasteel" = 80)
+
 /obj/structure/closet/malf/suits/PopulateContents()
 	new /obj/item/weapon/tank/jetpack/void(src)
 	new /obj/item/clothing/mask/breath(src)

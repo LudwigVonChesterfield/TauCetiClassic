@@ -215,29 +215,10 @@
 		return
 	toggle_open(user)
 
-/obj/machinery/dna_scannernew/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A in src)
-				A.loc = loc
-				A.ex_act(severity)
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(50))
-				for(var/atom/movable/A in src)
-					A.loc = loc
-					A.ex_act(severity)
-				qdel(src)
-				return
-		if(3.0)
-			if(prob(25))
-				for(var/atom/movable/A in src)
-					A.loc = loc
-					A.ex_act(severity)
-				qdel(src)
-				return
-	return
+/obj/machinery/dna_scannernew/ex_act(legacy_severity, turf/epicenter, severity, pressure_modifier)
+	for(var/atom/movable/AM in src)
+		AM.ex_act(legacy_severity, epicenter, severity, pressure_modifier)
+	..()
 
 
 /obj/machinery/dna_scannernew/blob_act()

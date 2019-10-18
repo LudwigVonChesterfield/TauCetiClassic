@@ -23,7 +23,7 @@
 	var/can_sweep = FALSE
 	var/can_spin = FALSE
 	var/spin_on_middleclick = FALSE
-	var/sweep_step = 4
+	var/sweep_step = -1 // -1 is used as "unset", and will automatically pick a value in setup_destructability().
 
 /obj/item/weapon/proc/can_push()
 	return can_push
@@ -96,6 +96,8 @@
  * Returns TRUE if you hit something.
  */
 /obj/item/weapon/proc/sweep(list/directions, mob/living/user, sweep_delay)
+	is_sweeping = TRUE
+
 	var/turf/start = get_step(src, directions[1])
 
 	user.do_attack_animation(start)
@@ -131,7 +133,9 @@
 			on_sweep_interupt(current_turf, user)
 			break
 
+	is_sweeping = FALSE
 	QDEL_IN(sweep_image, sweep_delay)
+	sweep_image = null
 
 /obj/item/weapon/proc/on_sweep_push(atom/target, turf/T, mob/user)
 	return
@@ -308,8 +312,18 @@
 			shake_camera(M, 1, 1)
 
 /obj/item/weapon/onUserMouseDrop(atom/target, atom/dropping, mob/user)
+	if(user.next_move > world.time || user.incapacitated())
+		return
+
 	var/turf/target_turf = get_turf(target)
 	var/turf/dropping_turf = get_turf(dropping)
+
+	if(get_dir(user, target_turf) == reverse_direction(get_dir(user, dropping_turf)) && can_spin())
+		sweep_spin(user)
+		return TRUE
+
+	if(!istype(target_turf) || !istype(dropping_turf))
+		return
 
 	var/list/turfs = getline(dropping_turf, target_turf)
 	var/list/directions = list()
@@ -321,7 +335,7 @@
 					return TRUE
 			else
 				if(can_pull())
-					sweep_pull(target, user)
+					sweep_pull(dropping, user)
 					return TRUE
 		directions += get_dir(user, T)
 

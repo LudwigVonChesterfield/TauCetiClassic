@@ -27,6 +27,8 @@
 	var/obj/machinery/power/dynamo/Generator = null
 	var/pedaled = 0
 
+	spawn_destruction_reagents = list("steel" = 15)
+
 /obj/structure/stool/bed/chair/pedalgen/atom_init()
 	. = ..()
 	handle_rotation()
@@ -54,10 +56,11 @@
 			Generator.disconnect_from_network()
 			Generator.loc = null
 
-/obj/structure/stool/bed/chair/pedalgen/attack_hand(mob/user)
+/obj/structure/stool/bed/chair/pedalgen/disarmReaction(mob/living/attacker)
 	if(buckled_mob)
-		pedal(user)
-	return 0
+		pedal(attacker)
+		return TRUE
+	return ..()
 
 /obj/structure/stool/bed/chair/pedalgen/proc/pedal(mob/user)
 	pedaled = 1

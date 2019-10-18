@@ -5,41 +5,13 @@
 	opacity = 1
 	density = 1
 
-	damage_cap = 200
 	max_temperature = 20000
 
 	sheet_type = /obj/item/stack/sheet/plasteel
 
+	spawn_destruction_reagents = list("plasteel" = 150)
+
 	var/d_state = INTACT
-
-/turf/simulated/wall/r_wall/attack_hand(mob/user)
-	user.SetNextMove(CLICK_CD_MELEE)
-	if(HULK in user.mutations) //#Z2
-		if(user.a_intent == "hurt")
-			to_chat(user, text("<span class='notice'>You punch the wall.</span>"))
-			take_damage(rand(5, 25))
-			if(prob(25))
-				user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-			if(prob(5))
-				playsound(user, 'sound/weapons/tablehit1.ogg', VOL_EFFECTS_MASTER)
-				var/mob/living/carbon/human/H = user
-				var/obj/item/organ/external/BP = H.bodyparts_by_name[user.hand ? BP_L_ARM : BP_R_ARM]
-				BP.take_damage(rand(5, 15), used_weapon = "Reinforced wall")
-				to_chat(user, text("<span class='warning'>Ouch!!</span>"))
-			else
-				playsound(user, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-			return //##Z2
-
-	if(rotting)
-		to_chat(user, "<span class='notice'>This wall feels rather unstable.</span>")
-		return
-
-	/*user << "<span class='notice'>You push the wall but nothing happens!</span>"
-	playsound(src, 'sound/weapons/Genhit.ogg', VOL_EFFECTS_MASTER, 25)
-	src.add_fingerprint(user)*/ //this code is in standard wall attack_hand proc
-	..()
-	return
-
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W, mob/user)
 
@@ -95,13 +67,13 @@
 		to_chat(user, "<span class='notice'>This wall is too thick to slice through. You will need to find a different path.</span>")
 		return
 
-	if(damage && iswelder(W))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.use(0,user))
 			to_chat(user, "<span class='notice'>You start repairing the damage to [src].</span>")
-			if(W.use_tool(src, user, max(5, damage / 5), volume = 100))
+			if(W.use_tool(src, user, max(5, received_damage / 5), volume = 100))
 				to_chat(user, "<span class='notice'>You finish repairing the damage to [src].</span>")
-				take_damage(-damage)
+				react_to_repair(received_damage, user, WT)
 			return
 		else
 			to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
@@ -250,16 +222,7 @@
 
 //vv OK, we weren't performing a valid deconstruction step or igniting thermite,let's check the other possibilities vv
 
-	//DRILLING
-	if(istype(W,/obj/item/weapon/changeling_hammer) && !rotting)
-		var/obj/item/weapon/changeling_hammer/C = W
-		user.do_attack_animation(src)
-		visible_message("<span class='warning'><B>[user]</B> has punched \the <B>[src]!</B></span>")
-		if(C.use_charge(user, 4))
-			playsound(user, pick('sound/effects/explosion1.ogg', 'sound/effects/explosion2.ogg'), VOL_EFFECTS_MASTER)
-			take_damage(pick(10, 20, 30))
-		return
-	else if (istype(W, /obj/item/weapon/pickaxe/drill/diamond_drill))
+	if (istype(W, /obj/item/weapon/pickaxe/drill/diamond_drill))
 
 		to_chat(user, "<span class='notice'>You begin to drill though the wall.</span>")
 
@@ -330,7 +293,7 @@
 
 	//Finally, CHECKING FOR FALSE WALLS if it isn't damaged
 	else if(!d_state)
-		return attack_hand(user)
+		return ..()
 	return
 
 /turf/simulated/wall/r_wall/update_icon()

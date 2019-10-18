@@ -5,6 +5,8 @@
 	icon_closed = "cabinet_closed"
 	icon_opened = "cabinet_open"
 
+	spawn_destruction_reagents = list("wood" = 80)
+
 /obj/structure/closet/cabinet/update_icon()
 	if(!opened)
 		icon_state = icon_closed
@@ -18,6 +20,8 @@
 	icon_closed = "acloset"
 	icon_opened = "aclosetopen"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/gimmick
 	name = "administrative supply closet"
 	desc = "It's a storage unit for things that have no right being here."
@@ -25,12 +29,16 @@
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/gimmick/russian
 	name = "russian surplus closet"
 	desc = "It's a storage unit for Russian standard-issue surplus."
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/gimmick/russian/PopulateContents()
 	for (var/i in 1 to 5)
@@ -43,6 +51,8 @@
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/gimmick/tacticool/PopulateContents()
 	..()
@@ -63,6 +73,8 @@
 	icon_closed = "syndicate"
 	icon_opened = "syndicateopen"
 	anchored = TRUE
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/thunderdome/tdred
 	name = "red-team Thunderdome closet"

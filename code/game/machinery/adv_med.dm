@@ -79,40 +79,10 @@
 	close_machine(target)
 	playsound(src, 'sound/machines/analysis.ogg', VOL_EFFECTS_MASTER, null, FALSE)
 
-/obj/machinery/bodyscanner/ex_act(severity)
-	var/should_destroy = FALSE
-	switch(severity)
-		if(1.0)
-			should_destroy = TRUE
-		if(2.0)
-			if(prob(50))
-				should_destroy = TRUE
-		if(3.0)
-			if(prob(25))
-				should_destroy = TRUE
-	if(should_destroy)
-		for(var/atom/movable/A in src)
-			A.forceMove(loc)
-			ex_act(severity)
-		qdel(src)
-
-/obj/machinery/bodyscanner/blob_act()
-	if(prob(50))
-		for(var/atom/movable/A in src)
-			A.forceMove(loc)
-		qdel(src)
-
-/obj/machinery/body_scanconsole/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-
-/obj/machinery/body_scanconsole/blob_act()
-	if(prob(50))
-		qdel(src)
+/obj/machinery/bodyscanner/ex_act(legacy_severity, turf/epicenter, severity, pressure_modifier)
+	for(var/atom/movable/AM in src)
+		AM.ex_act(legacy_severity, epicenter, severity, pressure_modifier)
+	..()
 
 /obj/machinery/body_scanconsole/power_change()
 	if(stat & BROKEN)

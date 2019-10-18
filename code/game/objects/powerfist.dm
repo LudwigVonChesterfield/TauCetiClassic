@@ -5,10 +5,14 @@
 	item_state = "powerfist"
 	flags = CONDUCT
 	attack_verb = list("whacked", "fisted", "power-punched")
-	force = 20
-	throwforce = 10
-	throw_range = 7
-	w_class = ITEM_SIZE_NORMAL
+
+	w_class = ITEM_SIZE_LARGE
+	force = 30
+	hit_area_coeff = 0.5
+
+	throwforce = 15
+	throw_range = 4
+
 	origin_tech = "combat=5;powerstorage=3;syndicate=3"
 	var/fisto_setting = 1
 	var/gasperfist = 3
@@ -48,7 +52,6 @@
 	else if(isscrewdriver(W))
 		updateTank(tank, 1, user)
 
-
 /obj/item/weapon/melee/powerfist/proc/updateTank(obj/item/weapon/tank/thetank, removing = 0, mob/living/carbon/human/user)
 	if(removing)
 		if(!tank)
@@ -68,6 +71,19 @@
 		tank = thetank
 		thetank.forceMove(src)
 
+/obj/item/weapon/melee/powerfist/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(user.a_intent == I_HURT)
+		if(!tank)
+			to_chat(user,"<span class='warning'>\The [src] can't operate without a source of gas!</span>")
+			return
+		else if(!tank.air_contents.remove(gasperfist * fisto_setting))
+			to_chat(user,"<span class='warning'>\The [src]'s piston-ram lets out a weak hiss, it needs more gas!</span>")
+			playsound(src, 'sound/effects/refill.ogg', VOL_EFFECTS_MASTER)
+			return
+		new /obj/item/effect/kinetic_blast(target.loc)
+		playsound(src, 'sound/weapons/guns/resonator_blast.ogg', VOL_EFFECTS_MASTER)
+		playsound(src, 'sound/weapons/genhit2.ogg', VOL_EFFECTS_MASTER)
+	..()
 
 /obj/item/weapon/melee/powerfist/attack(mob/living/target, mob/living/user, def_zone)
 	if(!tank)
@@ -77,6 +93,7 @@
 		to_chat(user,"<span class='warning'>\The [src]'s piston-ram lets out a weak hiss, it needs more gas!</span>")
 		playsound(src, 'sound/effects/refill.ogg', VOL_EFFECTS_MASTER)
 		return
+
 	target.apply_damage(force * fisto_setting, BRUTE, def_zone)
 	target.visible_message("<span class='danger'>[user]'s powerfist lets out a loud hiss as they punch [target.name]!</span>", \
 		"<span class='userdanger'>You cry out in pain as [user]'s punch flings you backwards!</span>")

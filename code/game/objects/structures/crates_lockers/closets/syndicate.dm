@@ -5,6 +5,7 @@
 	icon_closed = "syndicate"
 	icon_opened = "syndicateopen"
 
+	spawn_destruction_reagents = list("plasteel" = 80)
 
 /obj/structure/closet/syndicate/personal
 	desc = "It's a storage unit for operative gear."

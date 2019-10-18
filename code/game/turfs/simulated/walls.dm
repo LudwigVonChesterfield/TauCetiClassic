@@ -5,11 +5,10 @@
 	icon_state = "box"
 	plane = GAME_PLANE
 
+	spawn_destruction_reagents = list("steel" = 150)
+	// TODO: remove the mineral, damage, damage_cap vars.
 	var/mineral = "metal"
 	var/rotting = 0
-
-	var/damage = 0
-	var/damage_cap = 100 //Wall will break down to girders if damage reaches this point
 
 	var/damage_overlay
 	var/static/damage_overlays[8]
@@ -51,17 +50,6 @@
 /turf/simulated/wall/examine(mob/user)
 	..()
 
-	if(!damage)
-		to_chat(user, "<span class='info'>It looks fully intact.</span>")
-	else
-		var/dam = damage / damage_cap
-		if(dam <= 0.3)
-			to_chat(user, "<span class='warning'>It looks slightly damaged.</span>")
-		else if(dam <= 0.6)
-			to_chat(user, "<span class='warning'>It looks moderately damaged.</span>")
-		else
-			to_chat(user, "<span class='danger'>It looks heavily damaged.</span>")
-
 	if(rotting)
 		to_chat(user, "<span class='warning'>There is fungus growing on [src].</span>")
 
@@ -69,11 +57,11 @@
 	if(!damage_overlays[1]) //list hasn't been populated
 		generate_overlays()
 
-	if(!damage)
+	if(!received_damage)
 		overlays.Cut()
 		return
 
-	var/overlay = round(damage / damage_cap * damage_overlays.len) + 1
+	var/overlay = round(received_damage / max_received_damage * damage_overlays.len) + 1
 	if(overlay > damage_overlays.len)
 		overlay = damage_overlays.len
 
@@ -84,7 +72,7 @@
 	overlays += damage_overlays[overlay]
 	damage_overlay = overlay
 
-	return
+	update_destruction_decals()
 
 /turf/simulated/wall/proc/generate_overlays()
 	var/alpha_inc = 256 / damage_overlays.len
@@ -97,29 +85,31 @@
 
 //Damage
 
-/turf/simulated/wall/proc/take_damage(dam)
-	if(dam)
-		damage = max(0, damage + dam)
-		update_damage()
-	return
+/turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
+	if(adj_temp > max_temperature)
+		var/datum/destruction_measure/burn_DM = new(src,
+			15.0 * (adj_temp / max_temperature),
+			1.0,
+			HITZONE_MIDDLE,
+			BURN)
+		react_to_damage(null, null, burn_DM)
+	return ..()
 
-/turf/simulated/wall/proc/update_damage()
-	var/cap = damage_cap
+/turf/simulated/wall/update_received_damage()
+	var/cap = max_received_damage
 	if(rotting)
-		cap = cap / 10
+		cap = cap * 0.1
 
-	if(damage >= cap)
-		dismantle_wall()
+	if(received_damage >= cap || destruction_reagents.total_volume <= 0.0)
+		on_destroy(TRUE)
+	else if(received_damage >= cap * 0.8)
+		on_destroy()
 	else
 		update_icon()
 
-	return
-
-/turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
-	if(adj_temp > max_temperature)
-		take_damage(rand(10, 20) * (adj_temp / max_temperature))
-
-	return ..()
+/turf/simulated/wall/on_destroy()
+	crumble_to_dust()
+	dismantle_wall()
 
 /turf/simulated/wall/proc/dismantle_wall(devastated=0, explode=0)
 	if(devastated)
@@ -142,7 +132,6 @@
 		new /obj/effect/decal/cleanable/blood(src)
 		return (new /obj/structure/cultgirder(src))
 
-	new sheet_type(src, 2)
 	return (new /obj/structure/girder(src))
 
 /turf/simulated/wall/proc/devastate_wall()
@@ -150,27 +139,7 @@
 		new /obj/effect/decal/cleanable/blood(src)
 		new /obj/effect/decal/remains/human(src)
 
-	new sheet_type(src, 2)
-	new /obj/item/stack/sheet/metal(src)
-
-/turf/simulated/wall/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			src.ChangeTurf(basetype)
-			return
-		if(2.0)
-			if(prob(75))
-				take_damage(rand(150, 250))
-			else
-				dismantle_wall(1,1)
-		if(3.0)
-			take_damage(rand(0, 250))
-		else
-	return
-
-/turf/simulated/wall/blob_act()
-	take_damage(rand(75, 125))
-	return
+	new sheet_type(src, 1)
 
 // Wall-rot effect, a nasty fungus that destroys walls.
 /turf/simulated/wall/proc/rot()
@@ -246,51 +215,6 @@
 	to_chat(M, "<span class='notice'>You push the wall but nothing happens!</span>")
 	return */
 
-/turf/simulated/wall/attack_animal(mob/living/simple_animal/M)
-	..()
-	if(M.environment_smash >= 2)
-		if(istype(M, /mob/living/simple_animal/hulk))
-			var/mob/living/simple_animal/hulk/Hulk = M
-			playsound(Hulk, 'sound/weapons/tablehit1.ogg', VOL_EFFECTS_MASTER)
-			Hulk.health -= rand(4,10)
-		playsound(M, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-		if(istype(src, /turf/simulated/wall/r_wall))
-			if(M.environment_smash == 3)
-				take_damage(rand(25, 75))
-				to_chat(M, "<span class='info'>You smash against the wall.</span>")
-			else
-				to_chat(M, "<span class='info'>This wall is far too strong for you to destroy.</span>")
-		else
-			if (prob(40) || rotting)
-				to_chat(M, text("<span class='notice'>You smash through the wall.</span>"))
-				dismantle_wall(1)
-			else
-				take_damage(rand(25, 75))
-				to_chat(M, "<span class='info'>You smash against the wall.</span>")
-				return
-			return
-
-/turf/simulated/wall/attack_hand(mob/user)
-	user.SetNextMove(CLICK_CD_MELEE)
-	if(HULK in user.mutations) //#Z2 No more chances, just randomized damage and hurt intent
-		if(user.a_intent == "hurt")
-			playsound(user, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-			to_chat(user, text("<span class='notice'>You punch the wall.</span>"))
-			take_damage(rand(15, 50))
-			if(prob(25))
-				user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-			return //##Z2
-
-	if(rotting)
-		to_chat(user, "<span class='notice'>The wall crumbles under your touch.</span>")
-		dismantle_wall()
-		return
-
-	to_chat(user, "<span class='notice'>You push the wall but nothing happens!</span>")
-	playsound(src, 'sound/weapons/Genhit.ogg', VOL_EFFECTS_MASTER, 25)
-	src.add_fingerprint(user)
-	return
-
 /turf/simulated/wall/attackby(obj/item/weapon/W, mob/user)
 
 	if (!(ishuman(user)|| ticker) && ticker.mode.name != "monkey")
@@ -347,7 +271,7 @@
 		if(user.is_busy()) return
 
 		var/response = "Dismantle"
-		if(damage)
+		if(received_damage)
 			response = alert(user, "Would you like to repair or dismantle [src]?", "[src]", "Repair", "Dismantle")
 
 		var/obj/item/weapon/weldingtool/WT = W
@@ -355,9 +279,9 @@
 		if(WT.use(0,user))
 			if(response == "Repair")
 				to_chat(user, "<span class='notice'>You start repairing the damage to [src].</span>")
-				if(WT.use_tool(src, user, max(5, damage / 5), volume = 100))
+				if(WT.use_tool(src, user, max(5, received_damage / 5), volume = 100))
 					to_chat(user, "<span class='notice'>You finish repairing the damage to [src].</span>")
-					take_damage(-damage)
+					react_to_repair(received_damage, user, WT)
 
 			else if(response == "Dismantle")
 				to_chat(user, "<span class='notice'>You begin slicing through the outer plating.</span>")
@@ -368,6 +292,7 @@
 					if(user.loc == T && user.get_active_hand() == WT)
 						to_chat(user, "<span class='notice'>You remove the outer plating.</span>")
 						dismantle_wall()
+						new sheet_type(src, 2)
 			return
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -429,14 +354,6 @@
 				for(var/mob/O in viewers(user, 5))
 					O.show_message("<span class='warning'>The wall was sliced apart by [user]!</span>", 1, "<span class='warning'>You hear metal being sliced apart and sparks flying.</span>", 2)
 		return
-	else if(istype(W,/obj/item/weapon/changeling_hammer) && !rotting)
-		var/obj/item/weapon/changeling_hammer/C = W
-		visible_message("<span class='danger'>[user] has punched the[src]!</span>")
-		user.do_attack_animation(src)
-		if(C.use_charge(user))
-			playsound(user, pick('sound/effects/explosion1.ogg', 'sound/effects/explosion2.ogg'), VOL_EFFECTS_MASTER)
-			take_damage(pick(10, 20, 30))
-		return
 
 	else if(istype(W,/obj/item/apc_frame))
 		var/obj/item/apc_frame/AH = W
@@ -479,7 +396,7 @@
 		return
 
 	else
-		return attack_hand(user)
+		return ..()
 
 /turf/simulated/wall/singularity_pull(S, current_size)
 	if(current_size >= STAGE_FIVE)

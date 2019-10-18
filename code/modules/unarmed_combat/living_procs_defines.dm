@@ -154,7 +154,7 @@ var/global/combos_cheat_sheet = ""
 
 	return attack_unarmed(attacker)
 
-/mob/living/proc/attack_unarmed(mob/living/attacker)
+/mob/living/attack_unarmed(mob/living/attacker)
 	if(isturf(loc) && istype(loc.loc, /area/start))
 		to_chat(attacker, "No attacking people at spawn, you jackass.")
 		return
@@ -219,10 +219,10 @@ var/global/combos_cheat_sheet = ""
 				return TRUE
 			return hurtReaction(attacker)
 
-/mob/living/proc/helpReaction(mob/living/carbon/human/attacker, show_message = TRUE)
+/mob/living/helpReaction(mob/living/carbon/human/attacker, show_message = TRUE)
 	return TRUE
 
-/mob/living/proc/disarmReaction(mob/living/carbon/human/attacker, show_message = TRUE)
+/mob/living/disarmReaction(mob/living/carbon/human/attacker, show_message = TRUE)
 	attacker.do_attack_animation(src)
 
 	if(!anchored && !is_bigger_than(attacker) && src != attacker) // maxHealth is the current best size estimate.
@@ -246,11 +246,11 @@ var/global/combos_cheat_sheet = ""
 	if(show_message)
 		visible_message("<span class='warning'><B>[attacker] pushed [src]!</B></span>")
 
-/mob/living/proc/grabReaction(mob/living/carbon/human/attacker, show_message = TRUE)
+/mob/living/grabReaction(mob/living/carbon/human/attacker, show_message = TRUE)
 	attacker.Grab(src)
 	return TRUE
 
-/mob/living/proc/hurtReaction(mob/living/carbon/human/attacker, show_message = TRUE)
+/mob/living/hurtReaction(mob/living/carbon/human/attacker, show_message = TRUE)
 	attacker.do_attack_animation(src)
 
 	var/attack_obj = attacker.get_unarmed_attack()

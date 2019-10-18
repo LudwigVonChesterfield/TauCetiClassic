@@ -4,6 +4,8 @@
 	icon_state = "mixed"
 	icon_closed = "mixed"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/athletic_mixed/PopulateContents()
 	new /obj/item/clothing/under/shorts/grey(src)
 	new /obj/item/clothing/under/shorts/black(src)

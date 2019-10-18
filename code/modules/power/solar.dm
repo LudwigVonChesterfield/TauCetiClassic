@@ -313,34 +313,30 @@
 		overlays += image('icons/obj/computer.dmi', "solar_overlay_[dir]", FLY_LAYER, angle2dir(cdir))
 	return
 
+/obj/machinery/computer/default_deconstruct()
+	var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+	var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control( A )
+	if(stat & BROKEN)
+		visible_message("<span class='notice'>[src]'s broken glass falls out.</span>")
+		new /obj/item/weapon/shard( src.loc )
+		A.state = 3
+		A.icon_state = "3"
+	else
+		visible_message("<span class='notice'>[src]'s monitor is disconnected.</span>")
+		A.state = 4
+		A.icon_state = "4"
+	for(var/obj/C in src)
+		C.forceMove(loc)
+	A.circuit = M
+	A.anchored = TRUE
+	qdel(src)
+
 /obj/machinery/power/solar_control/attackby(I, mob/user)
 	if(isscrewdriver(I))
 		if(user.is_busy()) return
 		playsound(src, 'sound/items/Screwdriver.ogg', VOL_EFFECTS_MASTER)
 		if(do_after(user, 20, target = src))
-			if (src.stat & BROKEN)
-				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				new /obj/item/weapon/shard( src.loc )
-				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control( A )
-				for (var/obj/C in src)
-					C.loc = src.loc
-				A.circuit = M
-				A.state = 3
-				A.icon_state = "3"
-				A.anchored = 1
-				qdel(src)
-			else
-				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control( A )
-				for (var/obj/C in src)
-					C.loc = src.loc
-				A.circuit = M
-				A.state = 4
-				A.icon_state = "4"
-				A.anchored = 1
-				qdel(src)
+			default_deconstruct()
 	else
 		src.attack_hand(user)
 	return

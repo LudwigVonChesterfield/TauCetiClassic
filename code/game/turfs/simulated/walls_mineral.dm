@@ -9,6 +9,7 @@
 	name = "uranium wall"
 	desc = "A wall with uranium plating. This is probably a bad idea."
 	icon = 'icons/turf/walls/has_false_walls/uranium_wall.dmi'
+	spawn_destruction_reagents = list("uranium" = 100)
 	mineral = "uranium"
 	sheet_type = /obj/item/stack/sheet/mineral/uranium
 	canSmoothWith = list(/turf/simulated/wall/mineral/uranium, /obj/structure/falsewall/uranium)
@@ -43,6 +44,7 @@
 	name = "gold wall"
 	desc = "A wall with gold plating. Swag!"
 	icon = 'icons/turf/walls/has_false_walls/gold_wall.dmi'
+	spawn_destruction_reagents = list("gold" = 100)
 	mineral = "gold"
 	sheet_type = /obj/item/stack/sheet/mineral/gold
 	canSmoothWith = list(/turf/simulated/wall/mineral/gold, /obj/structure/falsewall/gold)
@@ -51,6 +53,7 @@
 	name = "silver wall"
 	desc = "A wall with silver plating. Shiny!"
 	icon = 'icons/turf/walls/has_false_walls/silver_wall.dmi'
+	spawn_destruction_reagents = list("silver" = 100)
 	mineral = "silver"
 	sheet_type = /obj/item/stack/sheet/mineral/silver
 	canSmoothWith = list(/turf/simulated/wall/mineral/silver, /obj/structure/falsewall/silver)
@@ -59,6 +62,7 @@
 	name = "diamond wall"
 	desc = "A wall with diamond plating. You monster."
 	icon = 'icons/turf/walls/has_false_walls/diamond_wall.dmi'
+	spawn_destruction_reagents = list("diamond" = 100)
 	mineral = "diamond"
 	sheet_type = /obj/item/stack/sheet/mineral/diamond
 	canSmoothWith = list(/turf/simulated/wall/mineral/diamond, /obj/structure/falsewall/diamond)
@@ -67,6 +71,7 @@
 	name = "bananium wall"
 	desc = "A wall with bananium plating. Honk!"
 	icon = 'icons/turf/walls/has_false_walls/bananium_wall.dmi'
+	spawn_destruction_reagents = list("bananium" = 100)
 	mineral = "bananium"
 //	sheet_type = /obj/item/stack/sheet/mineral/bananium
 	canSmoothWith = list(/turf/simulated/wall/mineral/bananium, /obj/structure/falsewall/bananium)
@@ -75,6 +80,7 @@
 	name = "sandstone wall"
 	desc = "A wall with sandstone plating."
 	icon = 'icons/turf/walls/has_false_walls/sandstone_wall.dmi'
+	spawn_destruction_reagents = list("sandstone" = 100)
 	mineral = "sandstone"
 	sheet_type = /obj/item/stack/sheet/mineral/sandstone
 	canSmoothWith = list(/turf/simulated/wall/mineral/sandstone, /obj/structure/falsewall/sandstone)
@@ -85,6 +91,7 @@
 	name = "phoron wall"
 	desc = "A wall with phoron plating. This is definately a bad idea."
 	icon = 'icons/turf/walls/has_false_walls/phoron_wall.dmi'
+	spawn_destruction_reagents = list("phoron" = 100)
 	mineral = "phoron"
 	sheet_type = /obj/item/stack/sheet/mineral/phoron
 	canSmoothWith = list(/turf/simulated/wall/mineral/phoron, /obj/structure/falsewall/phoron)

@@ -10,9 +10,6 @@
 	var/amount_per_transfer_from_this = 10
 	var/possible_transfer_amounts = list(10,25,50,100)
 
-/obj/structure/reagent_dispensers/attackby(obj/item/weapon/W, mob/user)
-	return
-
 /obj/structure/reagent_dispensers/atom_init()
 	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
@@ -29,29 +26,6 @@
 	if (N)
 		amount_per_transfer_from_this = N
 
-/obj/structure/reagent_dispensers/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				new /obj/effect/effect/water(src.loc)
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				new /obj/effect/effect/water(src.loc)
-				qdel(src)
-				return
-		else
-	return
-
-/obj/structure/reagent_dispensers/blob_act()
-	if(prob(50))
-		new /obj/effect/effect/water(src.loc)
-		qdel(src)
-
 
 // "Tanks".
 /obj/structure/reagent_dispensers/watertank
@@ -61,6 +35,8 @@
 	icon_state = "watertank"
 	amount_per_transfer_from_this = 10
 	var/modded = 0
+
+	spawn_destruction_reagents = list("steel" = 100)
 
 /obj/structure/reagent_dispensers/watertank/atom_init()
 	. = ..()
@@ -124,6 +100,8 @@
 	var/modded = 0
 	var/obj/item/device/assembly_holder/rig = null
 
+	spawn_destruction_reagents = list("steel" = 100)
+
 /obj/structure/reagent_dispensers/fueltank/atom_init()
 	. = ..()
 	var/datum/reagents/R = new/datum/reagents(300)
@@ -159,7 +137,9 @@
 		if (modded)
 			leak_fuel(amount_per_transfer_from_this)
 		message_admins("[key_name_admin(user)] set [src] faucet [modded ? "closed" : "open"] @ location [src.x], [src.y], [src.z] [ADMIN_JMP(src)]")
-	if (istype(W,/obj/item/device/assembly_holder))
+
+		add_fingerprint(user)
+	else if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
 			return ..()
@@ -182,20 +162,16 @@
 			test.Shift(EAST,6)
 			overlays += test
 
-	add_fingerprint(usr)
-	return ..()
+			add_fingerprint(user)
 
+	else
+		return ..()
 
-/obj/structure/reagent_dispensers/fueltank/bullet_act(obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
-			explode()
-
-/obj/structure/reagent_dispensers/fueltank/blob_act()
+/*
+	TODO: make fueltank react to fiery things in a most peculiar way...
+/obj/structure/reagent_dispensers/fueltank/on_destroy()
 	explode()
-
-/obj/structure/reagent_dispensers/fueltank/ex_act()
-	explode()
+*/
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
@@ -255,6 +231,8 @@
 	possible_transfer_amounts = null
 	anchored = 1
 
+	spawn_destruction_reagents = list("plastic" = 50)
+
 /obj/structure/reagent_dispensers/water_cooler/atom_init()
 	. = ..()
 	reagents.add_reagent("water",500)
@@ -266,6 +244,8 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "beertankTEMP"
 	amount_per_transfer_from_this = 10
+
+	spawn_destruction_reagents = list("iron" = 90, "wood" = 10)
 
 /obj/structure/reagent_dispensers/beerkeg/atom_init()
 	. = ..()
@@ -306,6 +286,8 @@
 	icon_state = "kvasstank"
 	possible_transfer_amounts = list(25,60,100)
 	amount_per_transfer_from_this = 25
+
+	spawn_destruction_reagents = list("iron" = 90, "gold" = 10)
 
 /obj/structure/reagent_dispensers/kvasstank/atom_init()
 	. = ..()

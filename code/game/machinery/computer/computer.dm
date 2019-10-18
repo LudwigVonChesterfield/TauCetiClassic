@@ -17,6 +17,8 @@
 	var/state_broken_preset = null // used if we want to choose icon_state that is going to be used
 	var/state_nopower_preset = null
 
+	spawn_destruction_reagents = list("steel" = 75, "glass" = 25)
+
 /obj/machinery/computer/atom_init(mapload, obj/item/weapon/circuitboard/C)
 	. = ..()
 	computer_list += src
@@ -131,6 +133,27 @@
 	text = replacetext(text, "\n", "<BR>")
 	return text
 
+/obj/machinery/computer/default_deconstruct()
+	var/obj/structure/computerframe/A = new /obj/structure/computerframe(loc)
+	transfer_fingerprints_to(A)
+	A.circuit = circuit
+	A.anchored = TRUE
+	A.dir = dir
+	circuit = null
+	for(var/obj/C in src)
+		C.forceMove(loc)
+	if(stat & BROKEN)
+		visible_message("<span class='notice'>[src]'s broken glass falls out.</span>")
+		new /obj/item/weapon/shard( src.loc )
+		A.state = 3
+		A.icon_state = "3"
+	else
+		visible_message("<span class='notice'>[src]'s monitor is disconnected.</span>")
+		set_light(0)
+		A.state = 4
+		A.icon_state = "4"
+	qdel(src)
+
 /obj/machinery/computer/attackby(obj/item/I, mob/user)
 	user.SetNextMove(CLICK_CD_INTERACT)
 	if(!ishuman(user))
@@ -139,25 +162,7 @@
 	if(isscrewdriver(I) && circuit && !(flags&NODECONSTRUCT))
 		if(user.is_busy(src)) return
 		if(I.use_tool(src, user, 20, volume = 50))
-			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-			transfer_fingerprints_to(A)
-			A.circuit = circuit
-			A.anchored = 1
-			A.dir = dir
-			circuit = null
-			for (var/obj/C in src)
-				C.loc = src.loc
-			if (src.stat & BROKEN)
-				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
-				new /obj/item/weapon/shard( src.loc )
-				A.state = 3
-				A.icon_state = "3"
-			else
-				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
-				set_light(0)
-				A.state = 4
-				A.icon_state = "4"
-			qdel(src)
+			default_deconstruct()
 	if(iswrench(I))
 		if(user.is_busy(src))
 			return

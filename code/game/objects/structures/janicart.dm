@@ -24,6 +24,8 @@
 
 	var/signs = 0 //maximum capacity hardcoded below
 
+	spawn_destruction_reagents = list("plastic" = 80)
+
 /obj/structure/stool/bed/chair/janitorialcart/atom_init()
 	. = ..()
 	janitorialcart_list += src
@@ -305,10 +307,3 @@
 		buckled_mob.apply_effect(12, STUTTER, 0)
 
 	update_icon()
-
-/obj/structure/stool/bed/chair/janitorialcart/ex_act(severity)
-	spill(100 / severity)
-	..()
-
-/obj/structure/stool/bed/chair/janitorialcart/bullet_act(obj/item/projectile/Proj)
-	spill(Proj.damage * 10)

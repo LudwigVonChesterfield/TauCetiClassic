@@ -38,21 +38,28 @@ var/explosion_in_progress = 0
 
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for(var/turf/T in explosion_turfs)
-		if(explosion_turfs[T] <= 0) continue
-		if(!T) continue
+		if(explosion_turfs[T] <= 0)
+			continue
+		if(!T)
+			continue
 
 		//Wow severity looks confusing to calculate... Fret not, I didn't leave you with any additional instructions or help. (just kidding, see the line under the calculation)
-		var/severity = 4 - round(max(min( 3, ((explosion_turfs[T] - T.explosion_resistance) / (max(3,(power/3)))) ) ,1), 1)								//sanity			effective power on tile				divided by either 3 or one third the total explosion power
+		var/legacy_severity = 4 - round(max(min( 3, ((explosion_turfs[T] - T.explosion_resistance) / (max(3,(power/3)))) ) ,1), 1)								//sanity			effective power on tile				divided by either 3 or one third the total explosion power
 								//															One third because there are three power levels and I
 								//															want each one to take up a third of the crater
+
+		var/severity = explosion_turfs[T]
+
 		var/x = T.x
 		var/y = T.y
 		var/z = T.z
-		T.ex_act(severity)
+
+		T.ex_act(legacy_severity, epicenter, severity)
 		if(!T)
 			T = locate(x,y,z)
 		for(var/atom/A in T)
-			A.ex_act(severity)
+			A.ex_act(legacy_severity, epicenter, severity)
+			CHECK_TICK
 		CHECK_TICK
 
 	explosion_in_progress = 0

@@ -397,6 +397,15 @@
 	victim.apply_effect(5, WEAKEN, blocked = armor_check)
 	victim.apply_damage(30, BRUTE, blocked = armor_check)
 
+	var/atom/dest = victim.loc
+	var/datum/destruction_measure/DM = new(src,
+		30.0,
+		1.0,
+		HITZONE_MIDDLE,
+		BRUTE,
+		DEST_BLUNT)
+	dest.react_to_damage(attacker, null, DM)
+
 	playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
 	victim.visible_message("<span class='danger'>[attacker] has thrown [victim] over their shoulder!</span>")
 
@@ -475,6 +484,15 @@
 		if(L.lying || L.resting || L.crawling)
 			L.apply_damage(30, BRUTE, blocked =0) // A body dropped on us! Armor ain't helping.
 		L.apply_effect(6, WEAKEN, blocked = 0)
+
+	var/atom/dest = victim.loc
+	var/datum/destruction_measure/DM = new(dest,
+		40.0,
+		1.0,
+		HITZONE_MIDDLE,
+		BRUTE,
+		DEST_BLUNT)
+	dest.react_to_damage(attacker, null, DM)
 
 	playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
 	attacker.visible_message("<span class='danger'>[attacker] falls elbow first onto [attacker.loc] with a loud thud!</span>")
@@ -606,6 +624,15 @@
 		L.pass_flags = prev_info_el["pass_flags"]
 		L.apply_effect(5, WEAKEN, blocked = 0)
 
+		var/atom/dest = get_step(L, dropkick_dir)
+		var/datum/destruction_measure/DM = new(dest,
+			L.get_size(),
+			1.0,
+			HITZONE_LOWER,
+			BRUTE,
+			DEST_BLUNT)
+		dest.react_to_damage(attacker, null, DM)
+
 	after_animation(victim, attacker)
 
 // We ought to execute the thing in animation, since it's very complex and so to not enter race conditions.
@@ -665,26 +692,38 @@
 				if(T != attacker.loc) // We bumped into something, so we bumped our victim into it...
 					var/list/to_check = T.contents + attacker.loc.contents - list(attacker)
 					for(var/mob/living/L in to_check)
-						if(L.is_bigger_than(victim))
-							continue
-						var/obj/item/organ/external/BP = BP_CHEST
-						var/armor_check = 0
-						if(ishuman(L))
-							var/mob/living/carbon/human/H = victim
-							BP = H.get_bodypart(BP)
-							armor_check = H.run_armor_check(H, "melee")
+					for(var/atom/A in to_check)
+						if(isliving(A))
+							var/mob/living/L = A
+							if(L.is_bigger_than(victim))
+								continue
+							var/obj/item/organ/external/BP = BP_CHEST
+							var/armor_check = 0
+							if(ishuman(L))
+								var/mob/living/carbon/human/H = victim
+								BP = H.get_bodypart(BP)
+								armor_check = H.run_armor_check(H, "melee")
 
-						var/obj/structure/table/facetable = locate() in T
-						if(facetable)
-							facetable.attackby(victim_G, attacker)
-							playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
-							victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
+							var/obj/structure/table/facetable = locate() in T
+							if(facetable)
+								facetable.attackby(victim_G, attacker)
+								playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
+								victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
+							else
+								playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
+								victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
+
+							L.apply_effect(6, WEAKEN, blocked = armor_check)
+							L.apply_damage(40, BRUTE, blocked = armor_check)
 						else
-							playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
-							victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
-
-						L.apply_effect(6, WEAKEN, blocked = armor_check)
-						L.apply_damage(40, BRUTE, blocked = armor_check)
+							var/atom/dest = victim.loc
+							var/datum/destruction_measure/DM = new(dest,
+								40.0,
+								1.0,
+								HITZONE_MIDDLE,
+								BRUTE,
+								DEST_BLUNT)
+							dest.react_to_damage(attacker, null, DM)
 					break try_steps_loop
 
 				if(!do_after(attacker, attacker.movement_delay() * 0.5, can_move = TRUE, target = victim, progress = FALSE))

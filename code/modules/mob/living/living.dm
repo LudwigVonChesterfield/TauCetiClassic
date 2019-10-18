@@ -1117,7 +1117,7 @@
 /mob/living/proc/get_taste_sensitivity()
 	return TRUE
 
-/mob/living/proc/taste_reagents(datum/reagents/tastes)
+/mob/living/proc/taste_reagents(datum/reagents/tastes, taste_verb)
 	var/t_sens = get_taste_sensitivity()
 	if(!t_sens)//this also works for IPCs and stuff that returns 0 here
 		return
@@ -1149,11 +1149,11 @@
 
 	if(world.time-lasttaste >= 18)//prevent tastes spam
 		if(final_taste_list.len == 0)//too many reagents - none meet their thresholds
-			to_chat(src, "<span class='notice'>You can't really make out what you're tasting...</span>")
+			to_chat(src, "<span class='notice'>You can't really make out what you're [taste_verb]ing...</span>")
 			lasttaste = world.time
 			return
 
-		to_chat(src, "<span class='notice'>You can taste [english_list(final_taste_list)].</span>")
+		to_chat(src, "<span class='notice'>You can [taste_verb] [english_list(final_taste_list)].</span>")
 		lasttaste = world.time
 
 // This proc returns TRUE if less than given percentage is not covered.

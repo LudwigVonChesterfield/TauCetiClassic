@@ -3,18 +3,6 @@
 /obj/item/proc/attack_self(mob/user)
 	return
 
-// No comment
-/atom/proc/attackby(obj/item/W, mob/user, params)
-	return
-
-/atom/movable/attackby(obj/item/W, mob/user, params)
-	if(!(W.flags & NOATTACKANIMATION))
-		user.do_attack_animation(src)
-	user.SetNextMove(CLICK_CD_MELEE)
-	add_fingerprint(user)
-	if(W && !(W.flags & NOBLUDGEON))
-		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
-
 /mob/living/attackby(obj/item/I, mob/user, params)
 	if(!istype(I) || !ismob(user))
 		return
@@ -36,12 +24,6 @@
 		if(istype(H.wear_suit, /obj/item/clothing/suit))
 			var/obj/item/clothing/suit/V = H.wear_suit
 			V.attack_reaction(src, REACTION_ATACKED, user)
-
-// Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
-// Click parameters is the params string from byond Click() code, see that documentation.
-/obj/item/proc/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	return
-
 
 /obj/item/proc/attack(mob/living/M, mob/living/user, def_zone)
 	var/messagesource = M

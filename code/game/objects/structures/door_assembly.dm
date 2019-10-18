@@ -29,6 +29,16 @@
 		electronics = null
 	return ..()
 
+/obj/structure/door_assembly/setup_destructability()
+	if(!spawn_destruction_reagents)
+		if(glass_material && mineral)
+			spawn_destruction_reagents = list(mineral = 50, "glass" = 100)
+		else if(mineral)
+			spawn_destruction_reagents = list(mineral = 150)
+		else
+			spawn_destruction_reagents = list("steel" = 150)
+	..()
+
 /obj/structure/door_assembly/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/pen))
 		var/t = sanitize_safe(input(user, "Enter the name for the door.", name, input_default(created_name)), MAX_LNAME_LEN)

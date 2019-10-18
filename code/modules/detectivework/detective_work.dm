@@ -446,10 +446,6 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					file[2] = new_title
 	updateUsrDialog()
 
-/obj/machinery/computer/forensic_scanning/ex_act()
-	return
-
-
 /obj/machinery/computer/forensic_scanning/proc/add_data_scanner(obj/item/device/W)
 	if(istype(W, /obj/item/device/detective_scanner))
 		var/obj/item/device/detective_scanner/D = W

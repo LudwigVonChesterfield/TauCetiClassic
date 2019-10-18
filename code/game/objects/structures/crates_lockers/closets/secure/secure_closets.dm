@@ -13,7 +13,8 @@
 	var/icon_broken = "securebroken"
 	var/icon_off = "secureoff"
 	wall_mounted = 0 //never solid (You can always pass over it)
-	health = 200
+
+	spawn_destruction_reagents = list("plasteel" = 80)
 
 /obj/structure/closet/secure_closet/can_open()
 	if(src.locked || src.welded)
@@ -109,8 +110,12 @@
 	return TRUE
 
 /obj/structure/closet/secure_closet/attack_hand(mob/user)
+	if(user.a_intent == I_HURT)
+		return ..()
+
 	src.add_fingerprint(user)
 	user.SetNextMove(CLICK_CD_RAPID)
+
 	if(src.locked)
 		src.togglelock(user)
 	else

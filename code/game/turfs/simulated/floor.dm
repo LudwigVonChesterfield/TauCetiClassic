@@ -44,6 +44,8 @@ var/list/wood_icons = list("wood","wood-broken")
 	var/floor_type = /obj/item/stack/tile/plasteel
 	var/lightfloor_state // for light floors, this is the state of the tile. 0-7, 0x4 is on-bit - use the helper procs below
 
+	spawn_destruction_reagents = list("iron" = 150)
+
 /turf/simulated/floor/proc/get_lightfloor_state()
 	return lightfloor_state & LIGHTFLOOR_STATE_BITS
 
@@ -79,31 +81,6 @@ var/list/wood_icons = list("wood","wood-broken")
 //		if (!( locate(/obj/machinery/mass_driver, src) ))
 //			return 0
 //	return ..()
-
-/turf/simulated/floor/ex_act(severity)
-	//set src in oview(1)
-	switch(severity)
-		if(1.0)
-			src.ChangeTurf(basetype)
-		if(2.0)
-			switch(pick(1,2;75,3))
-				if (1)
-					src.ReplaceWithLattice()
-					if(prob(33)) new /obj/item/stack/sheet/metal(src)
-				if(2)
-					src.ChangeTurf(basetype)
-				if(3)
-					if(prob(80))
-						src.break_tile_to_plating()
-					else
-						src.break_tile()
-					src.hotspot_expose(1000,CELL_VOLUME)
-					if(prob(33)) new /obj/item/stack/sheet/metal(src)
-		if(3.0)
-			if (prob(50))
-				src.break_tile()
-				src.hotspot_expose(1000,CELL_VOLUME)
-	return
 
 /turf/simulated/floor/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!burnt && prob(5))
@@ -246,13 +223,30 @@ var/list/wood_icons = list("wood","wood-broken")
 	return src.attack_hand(user)
 
 /turf/simulated/floor/attack_hand(mob/user)
-	if (is_light_floor())
+	if(user.a_intent == I_HURT)
+		return ..()
+	if(is_light_floor())
 		toggle_lightfloor_on()
 		update_icon()
-	..()
 
 /turf/simulated/floor/proc/gets_drilled()
 	return
+
+/turf/simulated/floor/update_received_damage()
+	if(received_damage >= max_received_damage || destruction_reagents.total_volume <= 0.0)
+		on_destroy()
+	else if(received_damage >= max_received_damage * 0.5)
+		break_tile_to_plating()
+	else if(received_damage >= max_received_damage * 0.2)
+		/*
+			TODO:
+				find out why floor doesn't update to plating on explosions.
+		*/
+		break_tile()
+
+/turf/simulated/floor/on_destroy()
+	crumble_to_dust()
+	ReplaceWithLattice()
 
 /turf/simulated/floor/proc/break_tile_to_plating()
 	if(!is_plating())
@@ -380,8 +374,16 @@ var/list/wood_icons = list("wood","wood-broken")
 	set_light(0)
 	floor_type = null
 	intact = 0
-	broken = 0
-	burnt = 0
+	broken = FALSE
+	burnt = FALSE
+
+	received_damage = 0
+	spawn_destruction_reagents = list("steel" = 150)
+	for(var/decal_type in destruction_decals)
+		QDEL_NULL(destruction_decals[decal_type])
+		destruction_decals -= decal_type
+
+	setup_destructability()
 
 	update_icon()
 	levelupdate()
@@ -407,6 +409,9 @@ var/list/wood_icons = list("wood","wood-broken")
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
 	floor_type = /obj/item/stack/tile/plasteel
+	spawn_destruction_reagents = list("plasteel" = 150)
+	setup_destructability()
+
 	icon_state = "floor"
 	icon_regular_floor = icon_state
 
@@ -428,6 +433,8 @@ var/list/wood_icons = list("wood","wood-broken")
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
 	floor_type = /obj/item/stack/tile/light
+	spawn_destruction_reagents = list("plasteel" = 100, "glass" = 50)
+	setup_destructability()
 
 	update_icon()
 	levelupdate()
@@ -464,6 +471,8 @@ var/list/wood_icons = list("wood","wood-broken")
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
 	floor_type = /obj/item/stack/tile/wood
+	spawn_destruction_reagents = list("wood" = 150)
+	setup_destructability()
 
 	update_icon()
 	levelupdate()
@@ -482,17 +491,18 @@ var/list/wood_icons = list("wood","wood-broken")
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
 	floor_type = /obj/item/stack/tile/carpet
+	spawn_destruction_reagents = list("fabric" = 150)
+	setup_destructability()
 
 	update_icon()
 	levelupdate()
 
 /turf/simulated/floor/attackby(obj/item/C, mob/user)
-
 	if(!C || !user)
 		return 0
 	user.SetNextMove(CLICK_CD_INTERACT)
 
-	if(istype(C,/obj/item/weapon/light/bulb)) //only for light tiles
+	if(istype(C, /obj/item/weapon/light/bulb)) //only for light tiles
 		if(is_light_floor())
 			if(get_lightfloor_state())
 				user.remove_from_mob(C)
@@ -503,7 +513,7 @@ var/list/wood_icons = list("wood","wood-broken")
 			else
 				to_chat(user, "<span class='notice'>The lightbulb seems fine, no need to replace it.</span>")
 
-	if(iscrowbar(C) && (!(is_plating())))
+	else if(iscrowbar(C) && (!(is_plating())))
 		if(broken || burnt)
 			to_chat(user, "<span class='warning'>You remove the broken plating.</span>")
 		else
@@ -523,7 +533,7 @@ var/list/wood_icons = list("wood","wood-broken")
 
 		return
 
-	if(isscrewdriver(C))
+	else if(isscrewdriver(C))
 		if(is_wood_floor())
 			if(broken || burnt)
 				return
@@ -541,7 +551,7 @@ var/list/wood_icons = list("wood","wood-broken")
 			playsound(src, 'sound/items/Screwdriver.ogg', VOL_EFFECTS_MASTER)
 		return
 
-	if(istype(C, /obj/item/stack/rods))
+	else if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
 		if (is_plating())
 			if (R.get_amount() >= 2)
@@ -560,7 +570,7 @@ var/list/wood_icons = list("wood","wood-broken")
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return
 
-	if(istype(C, /obj/item/stack/tile))
+	else if(istype(C, /obj/item/stack/tile))
 		if (is_catwalk())
 			to_chat(user, "<span class='warning'>The catwalk is too primitive to support tiling.</span>")
 		if(is_plating())
@@ -593,7 +603,7 @@ var/list/wood_icons = list("wood","wood-broken")
 				to_chat(user, "<span class='notice'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
 
 
-	if(iscoil(C))
+	else if(iscoil(C))
 		if(is_plating() || is_catwalk())
 			var/obj/item/stack/cable_coil/coil = C
 			for(var/obj/structure/cable/LC in src)
@@ -604,7 +614,7 @@ var/list/wood_icons = list("wood","wood-broken")
 		else
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 
-	if(istype(C, /obj/item/weapon/shovel))
+	else if(istype(C, /obj/item/weapon/shovel))
 		if(is_grass_floor())
 			new /obj/item/weapon/ore/glass(src)
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
@@ -613,7 +623,7 @@ var/list/wood_icons = list("wood","wood-broken")
 		else
 			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
 
-	if(iswelder(C))
+	else if(iswelder(C))
 		var/obj/item/weapon/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
@@ -625,6 +635,9 @@ var/list/wood_icons = list("wood","wood-broken")
 					broken = 0
 				else
 					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+
+	else
+		..()
 
 #undef LIGHTFLOOR_ON_BIT
 

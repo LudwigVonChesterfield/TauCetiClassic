@@ -16,10 +16,6 @@
 		queue_smooth_neighbors(src)
 	return ..()
 
-/obj/structure/blob_act()
-	if(prob(50))
-		qdel(src)
-
 /obj/structure/ex_act(severity)
 	switch(severity)
 		if(1.0)

@@ -5,6 +5,8 @@
 	icon_state = "densecrate"
 	density = 1
 
+	spawn_destruction_reagents = list("wood" = 80)
+
 /obj/structure/largecrate/attack_hand(mob/user)
 	to_chat(user, "<span class='notice'>You need a crowbar to pry this open!</span>")
 	return

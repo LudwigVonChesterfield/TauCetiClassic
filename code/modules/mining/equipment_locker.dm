@@ -379,10 +379,6 @@
 			return
 	qdel(voucher)
 
-/obj/machinery/mineral/equipment_locker/ex_act()
-	return
-
-
 /**********************Mining Equipment Locker Items**************************/
 /**********************Mining Rig Pack**********************/
 

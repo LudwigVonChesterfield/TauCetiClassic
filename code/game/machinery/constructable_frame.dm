@@ -13,6 +13,8 @@
 	var/list/req_component_names = null // user-friendly names of components
 	var/state = 1
 
+	spawn_destruction_reagents = list("steel" = 100)
+
 // unfortunately, we have to instance the objects really quickly to get the names
 // fortunately, this is only called once when the board is added and the items are immediately GC'd
 // and none of the parts do much in their constructors

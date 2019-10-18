@@ -23,16 +23,9 @@
 
 	A.attack_hand(src)
 
-/atom/proc/attack_hand(mob/user)
-	return
-
 /*
 	Animals & All Unspecified
 */
-/atom/proc/attack_animal(mob/user)
-	user.do_attack_animation(src)
-	user.SetNextMove(CLICK_CD_MELEE) // animals only punching things.
-
 /mob/living/simple_animal/UnarmedAttack(atom/A)
 	..()
 	A.attack_animal(src)
@@ -43,9 +36,6 @@
 /mob/living/carbon/monkey/UnarmedAttack(atom/A)
 	..()
 	A.attack_paw(src)
-
-/atom/proc/attack_paw(mob/user)
-	return
 
 /*
 	Monkey RestrainedClickOn() was apparently the
@@ -80,9 +70,6 @@
 /mob/living/carbon/slime/UnarmedAttack(atom/A)
 	..()
 	A.attack_slime(src)
-
-/atom/proc/attack_slime(mob/user)
-	return
 
 /*
 	New Players:

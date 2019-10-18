@@ -125,6 +125,8 @@ Class Procs:
 	var/radio_filter_out
 	var/radio_filter_in
 
+	spawn_destruction_reagents = list("steel" = 100)
+
 /obj/machinery/atom_init()
 	. = ..()
 	machines += src
@@ -209,26 +211,6 @@ Class Procs:
 			target.pulledby.stop_pulling()
 	updateUsrDialog()
 	update_icon()
-
-/obj/machinery/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(25))
-				qdel(src)
-				return
-		else
-	return
-
-/obj/machinery/blob_act()
-	if(prob(50))
-		qdel(src)
 
 // The main proc that controls power usage of a machine, change use_power only with this proc
 /obj/machinery/proc/set_power_use(new_use_power)
@@ -329,6 +311,9 @@ Class Procs:
 
 // set_machine must be 0 if clicking the machinery doesn't bring up a dialog
 /obj/machinery/attack_hand(mob/user)
+	if(user.a_intent == I_HURT)
+		..()
+		return FALSE
 	if ((user.lying || user.stat) && !IsAdminGhost(user))
 		return 1
 	if(!is_interactable())
@@ -373,20 +358,23 @@ Class Procs:
 		open_machine()
 		return 1
 
+/obj/machinery/proc/default_deconstruct()
+	deconstruction()
+	playsound(src, 'sound/items/Crowbar.ogg', VOL_EFFECTS_MASTER)
+	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(loc)
+	transfer_fingerprints_to(M)
+	M.state = 2
+	M.icon_state = "box_1"
+	for(var/obj/item/I in component_parts)
+		if(I.reliability != 100 && crit_fail)
+			I.crit_fail = 1
+		I.loc = loc
+	qdel(src)
+
 /obj/machinery/proc/default_deconstruction_crowbar(obj/item/weapon/crowbar/C, ignore_panel = 0)
 	. = istype(C) && (panel_open || ignore_panel) &&  !(flags & NODECONSTRUCT)
 	if(.)
-		deconstruction()
-		playsound(src, 'sound/items/Crowbar.ogg', VOL_EFFECTS_MASTER)
-		var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(loc)
-		transfer_fingerprints_to(M)
-		M.state = 2
-		M.icon_state = "box_1"
-		for(var/obj/item/I in component_parts)
-			if(I.reliability != 100 && crit_fail)
-				I.crit_fail = 1
-			I.loc = loc
-		qdel(src)
+		default_deconstruct()
 
 /obj/machinery/proc/default_deconstruction_screwdriver(mob/user, icon_state_open, icon_state_closed, obj/item/weapon/screwdriver/S)
 	if(istype(S) &&  !(flags & NODECONSTRUCT))

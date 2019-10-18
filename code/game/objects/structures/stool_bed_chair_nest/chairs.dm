@@ -14,6 +14,9 @@
 
 	var/roll_sound = null // Janicart and office chair use this when moving.
 
+	var/rotating = TRUE
+	var/rotate_times = 0
+
 /obj/structure/stool/bed/chair/atom_init()
 	..()
 	return INITIALIZE_HINT_LATELOAD
@@ -62,7 +65,6 @@
 	occupant.visible_message("<span class='danger'>[occupant] crashed into \the [A]!</span>")
 
 /obj/structure/stool/bed/chair/attackby(obj/item/weapon/W, mob/user)
-	..()
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
 		if(!SK.status)
@@ -76,8 +78,46 @@
 		SK.loc = E
 		SK.master = E
 		qdel(src)
+	else
+		..()
 
-/obj/structure/stool/bed/chair/attack_hand(mob/user)
+/obj/structure/stool/bed/chair/proc/rotate_times(times, delay=2, degrees=90)
+	if(rotating)
+		rotate_times = min(rotate_times + times, 10)
+		return
+
+	rotating = TRUE
+	while(rotate_times > 0)
+		if(QDELING(src))
+			return
+		dir = turn(dir, degrees)
+		sleep(delay)
+		handle_rotation()
+		rotate_times -= 1
+	rotating = FALSE
+
+/obj/structure/stool/bed/chair/on_destruction(atom/movable/demo, obj/item/I, datum/destruction_measure/DM)
+	if(DM.damage_type == BRUTE)
+		var/est_mass = get_mass()
+
+		switch(DM.damage_zone)
+			if(HITZONE_UPPER, HITZONE_LOWER)
+				if(DM.applied_force > est_mass && can_flipped && !flipped)
+					visible_message("<span class='notice'>[src] is flipped down!</span>")
+					flip()
+					if(buckled_mob && !buckled_mob.restrained())
+						var/mob/living/L = buckled_mob
+						unbuckle_mob()
+						L.apply_effect(2, WEAKEN, 0)
+						L.apply_damage(3, BRUTE, BP_HEAD)
+			if(HITZONE_MIDDLE)
+				if(DM.applied_force > est_mass)
+					var/rotations = round(DM.applied_force / est_mass)
+					var/delay = CLAMP(3 - rotations / 2, 1, 3)
+					INVOKE_ASYNC(src, .proc/rotate_times, rotations, delay)
+	. = ..()
+
+/obj/structure/stool/bed/chair/disarmReaction(mob/living/user)
 	if(can_flip(user))
 		var/flip_time = 20	//2 sec without someone
 		if(!isnull(buckled_mob))
@@ -94,8 +134,8 @@
 		else if(!user.is_busy() && do_after(user, flip_time, target = usr))
 			user.visible_message("<span class='notice'>[user] flips \the [src] up.</span>","<span class='notice'>You flips \the [src] up.</span>")
 			flip()
-	else
-		..()
+		return TRUE
+	return ..()
 
 /obj/structure/stool/bed/chair/user_buckle_mob(mob/living/M, mob/user)
 	if(dir == NORTH && !istype(src, /obj/structure/stool/bed/chair/schair/wagon/bench))
@@ -156,7 +196,7 @@
 		layer = OBJ_LAYER
 
 /obj/structure/stool/bed/chair/proc/can_flip(mob/living/carbon/human/user)
-	if(!user || !isturf(user.loc) || user.incapacitated() || user.lying || user.a_intent != "hurt"|| !can_flipped)
+	if(!user || !isturf(user.loc) || user.incapacitated() || user.lying || user.a_intent != I_DISARM || !can_flipped)
 		return 0
 	return 1
 
@@ -191,10 +231,14 @@
 /obj/structure/stool/bed/chair/barber
 	icon_state = "barber_chair"
 
+	spawn_destruction_reagents = list("iron" = 10, "plastic" = 5)
+
 /obj/structure/stool/bed/chair/metal
 	icon_state = "chair_gray"
 	can_flipped = 1
 	behind = "chair_behind_gray"
+
+	spawn_destruction_reagents = list("iron" = 15)
 
 /obj/structure/stool/bed/chair/metal/blue
 	icon_state = "chair_blue"
@@ -227,6 +271,8 @@
 	icon_state = "schair"
 	var/sarmrest = null
 
+	spawn_destruction_reagents = list("steel" = 15)
+
 /obj/structure/stool/bed/chair/schair/atom_init()
 	sarmrest = image("icons/obj/objects.dmi", "schair_armrest", layer = FLY_LAYER)
 	. = ..()
@@ -243,10 +289,14 @@
 	name = "wooden chair"
 	desc = "Old is never too old to not be in fashion."
 
+	spawn_destruction_reagents = list("wood" = 15)
+
 /obj/structure/stool/bed/chair/wood/wings
 	icon_state = "wooden_chair_wings"
 	name = "wooden chair"
 	desc = "Old is never too old to not be in fashion."
+
+	spawn_destruction_reagents = list("wood" = 15)
 
 /obj/structure/stool/bed/chair/wood/attackby(obj/item/weapon/W, mob/user)
 	if(iswrench(W))
@@ -277,6 +327,8 @@
 	icon_state = "comfychair"
 	color = rgb(255,255,255)
 	var/armrest = null
+
+	spawn_destruction_reagents = list("plastic" = 15)
 
 /obj/structure/stool/bed/chair/comfy/atom_init()
 	armrest = image("icons/obj/objects.dmi", "comfychair_armrest", layer = FLY_LAYER)
@@ -309,6 +361,8 @@
 	can_flipped = 1
 
 	roll_sound = 'sound/effects/roll.ogg'
+
+	spawn_destruction_reagents = list("plastic" = 15)
 
 /obj/structure/stool/bed/chair/office/light
 	icon_state = "officechair_white"

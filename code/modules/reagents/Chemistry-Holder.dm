@@ -348,6 +348,11 @@ var/const/INGEST = 2
 			del_reagent(R.id)
 		else
 			total_volume += R.volume
+
+	if(my_atom && my_atom.destruction_decals[DEST_POKE])
+		for(var/datum/destruction_decal/leak/L in my_atom.destruction_decals[DEST_POKE])
+			L.process_leak()
+
 	return 0
 
 /datum/reagents/proc/clear_reagents()
@@ -395,9 +400,12 @@ var/const/INGEST = 2
 	return
 
 /datum/reagents/proc/add_reagent(reagent, amount, list/data=null, safety = 0)
-	if(!isnum(amount)) return 1
-	if(amount < 0) return 0
-	if(amount > 2000) return
+	if(!isnum(amount))
+		return 1
+	if(amount < 0)
+		return 0
+	if(amount > 2000)
+		return
 	update_total()
 	if(total_volume + amount > maximum_volume) amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldnt happen. Will happen.
 

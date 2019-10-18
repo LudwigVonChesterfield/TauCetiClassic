@@ -49,9 +49,14 @@ var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin
 	var/static/list/casting_clothes
 
 /obj/effect/proc_holder/spell/proc/cast_check(skipcharge = 0,mob/user = usr) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
-
+	/*
 	if(((!user.mind) || !(src in user.mind.spell_list)) && !(src in user.spell_list))
 		to_chat(usr, "<span class='red'> You shouldn't have this spell! Something's wrong.</span>")
+		return 0
+	*/
+
+	if(!user.mind)
+		to_chat(user, "<span class='red'> You shouldn't have this spell! Something's wrong.</span>")
 		return 0
 
 	if(is_centcom_level(usr.z) && !centcomm_cancast) //Certain spells are not allowed on the centcomm zlevel

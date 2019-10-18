@@ -12,6 +12,8 @@
 	var/brake = 0
 	var/alert = 0
 
+	spawn_destruction_reagents = list("plasteel" = 15)
+
 /obj/structure/stool/bed/chair/wheelchair/handle_rotation()
 	overlays = null
 	var/image/O = image(icon = 'icons/obj/objects.dmi', icon_state = "w_overlay", layer = FLY_LAYER, dir = src.dir)
@@ -135,11 +137,10 @@
 	handle_rotation()
 
 /obj/structure/stool/bed/chair/wheelchair/attack_hand(mob/living/user)
-	if (pulling)
+	if(pulling)
 		MouseDrop(usr)
 	else
 		user_unbuckle_mob(user)
-	return
 
 /obj/structure/stool/bed/chair/wheelchair/MouseDrop(over_object, src_location, over_location)
 	..()

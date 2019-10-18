@@ -31,9 +31,13 @@
 	icon_state = "wood"
 	floor_type = /obj/item/stack/tile/wood
 
+	spawn_destruction_reagents = list("wood" = 150)
+
 /turf/unsimulated/desert
 	name = "sand"
 	icon_state = "asteroid"
+
+	spawn_destruction_reagents = list("sandstone" = 150)
 
 /turf/simulated/floor/engine
 	name = "reinforced floor"
@@ -114,6 +118,8 @@
 	floor_type = null
 	intact = 0
 
+	spawn_destruction_reagents = list("steel" = 150)
+
 /turf/simulated/floor/plating/airless
 	icon_state = "plating"
 	name = "airless plating"
@@ -172,6 +178,8 @@
 /turf/simulated/floor/beach/sand
 	name = "Sand"
 	icon_state = "sand"
+
+	spawn_destruction_reagents = list("sandstone" = 150)
 
 /turf/simulated/floor/beach/coastline
 	name = "Coastline"

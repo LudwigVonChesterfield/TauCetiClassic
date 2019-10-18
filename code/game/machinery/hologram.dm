@@ -210,23 +210,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		stat |= ~NOPOWER
 	update_power_use()
 
-//Destruction procs.
-/obj/machinery/hologram/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-		if(3.0)
-			if (prob(5))
-				qdel(src)
-	return
-
-/obj/machinery/hologram/blob_act()
-	qdel(src)
-	return
-
 /obj/machinery/hologram/meteorhit()
 	qdel(src)
 	return

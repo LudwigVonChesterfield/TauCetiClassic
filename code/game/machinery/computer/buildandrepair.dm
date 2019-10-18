@@ -10,6 +10,8 @@
 	var/obj/item/weapon/circuitboard/circuit = null
 //	weight = 1.0E8
 
+	spawn_destruction_reagents = list("steel" = 100)
+
 /obj/item/weapon/circuitboard
 	density = 0
 	anchored = 0

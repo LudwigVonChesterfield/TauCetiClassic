@@ -6,7 +6,7 @@
 	nodamage = 0
 	flag = "bullet"
 	embed = 1
-	sharp = 1
+	sharp = TRUE
 	var/stoping_power = 0
 
 	muzzle_type = /obj/effect/projectile/bullet/muzzle

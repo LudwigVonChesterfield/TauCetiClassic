@@ -4,3 +4,5 @@
 	icon = 'icons/turf/walls/cult_wall.dmi'
 	icon_state = "cult"
 	canSmoothWith = null
+
+	spawn_destruction_reagents = list("iron" = 100, "unholywater" = 25)

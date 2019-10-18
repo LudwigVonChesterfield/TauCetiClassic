@@ -18,6 +18,9 @@
 	can_pull = TRUE
 	hit_on_harm_pull = TRUE
 
+	sharp = TRUE
+	hit_area_coeff = 0.1 // Very-very pointy.
+
 /obj/item/weapon/twohanded/spear/can_push()
 	return can_push && wielded
 

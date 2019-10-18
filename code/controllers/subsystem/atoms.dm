@@ -104,6 +104,9 @@ var/datum/subsystem/atoms/SSatoms
 	else if(!A.initialized)
 		BadInitializeCalls[the_type] |= BAD_INIT_DIDNT_INIT
 
+	if(!qdeleted)
+		A.setup_destructability()
+
 	return qdeleted || QDELETED(A)
 
 /datum/subsystem/atoms/proc/map_loader_begin()

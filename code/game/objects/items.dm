@@ -77,6 +77,8 @@
 	*/
 	var/list/sprite_sheets_obj = null
 
+	var/is_sweeping = FALSE
+
 /obj/item/proc/check_allowed_items(atom/target, not_inside, target_self)
 	if(((src in target) && !target_self) || ((!istype(target.loc, /turf)) && (!istype(target, /turf)) && (not_inside)) || is_type_in_list(target, can_be_placed_into))
 		return 0
@@ -210,6 +212,15 @@
 	if(ismob(loc))
 		var/mob/m = loc
 		m.drop_from_inventory(src)
+
+	if(enchantment_wand)
+		enchantment_wand.enchanted_items -= src
+		enchantment_wand = null
+
+	QDEL_LIST(enchanted_spells)
+	QDEL_NULL(enchant_mod)
+	QDEL_NULL(enchantment_overlay)
+
 	return ..()
 
 /obj/item/ex_act(severity)
@@ -276,6 +287,16 @@
 	var/wet_status = "[src.wet ? " wet" : ""]"
 
 	to_chat(user, "[open_span]It's a[wet_status] [size] item.[close_span]")
+
+	if(enchanted)
+		var/spells_txt = ""
+		var/i = 1
+		var/max_ench_display = 3
+		for(var/obj/item/spell/S in enchanted_spells)
+			if(i > max_ench_display)
+				break
+			spells_txt += S.spell_word
+		to_chat(user, "Seems to be inscribed with <span class='danger'>[spells_txt]</span>.")
 
 /obj/item/attack_hand(mob/user)
 	if (!user || anchored)

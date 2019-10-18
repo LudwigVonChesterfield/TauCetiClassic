@@ -22,10 +22,11 @@
 	climbable = 1
 	smooth = SMOOTH_TRUE
 
+	spawn_destruction_reagents = list("iron" = 100)
+
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
 	var/flipable = TRUE
-	var/health = 100
 	var/canconnect = TRUE
 
 /obj/structure/table/atom_init()
@@ -53,15 +54,10 @@
 		if(T)
 			T.update_icon()
 
-/obj/structure/table/proc/destroy()
+/obj/structure/table/on_destroy()
 	new parts(loc)
-	density = 0
-	qdel(src)
-
-/obj/structure/rack/proc/destroy()
-	new parts(loc)
-	density = 0
-	qdel(src)
+	density = FALSE
+	..()
 
 /obj/structure/table/update_icon()
 	if(flipped)
@@ -91,73 +87,6 @@
 		smooth = initial(smooth)
 		queue_smooth_neighbors(src)
 		queue_smooth(src)
-
-
-/obj/structure/table/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(25))
-				destroy()
-		else
-	return
-
-
-/obj/structure/table/blob_act()
-	if(prob(75))
-		destroy()
-
-/obj/structure/table/attack_paw(mob/user)
-	if(HULK in user.mutations)
-		user.SetNextMove(CLICK_CD_MELEE)
-		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
-		destroy()
-
-
-/obj/structure/table/attack_alien(mob/user)
-	user.do_attack_animation(src)
-	user.SetNextMove(CLICK_CD_MELEE)
-	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-	if(istype(src, /obj/structure/table/reinforced))
-		return
-	else if(istype(src, /obj/structure/table/woodentable/fancy/black))
-		new/obj/item/weapon/table_parts/wood/fancy/black(loc)
-	else if(istype(src, /obj/structure/table/woodentable/fancy))
-		new/obj/item/weapon/table_parts/wood/fancy(loc)
-	else if(istype(src, /obj/structure/table/woodentable))
-		new/obj/item/weapon/table_parts/wood(loc)
-	else if(istype(src, /obj/structure/table/woodentable/poker))
-		new/obj/item/weapon/table_parts/wood(loc)
-	else if(istype(src, /obj/structure/table/glass))
-		var/obj/structure/table/glass/glasstable = src
-		glasstable.shatter()
-	else
-		new /obj/item/weapon/table_parts(loc)
-	density = 0
-	qdel(src)
-
-/obj/structure/table/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash)
-		..()
-		playsound(user, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		destroy()
-
-
-
-/obj/structure/table/attack_hand(mob/user)
-	if(HULK in user.mutations)
-		user.SetNextMove(CLICK_CD_MELEE)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		destroy()
 
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
@@ -197,14 +126,9 @@
 			else
 				return 1					//But only from one side
 		if(prob(chance))
-			health -= P.damage/2
-			if (health > 0)
-				visible_message("<span class='warning'>[P] hits \the [src]!</span>")
-				return 0
-			else
-				visible_message("<span class='warning'>[src] breaks down!</span>")
-				destroy()
-				return 1
+			visible_message("<span class='warning'>[P] hits \the [src]!</span>")
+			bullet_act(P)
+			return 0
 	return 1
 
 /obj/structure/table/CheckExit(atom/movable/O, target)
@@ -256,15 +180,14 @@
 				M.attack_log += "\[[time_stamp()]\] <font color='orange'>Was laied by [A.name] on \the [src]([A.ckey])</font>"
 				A.attack_log += "\[[time_stamp()]\] <font color='red'>Put [M.name] on \the [src]([M.ckey])</font>"
 			qdel(W)
-			return
+			return TRUE
 
 	if (iswrench(W))
 		if(user.is_busy(src))
 			return
 		to_chat(user, "<span class='notice'>Now disassembling table</span>")
 		if(W.use_tool(src, user, 50, volume = 50))
-			destroy()
-		return
+			on_destroy()
 
 	if(isrobot(user))
 		return
@@ -276,7 +199,7 @@
 			if(istype(src, /obj/structure/table/reinforced) && W:active)
 				..()
 				to_chat(user, "<span class='notice'>You tried to slice through [src] but [W] is too weak.</span>")
-				return FALSE
+				return
 			user.do_attack_animation(src)
 			var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 			spark_system.set_up(5, 0, src.loc)
@@ -285,8 +208,8 @@
 			playsound(src, pick(SOUNDIN_SPARKS), VOL_EFFECTS_MASTER)
 			visible_message("<span class='notice'>[src] was sliced apart by [user]!</span>", "<span class='notice'>You hear [src] coming apart.</span>")
 			user.SetNextMove(CLICK_CD_MELEE)
-			destroy()
-			return FALSE
+			on_destroy()
+			return TRUE
 
 	if(!(W.flags & ABSTRACT))
 		if(user.drop_item())
@@ -297,6 +220,7 @@
 				return
 			W.pixel_x = CLAMP(text2num(click_params["icon-x"]) - 16, -(world.icon_size/2), world.icon_size/2)
 			W.pixel_y = CLAMP(text2num(click_params["icon-y"]) - 16, -(world.icon_size/2), world.icon_size/2)
+			return TRUE
 	return
 
 /obj/structure/table/proc/slam(var/mob/living/A, var/mob/living/M, var/obj/item/weapon/grab/G)
@@ -427,7 +351,8 @@
 	desc = "Looks fragile. You should totally flip it. It is begging for it."
 	icon = 'icons/obj/smooth_structures/glass_table.dmi'
 	parts = /obj/item/weapon/table_parts/glass
-	health = 10
+
+	spawn_destruction_reagents = list("glass" = 100)
 
 /obj/structure/table/glass/flip(direction)
 	if( !straight_table_check(turn(direction,90)) || !straight_table_check(turn(direction,-90)) )
@@ -462,6 +387,9 @@
 	for (var/atom/movable/A in T)
 		if (!A.anchored)
 			A.throw_at(pick(targets), 1, 1)
+
+/obj/structure/table/glass/on_destroy()
+	shatter()
 
 /obj/structure/table/glass/on_climb(mob/living/user)
 	usr.forceMove(get_turf(src))
@@ -510,14 +438,14 @@
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon = 'icons/obj/smooth_structures/wooden_table.dmi'
 	parts = /obj/item/weapon/table_parts/wood
-	health = 50
+
+	spawn_destruction_reagents = list("wood" = 100)
 
 /obj/structure/table/woodentable/poker //No specialties, Just a mapping object.
 	name = "gambling table"
 	desc = "A seedy table for seedy dealings in seedy places."
 	icon = 'icons/obj/smooth_structures/poker_table.dmi'
 	parts = /obj/item/weapon/table_parts/wood/poker
-	health = 50
 
 /obj/structure/table/woodentable/fancy
 	name = "fancy table"
@@ -538,9 +466,10 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon = 'icons/obj/smooth_structures/reinforced_table.dmi'
-	health = 200
 	parts = /obj/item/weapon/table_parts/reinforced
 	flipable = FALSE
+
+	spawn_destruction_reagents = list("steel" = 100)
 
 	var/status = 2
 
@@ -608,27 +537,12 @@
 	throwpass = 1	//You can throw objects over this, despite it's density.
 	var/parts = /obj/item/weapon/rack_parts
 
-/obj/structure/rack/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			qdel(src)
-			if(prob(50))
-				new /obj/item/weapon/rack_parts(src.loc)
-		if(3.0)
-			if(prob(25))
-				qdel(src)
-				new /obj/item/weapon/rack_parts(src.loc)
+	spawn_destruction_reagents = list("iron" = 100)
 
-/obj/structure/rack/blob_act()
-	if(prob(75))
-		qdel(src)
-		return
-	else if(prob(50))
-		new /obj/item/weapon/rack_parts(src.loc)
-		qdel(src)
-		return
+/obj/structure/rack/on_destroy()
+	new parts(loc)
+	density = FALSE
+	..()
 
 /obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(air_group || (height==0)) return 1
@@ -657,7 +571,7 @@
 		new /obj/item/weapon/rack_parts( src.loc )
 		playsound(src, 'sound/items/Ratchet.ogg', VOL_EFFECTS_MASTER)
 		qdel(src)
-		return
+		return TRUE
 
 	if(istype(W, /obj/item/weapon/melee/energy) || istype(W, /obj/item/weapon/twohanded/dualsaber))
 		if(user.a_intent == I_HURT)
@@ -675,8 +589,8 @@
 				playsound(src, 'sound/weapons/blade1.ogg', VOL_EFFECTS_MASTER)
 				playsound(src, "sparks", VOL_EFFECTS_MASTER)
 				visible_message("<span class='notice'>[src] was sliced apart by [user]!</span>", "<span class='notice'> You hear [src] coming apart.</span>")
-				destroy()
-				return
+				on_destroy()
+				return TRUE
 
 	if(isrobot(user))
 		return
@@ -688,37 +602,6 @@
 
 /obj/structure/rack/meteorhit(obj/O)
 	qdel(src)
-
-
-/obj/structure/table/attack_hand(mob/user)
-	if(HULK in user.mutations)
-		user.SetNextMove(CLICK_CD_MELEE)
-		user.do_attack_animation(src)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		destroy()
-
-/obj/structure/rack/attack_paw(mob/user)
-	if(HULK in user.mutations)
-		user.SetNextMove(CLICK_CD_MELEE)
-		user.do_attack_animation(src)
-		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		destroy()
-
-/obj/structure/rack/attack_alien(mob/user)
-	user.do_attack_animation(src)
-	user.SetNextMove(CLICK_CD_MELEE)
-	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-	destroy()
-
-/obj/structure/rack/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash)
-		..()
-		playsound(user, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-		user.do_attack_animation(src)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		destroy()
 
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return

@@ -14,9 +14,9 @@
 
 	return ..()
 
-/obj/machinery/atmospherics/ex_act(severity)
-	for(var/atom/movable/A in src) //ventcrawling is serious business
-		A.ex_act(severity)
+/obj/machinery/atmospherics/ex_act(legacy_severity, turf/epicenter, severity, pressure_modifier)
+	for(var/atom/movable/AM in src)
+		AM.ex_act(legacy_severity, epicenter, severity, pressure_modifier)
 	. = ..()
 
 /obj/machinery/atmospherics/relaymove(mob/living/user, direction)

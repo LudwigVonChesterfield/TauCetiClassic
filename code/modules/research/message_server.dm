@@ -194,7 +194,9 @@ var/obj/machinery/blackbox_recorder/blackbox
 
 	var/list/datum/feedback_variable/feedback = new()
 
-	//Only one can exsist in the world!
+	spawn_destruction_reagents = null
+
+//Only one can exsist in the world!
 /obj/machinery/blackbox_recorder/atom_init()
 	. = ..()
 	if(blackbox)

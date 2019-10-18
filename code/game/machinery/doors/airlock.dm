@@ -85,6 +85,14 @@ var/list/airlock_overlays = list()
 	closeOther = null
 	return ..()
 
+/obj/machinery/door/airlock/setup_destructability()
+	if(!spawn_destruction_reagents)
+		if(glass)
+			spawn_destruction_reagents = list("steel" = 50, "glass" = 100)
+		else
+			spawn_destruction_reagents = list("steel" = 150)
+	..()
+
 /obj/machinery/door/airlock/process()
 	if(secondsElectrified > 0)
 		secondsElectrified--
@@ -863,6 +871,41 @@ var/list/airlock_overlays = list()
 	if(!no_window)
 		updateUsrDialog()
 
+/obj/machinery/door/airlock/default_deconstruct()
+	var/obj/structure/door_assembly/da = new assembly_type(loc)
+	da.anchored = TRUE
+	if(mineral)
+		da.change_mineral_airlock_type(mineral)
+	if(glass && da.can_insert_glass)
+		da.set_glass(TRUE)
+	da.state = ASSEMBLY_WIRED
+	da.dir = dir
+	da.created_name = name
+	da.spawn_destruction_reagents = spawn_destruction_reagents
+	da.setup_destructability()
+	da.update_state()
+
+	var/obj/item/weapon/airlock_electronics/ae
+	if(!electronics)
+		ae = new/obj/item/weapon/airlock_electronics(loc)
+		if(!req_access)
+			check_access()
+		if(req_access.len)
+			ae.conf_access = req_access
+		else if (req_one_access.len)
+			ae.conf_access = req_one_access
+			ae.one_access = 1
+	else
+		ae = electronics
+		electronics = null
+		ae.forceMove(loc)
+	if(operating == -1)
+		ae.icon_state = "door_electronics_smoked"
+		ae.broken = TRUE
+		operating = 0
+
+	qdel(src)
+
 /obj/machinery/door/airlock/attackby(obj/item/C, mob/user)
 
 	if(istype(C,/obj/item/weapon/changeling_hammer) && !operating && density) // yeah, hammer ignore electrify
@@ -916,38 +959,7 @@ var/list/airlock_overlays = list()
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			if(C.use_tool(src, user, 40, volume = 100))
 				to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
-
-				var/obj/structure/door_assembly/da = new assembly_type(loc)
-				da.anchored = 1
-				if(mineral)
-					da.change_mineral_airlock_type(mineral)
-				if(glass && da.can_insert_glass)
-					da.set_glass(TRUE)
-				da.state = ASSEMBLY_WIRED
-				da.dir = dir
-				da.created_name = name
-				da.update_state()
-
-				var/obj/item/weapon/airlock_electronics/ae
-				if(!electronics)
-					ae = new/obj/item/weapon/airlock_electronics(loc)
-					if(!req_access)
-						check_access()
-					if(req_access.len)
-						ae.conf_access = req_access
-					else if (req_one_access.len)
-						ae.conf_access = req_one_access
-						ae.one_access = 1
-				else
-					ae = electronics
-					electronics = null
-					ae.loc = loc
-				if(operating == -1)
-					ae.icon_state = "door_electronics_smoked"
-					ae.broken = TRUE
-					operating = 0
-
-				qdel(src)
+				default_deconstruct()
 				return
 		else if(hasPower())
 			to_chat(user, "<span class='notice'>The airlock's motors resist your efforts to force it.</span>")
@@ -977,7 +989,6 @@ var/list/airlock_overlays = list()
 		change_paintjob(C, user)
 	else
 		..()
-	return
 
 /obj/machinery/door/airlock/phoron/attackby(obj/item/I, mob/user)
 	ignite(I.get_current_temperature())

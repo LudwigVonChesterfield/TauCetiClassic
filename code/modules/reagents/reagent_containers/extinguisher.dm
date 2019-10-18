@@ -29,6 +29,8 @@
 	spray_cloud_move_delay = 2
 	spray_cloud_react_delay = 0
 
+	hit_area_coeff = 0.5
+
 /obj/item/weapon/reagent_containers/spray/extinguisher/atom_init()
 	. = ..()
 	flags ^= OPENCONTAINER|NOBLUDGEON

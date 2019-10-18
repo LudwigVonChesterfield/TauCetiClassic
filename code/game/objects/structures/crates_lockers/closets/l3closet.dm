@@ -5,6 +5,8 @@
 	icon_closed = "bio"
 	icon_opened = "bioopen"
 
+	spawn_destruction_reagents = list("plasteel" = 80)
+
 /obj/structure/closet/l3closet/general
 	icon_state = "bio_general"
 	icon_closed = "bio_general"

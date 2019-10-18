@@ -83,8 +83,12 @@
 	return
 
 /atom/Destroy()
-	if(reagents)
-		QDEL_NULL(reagents)
+	QDEL_NULL(reagents)
+	QDEL_NULL(destruction_reagents)
+
+	for(var/decal_type in destruction_decals)
+		QDEL_NULL(destruction_decals[decal_type])
+	destruction_decals = null
 
 	LAZYCLEARLIST(overlays)
 
@@ -174,11 +178,6 @@
 /atom/proc/emag_act()
 	return FALSE
 
-
-/atom/proc/bullet_act(obj/item/projectile/P, def_zone)
-	P.on_hit(src, 0, def_zone)
-	. = 0
-
 /atom/proc/in_contents_of(container)//can take class or object instance as argument
 	if(ispath(container))
 		if(istype(src.loc, container))
@@ -233,6 +232,21 @@
 		else
 			to_chat(user, "Nothing.")
 
+	if(is_destructible)
+		if(received_damage == 0.0)
+			to_chat(user, "<span class='info'>Seems structurally sound.</span>")
+		if(received_damage > 0.0)
+			to_chat(user, "<span class='info'>Seems slighty damaged.</span>")
+		if(received_damage > max_received_damage * 0.25)
+			to_chat(user, "<span class='warning'>Is damaged.</span>")
+		else if(received_damage > max_received_damage * 0.5)
+			to_chat(user, "<span class='warning'>Is moderately damaged.</span>")
+		else if(received_damage > max_received_damage * 0.75)
+			to_chat(user, "<span class='danger'>Is heavily damaged.</span>")
+
+		for(var/decal_type in destruction_decals)
+			to_chat(user, destruction_decals[decal_type][1].get_examine_msg(user))
+
 	return distance == -1 || isobserver(user) || (get_dist(src, user) <= distance)
 
 /atom/proc/dirt_description()
@@ -249,12 +263,6 @@
 /atom/proc/relaymove()
 	return
 
-/atom/proc/ex_act()
-	return
-
-/atom/proc/blob_act()
-	return
-
 /atom/proc/fire_act()
 	return
 
@@ -262,9 +270,6 @@
 	return
 
 /atom/proc/singularity_pull()
-	return
-
-/atom/proc/hitby(atom/movable/AM)
 	return
 
 /atom/proc/add_hiddenprint(mob/living/M)

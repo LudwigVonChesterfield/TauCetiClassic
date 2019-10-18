@@ -1,6 +1,3 @@
-#define SOLID 1
-#define LIQUID 2
-#define GAS 3
 #define MAX_PILL_SPRITE 24
 #define MAX_BOTTLE_SPRITE 3
 /obj/machinery/chem_dispenser
@@ -55,20 +52,6 @@
 	. = ..()
 	recharge()
 	dispensable_reagents = sortList(dispensable_reagents)
-
-/obj/machinery/chem_dispenser/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-
-/obj/machinery/chem_dispenser/blob_act()
-	if (prob(50))
-		qdel(src)
 
 /obj/machinery/chem_dispenser/meteorhit()
 	qdel(src)
@@ -355,20 +338,6 @@
 	var/datum/reagents/R = new/datum/reagents(100)
 	reagents = R
 	R.my_atom = src
-
-/obj/machinery/chem_master/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-
-/obj/machinery/chem_master/blob_act()
-	if (prob(50))
-		qdel(src)
 
 /obj/machinery/chem_master/meteorhit()
 	qdel(src)

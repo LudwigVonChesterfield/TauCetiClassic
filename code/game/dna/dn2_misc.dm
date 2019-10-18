@@ -220,15 +220,27 @@
 						playsound(H, 'sound/weapons/tablehit1.ogg', VOL_EFFECTS_MASTER)
 						if(i > 20)
 							if(prob(65))
-								hit = 1
-								W.dismantle_wall(1)
+								hit = TRUE
+								W.dismantle_wall(TRUE)
 							else
-								hit = 1
-								W.take_damage(50)
+								hit = TRUE
+								var/datum/destruction_measure/jump_DM = new(src,
+									50.0,
+									1.0,
+									HITZONE_MIDDLE,
+									BRUTE,
+									DEST_BLUNT)
+								W.react_to_damage(H, null, jump_DM)
 								H.Weaken(5)
 						else
-							hit = 1
-							W.take_damage(25)
+							hit = TRUE
+							var/datum/destruction_measure/jump_DM = new(src,
+								25.0,
+								1.0,
+								HITZONE_MIDDLE,
+								BRUTE,
+								DEST_BLUNT)
+							W.react_to_damage(H, null, jump_DM)
 							H.Weaken(5)
 			if(i > 20)
 				usr.canmove = 0
@@ -355,7 +367,13 @@
 			var/mob/living/carbon/human/H = usr
 			H.take_overall_damage(25, used_weapon = "reinforced wall")
 		else if(istype(W,/turf/simulated/wall))
-			W.take_damage(50)
+			var/datum/destruction_measure/smash_DM = new(src,
+				50.0,
+				1.0,
+				HITZONE_UPPER,
+				BRUTE,
+				DEST_BLUNT)
+			W.react_to_damage(src, null, smash_DM)
 		for(var/mob/living/M in T.contents)
 			if(M != usr)
 				usr.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with hulk_smash</font>"

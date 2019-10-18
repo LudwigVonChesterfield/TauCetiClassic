@@ -69,19 +69,6 @@
 	opacity = 1
 	spawn(20) if(src) opacity = 0
 
-/obj/machinery/shield/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			if (prob(75))
-				qdel(src)
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-		if(3.0)
-			if (prob(25))
-				qdel(src)
-	return
-
 /obj/machinery/shield/emp_act(severity)
 	switch(severity)
 		if(1)
@@ -89,10 +76,6 @@
 		if(2)
 			if(prob(50))
 				qdel(src)
-
-/obj/machinery/shield/blob_act()
-	qdel(src)
-
 
 /obj/machinery/shield/hitby(AM)
 	//Let everyone know we've been hit!

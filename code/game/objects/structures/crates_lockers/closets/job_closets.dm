@@ -14,6 +14,8 @@
 	icon_state = "black"
 	icon_closed = "black"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/gmcloset/PopulateContents()
 	new /obj/item/clothing/head/hairflower(src)
 	new /obj/item/clothing/under/dress/dress_saloon(src)
@@ -32,6 +34,8 @@
 	desc = "It's a storage unit for janitorial clothes and gear."
 	icon_state = "mixed"
 	icon_closed = "mixed"
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/jcloset/PopulateContents()
 	new /obj/item/clothing/under/rank/janitor(src)
@@ -55,6 +59,8 @@
 	icon_state = "blue"
 	icon_closed = "blue"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/lawcloset/PopulateContents()
 	new /obj/item/clothing/under/lawyer/female(src)
 	new /obj/item/clothing/under/lawyer/black(src)
@@ -72,6 +78,8 @@
 	icon_state = "cabinet_closed"
 	icon_closed = "cabinet_closed"
 	icon_opened = "cabinet_open"
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/theatrecloset/PopulateContents()
 	switch (rand(1, 21))

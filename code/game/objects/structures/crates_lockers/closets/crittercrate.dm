@@ -7,6 +7,8 @@
 	var/already_opened = 0
 	var/content_mob = null
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/critter/can_open()
 	if(locked || welded)
 		return 0

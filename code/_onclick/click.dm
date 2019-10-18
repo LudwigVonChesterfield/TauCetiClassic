@@ -5,6 +5,8 @@
 
 // 1 decisecond click delay (above and beyond mob/next_move)
 /mob/var/next_click	= 0
+// The params array of last click(duh).
+/mob/var/list/last_click_params = list()
 
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
@@ -50,6 +52,8 @@
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
+
+	last_click_params = params
 
 	var/list/modifiers = params2list(params)
 
@@ -111,7 +115,7 @@
 
 		// No adjacency needed
 		if(W)
-			var/resolved = A.attackby(W, src, params)
+			var/resolved = a_intent == I_HURT || A.attackby(W, src, params)
 			if(!resolved && A && W)
 				W.afterattack(A, src, 1, params) // 1 indicates adjacency
 		else

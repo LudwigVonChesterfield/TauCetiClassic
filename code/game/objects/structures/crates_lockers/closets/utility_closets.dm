@@ -19,7 +19,18 @@
 	icon_closed = "emergency"
 	icon_opened = "emergencyopen"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/emcloset/PopulateContents()
+	new /obj/random/misc/spell(src)
+	new /obj/random/misc/spell(src)
+	new /obj/random/misc/spell(src)
+	new /obj/random/misc/spell(src)
+	new /obj/random/misc/wand_component(src)
+	new /obj/random/misc/wand_component(src)
+	new /obj/random/misc/wand(src)
+	return
+
 	new /obj/item/clothing/head/helmet/space/sk(src)
 	new /obj/item/clothing/suit/space/sk(src)
 
@@ -65,6 +76,8 @@
 	icon_closed = "firecloset"
 	icon_opened = "fireclosetopen"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/firecloset/PopulateContents()
 	new /obj/item/clothing/suit/fire/firefighter(src)
 	new /obj/item/clothing/mask/gas/coloured(src)
@@ -96,6 +109,8 @@
 	icon_state = "toolcloset"
 	icon_closed = "toolcloset"
 	icon_opened = "toolclosetopen"
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/toolcloset/PopulateContents()
 	if(prob(40))
@@ -144,6 +159,8 @@
 	icon_opened = "toolclosetopen"
 	icon_closed = "radsuitcloset"
 
+	spawn_destruction_reagents = list("steel" = 80)
+
 /obj/structure/closet/radiation/PopulateContents()
 	for (var/i in 1 to 2)
 		new /obj/item/clothing/suit/radiation(src)
@@ -159,6 +176,8 @@
 	icon_closed = "bombsuit"
 	icon_opened = "bombsuitopen"
 
+	spawn_destruction_reagents = list("plasteel" = 80)
+
 /obj/structure/closet/bombcloset/PopulateContents()
 	new /obj/item/clothing/suit/bomb_suit(src)
 	new /obj/item/clothing/under/color/black(src)
@@ -172,6 +191,8 @@
 	icon_state = "bombsuitsec"
 	icon_closed = "bombsuitsec"
 	icon_opened = "bombsuitsecopen"
+
+	spawn_destruction_reagents = list("plasteel" = 80)
 
 /obj/structure/closet/bombclosetsecurity/PopulateContents()
 	new /obj/item/clothing/suit/bomb_suit/security(src)
@@ -191,6 +212,8 @@
 	anchored = TRUE
 	density = FALSE
 	wall_mounted = TRUE
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/hydrant/PopulateContents()
 	new /obj/item/clothing/suit/fire/firefighter(src)
@@ -212,6 +235,8 @@
 	anchored = TRUE
 	density = FALSE
 	wall_mounted = TRUE
+
+	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/medical_wall/update_icon()
 	if(!opened)

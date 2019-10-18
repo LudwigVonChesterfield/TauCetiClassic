@@ -12,7 +12,6 @@
 	var/locked = 0
 	var/broken = 0
 	var/wall_mounted = 0 //never solid (You can always pass over it)
-	var/health = 100
 	var/lastbang
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.
@@ -132,50 +131,29 @@
 		to_chat(user, "<span class='notice'>It won't budge!</span>")
 	return
 
-// this should probably use dump_contents()
-/obj/structure/closet/ex_act(severity)
-	switch(severity)
-		if(1)
-			for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
-				A.forceMove(src.loc)
-				A.ex_act(severity++)
-			qdel(src)
-		if(2)
-			if(prob(50))
-				for (var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
-					A.ex_act(severity++)
-				qdel(src)
-		if(3)
-			if(prob(5))
-				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
-					A.ex_act(severity++)
-				qdel(src)
+/obj/structure/closet/on_destruction(atom/movable/demo, obj/item/I, datum/destruction_measure/DM)
+	switch(DM.damage_type)
+		if(BRUTE)
+			if(DM.applied_pressure >= get_mass())
+				locked = FALSE
+				update_icon()
+			if(DM.destruction_type in list(DEST_PRODE, DEST_BLUNT) && DM.applied_pressure >= get_mass())
+				open()
+		if(BURN)
+			if(DM.applied_force >= get_mass())
+				welded = FALSE
 
-/obj/structure/closet/bullet_act(obj/item/projectile/Proj)
-	health -= Proj.damage
+	return ..()
+
+/obj/structure/closet/on_destroy()
+	for(var/atom/movable/AM in src)
+		AM.forceMove(loc)
 	..()
-	if(health <= 0)
-		for(var/atom/movable/A as mob|obj in src)
-			A.forceMove(src.loc)
-		qdel(src)
 
-	return
-
-/obj/structure/closet/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash)
-		..()
-		playsound(user, 'sound/effects/grillehit.ogg', VOL_EFFECTS_MASTER)
-		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
-		open()
-		qdel(src)
-
-// this should probably use dump_contents()
-/obj/structure/closet/blob_act()
-	if(prob(75))
-		open()
-		qdel(src)
+/obj/structure/closet/ex_act(legacy_severity, turf/epicenter, severity, pressure_modifier)
+	for(var/atom/movable/AM in src)
+		AM.ex_act(legacy_severity, epicenter, severity, pressure_modifier)
+	..()
 
 /obj/structure/closet/meteorhit(obj/O)
 	if(O.icon_state == "flaming")
@@ -205,8 +183,11 @@
 	else if(istype(W, /obj/item/weapon/packageWrap) || istype(W, /obj/item/weapon/extraction_pack))
 		return
 
+	else if(user.a_intent == I_HURT)
+		return ..()
+
 	else
-		attack_hand(user)
+		return attack_hand(user)
 
 /obj/structure/closet/proc/tools_interact(obj/item/weapon/W, mob/user)
 	if(iswelder(W))
@@ -281,9 +262,13 @@
 	return src.attack_hand(user)
 
 /obj/structure/closet/attack_hand(mob/user)
+	if(user.a_intent == I_HURT)
+		return ..()
+
 	src.add_fingerprint(user)
 	user.SetNextMove(CLICK_CD_RAPID)
 	src.toggle(user)
+	return FALSE
 
 // tk grab then use on self
 /obj/structure/closet/attack_self_tk(mob/user)

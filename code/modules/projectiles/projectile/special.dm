@@ -66,6 +66,9 @@
 	nodamage = 1
 	flag = "bullet"
 
+	w_class = ITEM_SIZE_TINY
+	hit_area_coeff = 1.0
+
 /obj/item/projectile/meteor/Bump(atom/A)
 	if(A == firer)
 		loc = A.loc

@@ -105,15 +105,11 @@
 		cancelCameraAlarm()
 		toggle_cam(FALSE)
 
-/obj/machinery/camera/ex_act(severity)
+/obj/machinery/camera/ex_act(legacy_severity, turf/epicenter, severity, pressure_modifier)
 	if(src.invuln)
 		return
 	else
-		..(severity)
-	return
-
-/obj/machinery/camera/blob_act()
-	return
+		..()
 
 /obj/machinery/camera/proc/setViewRange(num = 7)
 	src.view_range = num

@@ -6,6 +6,8 @@
 	var/obj/item/assembly/shock_kit/part = null
 	var/last_time = 1.0
 
+	spawn_destruction_reagents = list("iron" = 10, "wood" = 5)
+
 /obj/structure/stool/bed/chair/e_chair/atom_init()
 	. = ..()
 	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)
