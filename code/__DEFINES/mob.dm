@@ -40,8 +40,7 @@
 #define O_KIDNEYS  "kidneys"
 #define O_APPENDIX "appendix"
 
-#define AGE_MIN 25			//youngest a character can be
-#define AGE_MAX 85			//oldest a character can be
+#define TARGET_ZONE_ALL list(BP_CHEST, BP_GROIN, BP_HEAD, BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG, O_EYES, O_MOUTH)
 
 #define LEFT  1
 #define RIGHT 2
@@ -56,7 +55,7 @@
 
 // intent flags
 #define I_HELP   "help"
-#define I_DISARM "disarm"
+#define I_DISARM "disarm" // TODO: rename to "I_PUSH" "push". Don't forget the icons. ~Luduk.
 #define I_GRAB   "grab"
 #define I_HURT   "hurt" // or harm? or hurt? or what?
 

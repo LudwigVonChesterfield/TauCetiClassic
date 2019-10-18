@@ -138,7 +138,7 @@
 	if(ishuman(mymob))
 		human_hud(ui_style, ui_color, ui_alpha) // Pass the player the UI style chosen in preferences
 	else if(isIAN(mymob))
-		ian_hud()
+		ian_hud(ui_style, ui_color, ui_alpha)
 	else if(ismonkey(mymob))
 		monkey_hud(ui_style)
 	else if(isbrain(mymob))
@@ -159,6 +159,8 @@
 		blob_hud()
 	else if(isessence(mymob))
 		changeling_essence_hud()
+	else if(isliving(mymob))
+		default_hud(ui_style, ui_color, ui_alpha)
 
 	if(istype(mymob.loc,/obj/mecha))
 		show_hud(HUD_STYLE_REDUCED)

@@ -18,13 +18,12 @@
 	response_harm   = "hits the"
 
 	harm_intent_damage = 0
-	melee_damage_lower = 0
-	melee_damage_upper = 0
-	attacktext = "brutally crushes"
+	melee_damage = 0
+	attacktext = "brutally crush"
 	environment_smash = 0
 
 	speed = 1
-	a_intent = "harm"
+	a_intent = I_HURT
 	stop_automated_movement = 1
 	status_flags = CANPUSH
 	universal_speak = 1
@@ -45,6 +44,10 @@
 	var/life_cicle = 0
 	var/next_cicle = 10
 	var/activated = 0 //So, it wont start its massacre right away and can be delayed for event or what ever...
+
+	has_head = TRUE
+	has_arm = TRUE
+	has_leg = TRUE
 
 /mob/living/var/scp_mark = 0
 /turf/var/scp_was_here = 0

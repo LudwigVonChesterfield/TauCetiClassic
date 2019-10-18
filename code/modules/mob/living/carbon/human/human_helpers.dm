@@ -8,9 +8,9 @@
 		if(show_warning)
 			to_chat(src, "<span class='warning'>Please wait while someone else will finish interacting with [target].</span>")
 		return TRUE
-	return FALSE
+	return combo_animation || attack_animation
 
-/mob/living/carbon/human/become_busy(_hand = 0) // 0 is right hand, don't question it we don't have defines for this yet.
+/mob/living/carbon/human/become_busy(atom/target, _hand = 0) // 0 is right hand, don't question it we don't have defines for this yet.
 	if(_hand)
 		busy_left_hand = TRUE
 	else

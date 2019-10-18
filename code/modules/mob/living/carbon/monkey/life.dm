@@ -7,6 +7,7 @@
 		domutcheck(src,null,MUTCHK_FORCED)
 	..()
 
+
 	var/datum/gas_mixture/environment // Added to prevent null location errors-- TLE
 	if(loc)
 		environment = loc.return_air()
@@ -54,6 +55,7 @@
 
 
 	//Status updates, death etc.
+	handle_combat() // Even in death we still fight.
 	handle_regular_status_updates()
 	update_canmove()
 
@@ -444,7 +446,7 @@
 /mob/living/carbon/monkey/proc/handle_chemicals_in_body()
 
 	if(reagents && reagents.reagent_list.len)
-		reagents.metabolize(src,race)
+		reagents.metabolize(src)
 
 	if (drowsyness)
 		drowsyness--

@@ -1,10 +1,72 @@
-/datum/hud/proc/larva_hud()
+/datum/hud/proc/larva_hud(ui_style='icons/mob/screen1_White.dmi', ui_color = "#ffffff", ui_alpha = 255)
 
 	src.adding = list()
 	src.other = list()
 
+
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
+
+	using = new /obj/screen()
+	using.name = "act_intent"
+	using.icon = ui_style
+	using.icon_state = "intent_" + mymob.a_intent
+	using.screen_loc = ui_acti
+	using.layer = ABOVE_HUD_LAYER
+	using.plane = ABOVE_HUD_PLANE
+	src.adding += using
+	action_intent = using
+
+//intent small hud objects
+	var/icon/ico
+
+	ico = new/icon(ui_style, "black")
+	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
+	ico.DrawBox(rgb(255,255,255,1),1,ico.Height()/2,ico.Width()/2,ico.Height())
+	using = new /obj/screen( src )
+	using.name = "help"
+	using.icon = ico
+	using.screen_loc = ui_acti
+	using.layer = ABOVE_HUD_LAYER
+	using.plane = ABOVE_HUD_PLANE
+	src.adding += using
+	help_intent = using
+
+	ico = new/icon(ui_style, "black")
+	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
+	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,ico.Height()/2,ico.Width(),ico.Height())
+	using = new /obj/screen( src )
+	using.name = "disarm"
+	using.icon = ico
+	using.screen_loc = ui_acti
+	using.layer = ABOVE_HUD_LAYER
+	using.plane = ABOVE_HUD_PLANE
+	src.adding += using
+	disarm_intent = using
+
+	ico = new/icon(ui_style, "black")
+	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
+	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,1,ico.Width(),ico.Height()/2)
+	using = new /obj/screen( src )
+	using.name = "grab"
+	using.icon = ico
+	using.screen_loc = ui_acti
+	using.layer = ABOVE_HUD_LAYER
+	using.plane = ABOVE_HUD_PLANE
+	src.adding += using
+	grab_intent = using
+
+	ico = new/icon(ui_style, "black")
+	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
+	ico.DrawBox(rgb(255,255,255,1),1,1,ico.Width()/2,ico.Height()/2)
+	using = new /obj/screen( src )
+	using.name = I_HURT
+	using.icon = ico
+	using.screen_loc = ui_acti
+	using.layer = ABOVE_HUD_LAYER
+	using.plane = ABOVE_HUD_PLANE
+	src.adding += using
+	hurt_intent = using
 
 	using = new /obj/screen()
 	using.name = "mov_intent"
