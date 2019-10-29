@@ -110,19 +110,7 @@
 	B.reagents.trans_to(D, spray_amount)
 	D.icon += mix_color_from_reagents(D.reagents.reagent_list)
 
-	for(var/i in 1 to spray_dist)
-		step_towards(D, A)
-		D.reagents.reaction(get_turf(D))
-		for(var/atom/T in get_turf(D))
-			D.reagents.reaction(T)
-
-			// When spraying against the wall, also react with the wall, but
-			// not its contents. BS12
-			if(get_dist(D, A) == 1 && A.density)
-				D.reagents.reaction(A)
-			sleep(2)
-		sleep(3)
-	qdel(D)
+	chempuff_spray(D, get_step(A, get_dir(src, A)), A, spray_dist, 2, 3)
 
 /obj/machinery/color_mixer/proc/err_log(message, type = "ERR")
 	if(disable_notifications && type == "NOT")

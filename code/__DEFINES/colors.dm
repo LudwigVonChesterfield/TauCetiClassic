@@ -78,6 +78,22 @@
 #define LIGHT_COLOR_FLARE        "#fa644b" //Bright, non-saturated red. Leaning slightly towards pink for visibility. rgb(250, 100, 75)
 #define LIGHT_COLOR_GHOST_CANDLE "#a2fad1" // Used by ghost candles. rgb(162, 250, 209)
 
+#define TO_NEGATIVE_COLOR list( \
+	-1.0,  0.0,  0.0, 0.0, \
+	 0.0, -1.0,  0.0, 0.0, \
+	 0.0,  0.0, -1.0, 0.0, \
+	 0.0,  0.0,  0.0, 1.0, \
+	 1.0,  1.0,  1.0, 0.0 \
+	)
+
+#define TO_GREYSCALE_COLOR list( \
+	0.33, 0.33, 0.33, 0.0, \
+	0.33, 0.33, 0.33, 0.0, \
+	0.33, 0.33, 0.33, 0.0, \
+	0.0,  0.0,  0.0,  0.33, \
+	0.0,  0.0,  0.0,  0.0 \
+	)
+
 //Human organ color mods
 #define HULK_SKIN_TONE rgb(48, 224, 40) // human
 #define HULK_SKIN_COLOR RGB_CONTRAST(35, 121, 11) // xenos

@@ -13,6 +13,10 @@
 		for(var/atom/movable/AM in T.contents)
 			AM.shake_act(max_severity - 1)
 
+	for(var/mob/living/L in player_list)
+		if(get_dist(L, src) <= 7)
+			shake_camera(L, 1, 1)
+
 /atom/proc/shake_act(severity)
 	return
 
@@ -36,7 +40,7 @@
 			apply_effect(severity * 2.0, STUN, 0)
 			apply_effect(severity * 2.0, WEAKEN, 0)
 		apply_effect(severity * 4.0, STUTTER, 0)
-		shake_camera(src, round(severity), round(severity))
+		shake_camera(src, round(severity* 2), round(severity))
 
 /turf/simulated/floor/on_destruction(atom/movable/demo, obj/item/I, datum/destruction_measure/DM)
 	. = ..()

@@ -31,3 +31,7 @@
 		target.mutations.Remove(x)
 	target.disabilities &= ~disabilities
 	target.update_mutations()
+
+/obj/effect/proc_holder/spell/targeted/genetic/random/cast(list/targets)
+	disabilities = rand(1, 64)
+	..()

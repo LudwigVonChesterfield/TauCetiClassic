@@ -31,6 +31,9 @@
 		if(istype(target) && !(target.handcuffed))
 			break
 
+	if(!target)
+		return
+
 	if(!(target.type in compatible_mobs))
 		to_chat(user, "<span class='notice'>It'd be stupid to disarm [target]!</span>")
 		return

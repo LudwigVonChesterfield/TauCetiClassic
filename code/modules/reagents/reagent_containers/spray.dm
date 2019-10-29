@@ -152,26 +152,8 @@
 	if(!chempuff_dense)
 		D.pass_flags |= PASSBLOB | PASSMOB | PASSCRAWL
 
-	step_towards(D, start)
-	sleep(spray_cloud_move_delay)
-
 	var/max_steps = spray_size_current
-	for(var/i in 1 to max_steps)
-		step_towards(D, target)
-		var/turf/T = get_turf(D)
-		D.reagents.reaction(T)
-		var/turf/next_T = get_step(T, get_dir(T, target))
-		// When spraying against the wall, also react with the wall, but
-		// not its contents. BS12
-		if(next_T.density)
-			D.reagents.reaction(next_T)
-			sleep(spray_cloud_react_delay)
-		else
-			for(var/atom/A in T)
-				D.reagents.reaction(A)
-				sleep(spray_cloud_react_delay)
-		sleep(spray_cloud_move_delay)
-	qdel(D)
+	chempuff_spray(D, start, target, max_steps, spray_cloud_react_delay, spray_cloud_move_delay)
 
 /obj/item/weapon/reagent_containers/spray/attack_self(mob/user)
 	if(!possible_transfer_amounts)

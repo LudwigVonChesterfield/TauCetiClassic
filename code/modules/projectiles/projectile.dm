@@ -19,6 +19,10 @@
 	pass_flags = PASSTABLE
 	mouse_opacity = 0
 	appearance_flags = 0
+
+	w_class = ITEM_SIZE_TINY
+	hit_area_coeff = 0.1
+
 	var/bumped = 0		//Prevents it from hitting more than one guy at once
 	var/def_zone = ""	//Aiming at
 	var/mob/firer = null//Who shot it
@@ -72,6 +76,9 @@
 
 	var/list/proj_act_sound = null
 
+	var/datum/callback/on_impact_callback
+	var/datum/callback/on_step_callback
+
 /obj/item/projectile/atom_init()
 	damtype = damage_type // TODO unify these vars properly (Bay12)
 	if(timestop_count)
@@ -84,6 +91,10 @@
 
 /obj/item/projectile/Destroy()
 	QDEL_LIST(tracer_list)
+
+	QDEL_NULL(on_impact_callback)
+	QDEL_NULL(on_step_callback)
+
 	firer = null
 	starting = null
 	original = null
@@ -112,6 +123,8 @@
 
 	//called when the projectile stops flying because it collided with something
 /obj/item/projectile/proc/on_impact(atom/A)
+	if(on_impact_callback)
+		on_impact_callback.Invoke()
 	impact_effect(effect_transform)		// generate impact effect
 	return
 
@@ -161,10 +174,6 @@
 /obj/item/projectile/Bump(atom/A, forced=0)
 	if(A == src)
 		return 0 //no
-
-	if(A == firer)
-		loc = A.loc
-		return 0 //cannot shoot yourself
 
 	if((bumped && !forced) || (A in permutated))
 		return 0
@@ -233,7 +242,7 @@
 
 	if(istype(A,/turf))
 		for(var/obj/O in A)
-			O.bullet_act(src)
+			O.bullet_act(src, def_zone)
 		for(var/mob/Mob in A)
 			Mob.bullet_act(src, def_zone)
 
@@ -283,6 +292,9 @@
 
 		before_move()
 		Move(location.return_turf())
+
+		if(on_step_callback)
+			on_step_callback.Invoke()
 
 		if(!bumped && !isturf(original))
 			if(loc == get_turf(original))
@@ -335,6 +347,7 @@
 		if(istype(M))
 			if(tracer_list)
 				tracer_list += M
+			M.color = color
 			M.set_transform(T)
 			M.pixel_x = location.pixel_x
 			M.pixel_y = location.pixel_y
@@ -347,6 +360,7 @@
 		if(istype(P))
 			if(tracer_list)
 				tracer_list += P
+			P.color = color
 			P.set_transform(M)
 			P.pixel_x = location.pixel_x
 			P.pixel_y = location.pixel_y
@@ -357,13 +371,14 @@
 		var/obj/effect/projectile/P = new impact_type(location.loc)
 
 		if(istype(P))
+			P.color = color
 			P.set_transform(M)
 			P.pixel_x = location.pixel_x
 			P.pixel_y = location.pixel_y
 			P.activate()
 
 /obj/item/projectile/proc/Fire(atom/A, mob/living/user)
-	var/turf/T = get_turf(user)
+	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 	firer = user
 	def_zone = check_zone(user.zone_sel.selecting)
@@ -382,9 +397,6 @@
 	var/result = 0 //To pass the message back to the gun.
 
 /obj/item/projectile/test/Bump(atom/A)
-	if(A == firer)
-		loc = A.loc
-		return //cannot shoot yourself
 	if(istype(A, /obj/item/projectile))
 		return
 	if(istype(A, /mob/living))

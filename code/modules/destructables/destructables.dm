@@ -96,6 +96,8 @@
 	for(var/reagent_name in spawn_destruction_reagents)
 		var/clumps = rand(1, min(round(spawn_destruction_reagents[reagent_name] * 10 / max_received_damage), 10.0))
 		for(var/i in 1 to clumps)
+			if(spawn_destruction_reagents[reagent_name] / clumps < 0.5)
+				continue
 			var/datum/reagents/R = new(1000)
 			R.add_reagent(reagent_name, min(round(spawn_destruction_reagents[reagent_name] / clumps), 10.0))
 
@@ -295,6 +297,4 @@
 
 	react_to_damage(P, null, bullet_DM)
 
-	if(P.on_hit_callback)
-		P.on_hit_callback.Invoke()
 	return P.on_hit(src, 0, def_zone)

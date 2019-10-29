@@ -115,22 +115,4 @@
 		trans_to(D, amount)
 	D.icon += mix_color_from_reagents(D.reagents.reagent_list)
 
-	step_towards(D, start)
-	sleep(2)
-
-	for(var/i in 1 to max_steps)
-		step_towards(D, target)
-		var/turf/T = get_turf(D)
-		D.reagents.reaction(T)
-		var/turf/next_T = get_step(T, get_dir(T, target))
-		// When spraying against the wall, also react with the wall, but
-		// not its contents. BS12
-		if(next_T.density)
-			D.reagents.reaction(next_T)
-			sleep(1)
-		else
-			for(var/atom/A in T)
-				D.reagents.reaction(A)
-				sleep(1)
-		sleep(2)
-	qdel(D)
+	chempuff_spray(D, start, target, max_steps, 1, 2)

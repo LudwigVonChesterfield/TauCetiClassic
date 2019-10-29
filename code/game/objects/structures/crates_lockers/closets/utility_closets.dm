@@ -22,15 +22,6 @@
 	spawn_destruction_reagents = list("steel" = 80)
 
 /obj/structure/closet/emcloset/PopulateContents()
-	new /obj/random/misc/spell(src)
-	new /obj/random/misc/spell(src)
-	new /obj/random/misc/spell(src)
-	new /obj/random/misc/spell(src)
-	new /obj/random/misc/wand_component(src)
-	new /obj/random/misc/wand_component(src)
-	new /obj/random/misc/wand(src)
-	return
-
 	new /obj/item/clothing/head/helmet/space/sk(src)
 	new /obj/item/clothing/suit/space/sk(src)
 

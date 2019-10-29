@@ -510,8 +510,6 @@
 		ignore_threshold = 1
 	src.take_damage(Proj.damage,Proj.flag)
 	src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),ignore_threshold)
-	if(Proj.on_hit_callback)
-		Proj.on_hit_callback.Invoke()
 	Proj.on_hit(src)
 	return
 

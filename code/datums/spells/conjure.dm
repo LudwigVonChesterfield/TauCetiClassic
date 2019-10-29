@@ -17,6 +17,9 @@
 	var/delay = 1//Go Go Gadget Inheritance
 	sound = 'sound/items/welder.ogg'
 
+/obj/effect/proc_holder/spell/aoe_turf/conjure/proc/create_summoned_object(summoned_object_type, atom/spawn_place, mob/summoner)
+	return new summoned_object_type(spawn_place)
+
 /obj/effect/proc_holder/spell/aoe_turf/conjure/cast(list/targets)
 
 	for(var/turf/T in targets)
@@ -42,7 +45,7 @@
 				var/turf/N = summoned_object_type
 				O.ChangeTurf(N)
 			else
-				var/atom/summoned_object = new summoned_object_type(spawn_place)
+				var/atom/summoned_object = create_summoned_object(summoned_object_type, spawn_place, usr)
 
 				for(var/varName in newVars)
 					if(varName in summoned_object.vars)
@@ -97,12 +100,24 @@
 /obj/effect/forcefield/magic/atom_init(mapload, mob/wiz, timeleft = 300)
 	. = ..()
 	wizard = wiz
-	QDEL_IN(src, timeleft)
+	if(timeleft > 0)
+		QDEL_IN(src, timeleft)
 
 /obj/effect/forcefield/magic/CanPass(atom/movable/mover, turf/target, height=0)
 	if(mover == wizard)
 		return 1
 	return 0
+
+/obj/effect/forcefield/del_after
+	var/time_to_live = 50
+
+/obj/effect/forcefield/del_after/atom_init(mapload, timeleft = 50)
+	. = ..()
+	time_to_live = timeleft
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/effect/forcefield/del_after/atom_init_late()
+	QDEL_IN(src, time_to_live)
 
 /obj/effect/proc_holder/spell/aoe_turf/conjure/smoke
 	name = "Paralysing Smoke"

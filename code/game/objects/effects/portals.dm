@@ -33,7 +33,8 @@
 		return
 	return
 
-
+/obj/effect/portal/proc/on_teleport(atom/movable/AM)
+	return
 
 /obj/effect/portal/proc/teleport(atom/movable/M, density_check = TELE_CHECK_NONE, respect_entrydir = FALSE, use_forceMove = TRUE)
 	if (istype(M, /obj/effect)) //sparks don't teleport
@@ -46,6 +47,7 @@
 		qdel(src)
 		return FALSE
 	if (istype(M, /atom/movable))
+		on_teleport(M)
 		if(prob(failchance)) //oh dear a problem, put em in deep space
 			src.icon_state = "portal1"
 			return do_teleport(M, locate(rand(5, world.maxx - 5), rand(5, world.maxy -5), 3), 0, use_forceMove, adest_checkdensity = density_check, arespect_entrydir = respect_entrydir, aentrydir = get_dir(M, src))

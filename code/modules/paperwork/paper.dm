@@ -471,6 +471,19 @@
 	if(user.mind && (user.mind.assigned_role == "Clown"))
 		clown = 1
 
+	// Wandcrafting-related rune-stuff.
+	if(istype(P, /obj/item/rune))
+		var/obj/item/rune/R = P
+		if(global.spell_types_by_spell_word[R.rune_word])
+			var/spell_type = pick(global.spell_types_by_spell_word[R.rune_word])
+			var/obj/item/spell/S = new spell_type(loc)
+			if(ismob(loc))
+				var/mob/M = loc
+				M.put_in_hands(S)
+			qdel(R)
+			qdel(src)
+			return
+
 	if(istype(P, /obj/item/weapon/paper))
 		var/obj/item/weapon/paper/paper = P
 		if(paper.crumpled)

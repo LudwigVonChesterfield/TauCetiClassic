@@ -1,3 +1,20 @@
+/obj/item/projectile/cast_trigger
+	name = "trigger"
+	icon_state = "energy"
+	light_color = "#303030"
+	light_power = 2
+	light_range = 2
+	nodamage = TRUE
+	flag = "magic"
+
+	density = FALSE
+
+/obj/item/projectile/cast_trigger/atom_init()
+	var/new_color = pick("#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff")
+	light_color = new_color
+	color = "[new_color]30"
+	. = ..()
+
 /obj/item/projectile/magic
 	name = "bolt of nothing"
 	icon_state = "energy"
@@ -7,10 +24,12 @@
 	nodamage = 1
 	flag = "magic"
 
+	w_class = ITEM_SIZE_NORMAL
+
 	var/power_of_spell = 1
 
 /obj/item/projectile/magic/atom_init(mapload, power_of_spell = 1)
-	src.power_of_spell = power_of_spell
+	src.power_of_spell = round(power_of_spell)
 	. = ..()
 
 /obj/item/projectile/magic/change
@@ -190,6 +209,33 @@
 /obj/item/projectile/magic/forcebolt/on_hit(atom/target, blocked = 0)
 
 	var/obj/T = target
-	var/throwdir = get_dir(firer,target)
+	var/throwdir = get_dir(src, target)
 	T.throw_at(get_edge_target_turf(target, throwdir),10,10)
 	return 1
+
+
+
+/obj/item/projectile/magic/teleport
+	name = "spherical bluespace bazinga"
+	icon_state = "bluespace"
+	light_color = "#2020ff"
+
+	density = TRUE
+
+	damage = 0
+	nodamage = TRUE
+
+/obj/item/projectile/magic/teleport/on_impact(atom/target)
+	if(firer)
+		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		steam.set_up(10, 0, firer.loc)
+		steam.start()
+
+		var/turf/T = get_turf(target)
+		var/turf/land = get_step(T, get_dir(T, firer))
+
+		firer.forceMove(land)
+		var/datum/effect/effect/system/steam_spread/steam_2 = new /datum/effect/effect/system/steam_spread()
+		steam_2.set_up(10, 0, land)
+		steam_2.start()
+	..()

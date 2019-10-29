@@ -42,6 +42,12 @@
 		if(istype(master, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = master
 			S.close(usr)
+		else if(istype(master, /obj/item/weapon/wand))
+			var/obj/item/weapon/wand/W = master
+			W.close(usr)
+		else if(istype(master, /obj/item/spell))
+			var/obj/item/spell/S = master
+			S.close(usr)
 	return 1
 
 

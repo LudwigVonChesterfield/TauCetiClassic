@@ -25,6 +25,11 @@
 
 #undef NONSENSICAL_VALUE
 
+/atom/proc/get_light_top()
+	if(!ismovableatom(loc))
+		return src
+	return loc
+
 // Will update the light (duh).
 // Creates or destroys it if needed, makes it update values, makes sure it's got the correct source turf...
 /atom/proc/update_light()
@@ -35,10 +40,7 @@
 	if (!light_power || !light_range) // We won't emit light anyways, destroy the light source.
 		QDEL_NULL(light)
 	else
-		if (!ismovableatom(loc)) // We choose what atom should be the top atom of the light here.
-			. = src
-		else
-			. = loc
+		. = get_light_top()
 
 		if (light) // Update the light or create it if it does not exist.
 			light.update(.)

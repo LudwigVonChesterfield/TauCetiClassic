@@ -288,6 +288,7 @@
 
 	to_chat(user, "[open_span]It's a[wet_status] [size] item.[close_span]")
 
+	// Wandcrafting related stuff.
 	if(enchanted)
 		var/spells_txt = ""
 		var/i = 1
@@ -296,6 +297,7 @@
 			if(i > max_ench_display)
 				break
 			spells_txt += S.spell_word
+			i++
 		to_chat(user, "Seems to be inscribed with <span class='danger'>[spells_txt]</span>.")
 
 /obj/item/attack_hand(mob/user)

@@ -231,6 +231,10 @@ var/const/INGEST = 2
 					if(istype(my_atom.loc, /obj/machinery/bunsen_burner))
 						if(!my_atom.loc:heated)
 							continue
+					else if(istype(my_atom.loc, /obj/structure/rune_pot))
+						var/obj/structure/rune_pot/RP = my_atom.loc
+						if(!RP.lit)
+							continue
 					else
 						continue
 

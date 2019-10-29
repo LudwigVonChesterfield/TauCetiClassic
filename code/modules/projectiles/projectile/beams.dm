@@ -10,6 +10,8 @@
 	var/frequency = 1
 	hitscan = 1
 
+	w_class = ITEM_SIZE_NORMAL
+
 	muzzle_type = /obj/effect/projectile/laser/muzzle
 	tracer_type = /obj/effect/projectile/laser/tracer
 	impact_type = /obj/effect/projectile/laser/impact
@@ -177,3 +179,101 @@
 /obj/item/projectile/beam/stun/atom_init()
 	. = ..()
 	proj_act_sound = null
+
+
+
+
+/obj/item/projectile/beam/magic
+	flag = "magic"
+	var/power_of_spell = 1.0
+
+/obj/item/projectile/beam/magic/atom_init(atom/target, spell_power)
+	src.power_of_spell = spell_power
+	. = ..()
+
+/obj/item/projectile/beam/magic/muh_lazur
+	name = "muh lazur"
+	icon_state = "laser"
+
+	damage = 2
+	stutter = 2
+	agony = 2
+	nodamage = FALSE
+
+	muzzle_type = /obj/effect/projectile/laser/muzzle
+	tracer_type = /obj/effect/projectile/laser/tracer
+	impact_type = /obj/effect/projectile/laser/impact
+
+	light_color = COLOR_RED
+
+/obj/item/projectile/beam/magic/muh_lazur/atom_init()
+	color = TO_NEGATIVE_COLOR
+	. = ..()
+
+/obj/item/projectile/beam/magic/healing
+	name = "healing beam"
+	icon_state = "xray"
+
+	damage = 0.0
+	nodamage = TRUE
+
+	muzzle_type = /obj/effect/projectile/xray/muzzle
+	tracer_type = /obj/effect/projectile/xray/tracer
+	impact_type = /obj/effect/projectile/xray/impact
+
+/obj/item/projectile/beam/magic/healing/on_hit(mob/living/target, blocked = 0)
+	if(!istype(target) || target.stat == DEAD || issilicon(target))
+		return
+
+	var/hamt = -2.0 * power_of_spell
+	var/reduced_heal = (power_of_spell >= 7.0)
+	if(reduced_heal)
+		hamt *= 0.15 // healing everything 85% less, because most of healing power goes into regeneration of limbs which also full heals them.
+		target.restore_all_bodyparts()
+		target.regenerate_icons()
+
+	if(prob(power_of_spell)) // critical hit!!
+		hamt *= 2
+
+	if(power_of_spell >= 4)
+		hamt *= 0.8
+		target.cure_all_viruses()
+	if(power_of_spell >= 5)
+		hamt *= 0.7
+		target.remove_any_mutations()
+
+	target.apply_damages(reduced_heal ? 0 : hamt, reduced_heal ? 0 : hamt, hamt, hamt, hamt, hamt) // zero is for brute and burn in case of restoring bodyparts, because no point to heal them, since body parts restoration does that.
+	target.apply_effects(hamt, hamt, hamt, hamt, hamt, hamt, hamt, hamt)
+
+/obj/item/projectile/beam/magic/life_steal
+	name = "life-steal beam"
+	icon_state = "xray"
+
+	damage = 0.0
+	nodamage = TRUE
+
+	muzzle_type = /obj/effect/projectile/xray/muzzle
+	tracer_type = /obj/effect/projectile/xray/tracer
+	impact_type = /obj/effect/projectile/xray/impact
+
+	light_color = COLOR_PURPLE
+
+/obj/item/projectile/beam/magic/life_steal/atom_init()
+	color = TO_NEGATIVE_COLOR
+	. = ..()
+
+/obj/item/projectile/beam/magic/life_steal/on_hit(mob/living/target, blocked = 0)
+	if(!istype(target) || target.stat == DEAD || issilicon(target))
+		return
+
+	var/dam_hit = -1.0 * power_of_spell
+
+	if(prob(power_of_spell)) // critical hit!!
+		dam_hit *= 2
+
+	target.apply_damage(damage = -dam_hit, damagetype = OXY, used_weapon = "High power suffocant")
+
+	if(firer && isliving(firer))
+		var/mob/living/L = firer
+		L.apply_damages(dam_hit, dam_hit, dam_hit, dam_hit, dam_hit, dam_hit) // zero is for brute and burn in case of restoring bodyparts, because no point to heal them, since body parts restoration does that.
+		L.apply_effects(dam_hit, dam_hit, dam_hit, dam_hit, dam_hit, dam_hit, dam_hit, dam_hit)

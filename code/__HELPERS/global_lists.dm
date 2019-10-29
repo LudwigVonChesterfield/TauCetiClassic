@@ -97,6 +97,10 @@
 			global.combat_combos[hash] = CC
 		global.combat_combos_by_name[CC.name] = CC
 
+	init_spell_runes()
+
+	set_alchemic_precursor_recipes()
+
 	populate_gear_list()
 
 /proc/init_joblist() // Moved here because we need to load map config to edit jobs, called from SSjobs

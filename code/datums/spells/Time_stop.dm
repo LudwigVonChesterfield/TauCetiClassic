@@ -14,23 +14,23 @@ var/timestop_count = 0
 	bound_width = 160
 	bound_x = -64
 	bound_y = -64
-	var/list/immune = list() // the one who creates the timestop is immune
+	var/mob/caster
 	var/list/stopped_atoms = list()
 	var/freezerange = 2
-	var/duration = 14 SECONDS
 	alpha = 125
 
-/obj/effect/timestop/atom_init()
+/obj/effect/timestop/atom_init(mapload, mob/caster, duration = 14 SECONDS)
 	. = ..()
+	src.caster = caster
 	timestop_count++
 	playsound(src, 'sound/magic/TIMEPARADOX2.ogg', VOL_EFFECTS_MASTER)
 	timestop()
 	QDEL_IN(src, duration)
 
 /obj/effect/timestop/Destroy()
+	caster = null
 	timestop_count--
 	untimestop()
-	LAZYCLEARLIST(immune)
 	LAZYCLEARLIST(stopped_atoms)
 
 	return ..()
@@ -55,32 +55,33 @@ var/timestop_count = 0
 	if(!length(catched_targets))
 		return
 
-	for(var/AM in catched_targets)
-		if(isliving(AM))
+	targets_loop:
+		for(var/AM in catched_targets)
+			if(isliving(AM))
 
-			var/mob/living/M = AM
-			if(M.mind)
-				for(var/obj/effect/proc_holder/spell/aoe_turf/conjure/timestop/T in M.mind.spell_list) //People who can stop time are immune to timestop
-					immune |= M
-			if(M in immune)
-				continue
+				var/mob/living/M = AM
+				if(M.mind)
+					for(var/obj/effect/proc_holder/spell/aoe_turf/conjure/timestop/T in M.mind.spell_list) //People who can stop time are immune to timestop
+						continue targets_loop
+				if(M == caster)
+					continue targets_loop
 
-			if(istype(M, /mob/living/simple_animal/hostile))
-				var/mob/living/simple_animal/hostile/H = M
-				H.LoseTarget()
+				if(istype(M, /mob/living/simple_animal/hostile))
+					var/mob/living/simple_animal/hostile/H = M
+					H.LoseTarget()
 
-			M.Stun(10, 1, 1, 1)
-			M.freeze_movement = TRUE
-			stopped_atoms |= M
+				M.Stun(10, 1, 1, 1)
+				M.freeze_movement = TRUE
+				stopped_atoms |= M
 
-		else if(isobj(AM))
-			var/obj/O = AM
-			if(istype(O, /obj/item/projectile))
-				var/obj/item/projectile/P = O
-				P.paused = TRUE // just so it won't keep trying to move while freezed.
+			else if(isobj(AM))
+				var/obj/O = AM
+				if(istype(O, /obj/item/projectile))
+					var/obj/item/projectile/P = O
+					P.paused = TRUE // just so it won't keep trying to move while freezed.
 
-			O.freeze_movement = TRUE
-			stopped_atoms |= O
+				O.freeze_movement = TRUE
+				stopped_atoms |= O
 
 /obj/effect/timestop/proc/untimestop(atom/movable/target)
 	var/list/catched_targets = list()
@@ -116,3 +117,6 @@ var/timestop_count = 0
 	action_icon_state = "time"
 	newVars = list("duration" = 140)
 	summon_type = list(/obj/effect/timestop)
+
+/obj/effect/proc_holder/spell/aoe_turf/conjure/timestop/create_summoned_object(summoned_object_type, atom/spawn_place, mob/summoner)
+	return new summoned_object_type(spawn_place, summoner)

@@ -365,13 +365,12 @@
 	if(prob(power_of_spell)) // critical hit!!
 		hamt *= 2
 
-	switch(power_of_spell)
-		if(4)
-			hamt *= 0.15
-			L.cure_all_viruses()
-		if(5)
-			hamt *= 0.10
-			L.remove_any_mutations()
+	if(power_of_spell >= 4)
+		hamt *= 0.8
+		L.cure_all_viruses()
+	if(power_of_spell >= 5)
+		hamt *= 0.7
+		L.remove_any_mutations()
 
 	L.apply_damages(hamt, hamt, hamt, hamt, hamt, hamt)
 	L.apply_effects(hamt, hamt, hamt, hamt, hamt, hamt, hamt, hamt)
@@ -394,11 +393,21 @@
 		return
 
 	var/hamt = -30 * power_of_spell // level 6 = 180 || level 7 = 31.5 (cause of reduction)
-	var/reduced_heal = (power_of_spell == 7)
+	var/reduced_heal = (power_of_spell >= 7)
 	if(reduced_heal)
 		hamt *= 0.15 // healing everything 85% less, because most of healing power goes into regeneration of limbs which also full heals them.
 		target.restore_all_bodyparts()
 		target.regenerate_icons()
+
+	if(prob(power_of_spell)) // critical hit!!
+		hamt *= 2
+
+	if(power_of_spell >= 4)
+		hamt *= 0.8
+		target.cure_all_viruses()
+	if(power_of_spell >= 5)
+		hamt *= 0.7
+		target.remove_any_mutations()
 
 	target.apply_damages(reduced_heal ? 0 : hamt, reduced_heal ? 0 : hamt, hamt, hamt, hamt, hamt) // zero is for brute and burn in case of restoring bodyparts, because no point to heal them, since body parts restoration does that.
 	target.apply_effects(hamt, hamt, hamt, hamt, hamt, hamt, hamt, hamt)

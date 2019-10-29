@@ -97,6 +97,7 @@ var/global/list/dust_icons_hash = list()
 	return ..()
 
 /obj/item/dust/react_to_dust(obj/item/dust/D)
+	/*
 	if(!D.throwing)
 		var/datum/reagent/reag = reagents.reagent_list[1]
 		var/datum/reagent/D_reag = D.reagents.reagent_list[1]
@@ -104,6 +105,13 @@ var/global/list/dust_icons_hash = list()
 		if(reag.id == D_reag.id)
 			merge_with(D)
 			return TRUE
+	*/
+	var/datum/reagent/reag = reagents.reagent_list[1]
+	var/datum/reagent/D_reag = D.reagents.reagent_list[1]
+
+	if(reag.id == D_reag.id)
+		merge_with(D)
+		return TRUE
 	return FALSE
 
 /obj/item/dust/proc/merge_with(obj/item/dust/D)

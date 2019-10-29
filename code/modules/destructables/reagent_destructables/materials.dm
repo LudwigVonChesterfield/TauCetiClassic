@@ -171,7 +171,23 @@
 
 	density = 2.5
 	pressure_split = 7.5
-	brittle_amount = 5.0
+	brittle_amount = 0.0
+
+	damage_resistance = list(BRUTE = 0.5,
+	                         BURN = 0.5,
+	                         "other" = 0.0)
+
+/datum/reagent/stone
+	name = "Stone"
+	id = "stone"
+	description = "A stone."
+	reagent_state = SOLID
+	color = "#566061" // rgb: 86, 96, 97
+	taste_message = "rock"
+
+	density = 2.6
+	pressure_split = 8.0
+	brittle_amount = 0.0
 
 	damage_resistance = list(BRUTE = 0.5,
 	                         BURN = 0.5,
