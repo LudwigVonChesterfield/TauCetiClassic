@@ -1,11 +1,22 @@
 /obj/structure/girder
-	icon_state = "girder"
+	icon = 'icons/obj/smooth_structures/girder.dmi'
+	icon_state = "box"
 	anchored = 1
 	density = 1
 	layer = 2.9
 	var/state = 0
 
 	spawn_destruction_reagents = list("iron" = 50)
+
+	canSmoothWith = list(
+		/turf/simulated/wall,
+		/turf/simulated/wall/r_wall,
+		/obj/structure/falsewall,
+		/obj/structure/falsewall/reinforced,
+		/obj/structure/girder,
+		/obj/structure/girder/reinforced
+	)
+	smooth = SMOOTH_TRUE
 
 /obj/structure/girder/attackby(obj/item/W, mob/user)
 	if(user.is_busy())
@@ -102,7 +113,7 @@
 					new /obj/structure/falsewall/reinforced(loc)
 					qdel(src)
 				else
-					if (src.icon_state == "reinforced") //I cant believe someone would actually write this line of code...
+					if (istype (src, /obj/structure/girder/reinforced))
 						if(S.get_amount() < 1)
 							return ..()
 						to_chat(user, "<span class='notice'>Now finalising reinforced wall.</span>")
@@ -163,13 +174,18 @@
 	..()
 
 /obj/structure/girder/displaced
+	icon = 'icons/obj/structures.dmi'
 	icon_state = "displaced"
 	anchored = 0
 
 	spawn_destruction_reagents = list("iron" = 50)
 
+	health = 50
+	smooth = SMOOTH_FALSE
+
 /obj/structure/girder/reinforced
-	icon_state = "reinforced"
+	icon = 'icons/obj/smooth_structures/girder_reinforced.dmi'
+	icon_state = "box"
 	state = 2
 
 	spawn_destruction_reagents = list("steel" = 50)
@@ -181,6 +197,7 @@
 	density = 1
 	layer = 2.9
 	var/health = 250
+	smooth = SMOOTH_FALSE
 
 /obj/structure/cultgirder/attackby(obj/item/W, mob/user)
 	if(user.is_busy(src))

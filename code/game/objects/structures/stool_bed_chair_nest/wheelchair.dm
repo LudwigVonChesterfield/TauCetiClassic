@@ -38,7 +38,7 @@
 		var/mob/living/M = usr
 		if(buckled_mob == M)
 			if(brake)
-				M.throw_alert("brake")
+				M.throw_alert("brake", /obj/screen/alert/brake)
 				alert = 1
 			else
 				M.clear_alert("brake")
