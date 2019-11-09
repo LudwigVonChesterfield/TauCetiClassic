@@ -383,11 +383,11 @@
 	if(icon_move && !stat)
 		flick(icon_move, src)
 
-/mob/living/simple_animal/has_head(targetzone = null)
-	return has_head
-
-/mob/living/simple_animal/has_arm(targetzone = null)
-	return has_arm
-
-/mob/living/simple_animal/has_leg(targetzone = null)
-	return has_leg
+/mob/living/simple_animal/has_bodypart(name)
+	if(name == BP_HEAD)
+		return has_head
+	if(name == BP_L_ARM || BP_R_ARM)
+		return has_arm
+	if(name == BP_L_LEG || BP_R_LEG)
+		return has_leg
+	return FALSE

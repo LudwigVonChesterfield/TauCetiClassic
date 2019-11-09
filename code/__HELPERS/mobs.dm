@@ -271,3 +271,5 @@
 		user.become_not_busy(_hand = busy_hand)
 	if(target)
 		target.in_use_action = FALSE
+	if(target && target != user)
+		target.in_use_action = FALSE

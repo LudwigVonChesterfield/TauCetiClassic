@@ -11,11 +11,14 @@
 		)
 
 	on_trigger_cast_type = WAND_COMP_OTHERSCAST
+	timer_before_cast = FALSE
 
 /obj/item/spell/projectile/proc/get_proj_type()
 	return projectile_type
 
 /obj/item/spell/projectile/proc/process_projectile(obj/item/projectile/P, obj/item/weapon/wand/holder, atom/casting_obj, atom/target, datum/spell_modifier/cur_mod, datum/spell_modifier/next_mod)
+	issue_event(WAND_SPELL_TIMER, holder, P, list(target), cur_mod.get_copy(), next_mod.get_copy())
+
 	if(spell_flags[WAND_SPELL_TRIGGER_ON_IMPACT])
 		P.on_impact_callback = CALLBACK(src, /obj/item/spell.proc/issue_event, WAND_SPELL_TRIGGER_ON_IMPACT, holder, P, list(target), cur_mod.get_copy(), next_mod.get_copy())
 	if(spell_flags[WAND_SPELL_TRIGGER_ON_STEP])

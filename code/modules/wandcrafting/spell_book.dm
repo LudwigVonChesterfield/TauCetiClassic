@@ -36,12 +36,12 @@
 	var/rune_txt = ""
 	var/i = 1
 	for(var/rune in global.runes_by_spell_word[spell_word])
-		rune_txt += "<font color=[global.rune_to_color[rune]]>[rune]</span>"
+		rune_txt += "<font color=[global.rune_to_color[rune]]>[rune]</font>"
 		if(i != global.runes_by_spell_word[spell_word].len)
 			rune_txt += "`"
 		i++
 
-	colorized_spell_word = rune_txt
+	colorized_spell_word = capitalize(rune_txt)
 
 	additional_info = S.get_additional_info(SB)
 
@@ -132,7 +132,7 @@
 	known_types[spell_type] = TRUE
 	known_spell_words[SE.spell_word] = TRUE
 	if(shine_on_new_spell)
-		loc.visible_message("<span class='notice'>[src] [pick("shines", "shimmer", "chachings")].</span>")
+		loc.visible_message("<span class='notice'>[src] [pick("shines", "shimmers", "chachings")].</span>")
 
 	categories |= SE.category
 	entries[SE.full_spell_name] = SE

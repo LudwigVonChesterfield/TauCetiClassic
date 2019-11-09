@@ -278,6 +278,17 @@
 			to_chat(casting_obj, "<span class='warning'>It seems [src] has no spells!</span>")
 		return
 
+	if(!casting_obj.can_cast)
+		if(ismob(casting_obj))
+			to_chat(casting_obj, "<span class='warning'>Spells can't be cast while in [get_area(casting_obj)]!</span>")
+		return
+
+	for(var/atom/A in targets)
+		if(!A.can_cast_on)
+			if(ismob(casting_obj))
+				to_chat(casting_obj, "<span class='warning'>Spells can't be cast while in [get_area(A)]!</span>")
+			return
+
 	var/list/to_cast = get_next_spells()
 	if(islist(to_cast))
 		if(to_cast.len)

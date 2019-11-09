@@ -34,6 +34,7 @@
 /obj/item/spell/spell_component/timer/get_additional_info()
 	var/dat = ..()
 	dat += "When applied to spell, the spell will issue a trigger-cast mechanic after a set amount of time.<BR>"
+	return dat
 
 /obj/item/spell/spell_component/timer/proc/after_time(obj/item/weapon/wand/holder, atom/casting_obj, list/targets, datum/spell_modifier/cur_mod)
 	if(QDELING(casting_obj) || QDELING(src))

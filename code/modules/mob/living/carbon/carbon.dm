@@ -655,7 +655,7 @@
 				W.plane = initial(W.plane)
 
 //-TG- port for smooth lying/standing animations
-/mob/living/carbon/get_pixel_y_offset(lying_current = 0)
+/mob/living/carbon/get_pixel_y_offset(lying_current = FALSE)
 	if(lying)
 		if(buckled && istype(buckled, /obj/structure/stool/bed/roller))
 			return 1

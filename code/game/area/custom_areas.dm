@@ -52,11 +52,22 @@
 	requires_power = 0
 	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
 
+/atom/var/can_cast = TRUE
+/atom/var/can_cast_on = TRUE
+
 /area/custom/wizard_station
 	name = "Wizard's Den"
 	icon_state = "yellow"
 	requires_power = 0
 	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
+
+/area/custom/wizard_station/Entered(atom/movable/AM, atom/oldLoc)
+	AM.can_cast = FALSE
+	AM.can_cast_on = FALSE
+
+/area/custom/wizard_station/Exited(atom/movable/AM, atom/newLoc)
+	AM.can_cast = TRUE
+	AM.can_cast_on = TRUE
 
 /area/custom/tophat
 	name = "Tophat"

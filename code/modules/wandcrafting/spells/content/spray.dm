@@ -16,6 +16,7 @@
 		)
 
 	on_trigger_cast_type = WAND_COMP_OTHERSCAST
+	timer_before_cast = FALSE
 
 	var/list/reagents_to_spray
 	var/spray_range = 5
@@ -77,6 +78,7 @@
 	D.icon += mix_color_from_reagents(D.reagents.reagent_list)
 	D.created_by = casting_obj
 
+	issue_event(WAND_SPELL_TIMER, holder, D, list(target), cur_mod.get_copy(), next_mod.get_copy())
 	if(spell_flags[WAND_SPELL_TRIGGER_ON_IMPACT])
 		D.on_impact_callback = CALLBACK(src, /obj/item/spell.proc/issue_event, WAND_SPELL_TRIGGER_ON_IMPACT, holder, D, list(target), cur_mod.get_copy(), next_mod.get_copy())
 	if(spell_flags[WAND_SPELL_TRIGGER_ON_STEP])
@@ -101,6 +103,9 @@
 		reagents_to_spray[reag] = 5 / regs
 
 	. = ..()
+
+/obj/item/spell/spray/random/set_full_name()
+	full_name = name
 
 /obj/item/spell/spray/random/get_spray_reagents(obj/item/weapon/wand/holder, atom/casting_obj, atom/target, datum/spell_modifier/cur_mod, datum/spell_modifier/next_mod)
 	var/datum/reagents/R = new(1000)

@@ -6,7 +6,7 @@
 
 /obj/item/spell/on_caster/get_additional_info(obj/item/weapon/storage/spellbook/SB)
 	var/dat = ..()
-	dat = "<font color='red'>Cast location is always the same as the location of object that cast it.</font>"
+	dat += "<font color='red'>Cast location is always the same as the location of object that cast it.</font>"
 	return dat
 
 /obj/item/spell/on_caster/spell_areacast(obj/item/weapon/wand/holder, atom/casting_obj, list/targets, datum/spell_modifier/cur_mod, datum/spell_modifier/next_mod)
@@ -37,7 +37,7 @@
 
 	epicenter.color = epicenter_prev_color
 
-	explosion(epicenter, 0, 1, power, 0)
+	explosion(epicenter, 0.0, 1.0, power, 0.0)
 
 
 

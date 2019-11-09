@@ -39,7 +39,7 @@
 /obj/effect/portal/proc/teleport(atom/movable/M, density_check = TELE_CHECK_NONE, respect_entrydir = FALSE, use_forceMove = TRUE)
 	if (istype(M, /obj/effect)) //sparks don't teleport
 		return FALSE
-	if (M.anchored && istype(M, /obj/mecha))
+	if (M.anchored && !istype(M, /obj/mecha))
 		return FALSE
 	if (icon_state == "portal1")
 		return FALSE

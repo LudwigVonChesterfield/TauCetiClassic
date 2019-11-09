@@ -15,11 +15,5 @@ This is what happens, when we attack aliens.
 	return list("damage" = retDam, "type" = retDamType, "flags" = retFlags, "verb" = retVerb, "sound" = retSound,
 				"miss_sound" = retMissSound)
 
-/mob/living/carbon/alien/has_head(targetzone = null)
-	return TRUE
-
-/mob/living/carbon/alien/has_arm(targetzone = null)
-	return TRUE
-
-/mob/living/carbon/alien/has_leg(targetzone = null)
-	return TRUE
+/mob/living/carbon/alien/has_bodypart(name)
+	return (name in list(BP_HEAD, BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG))

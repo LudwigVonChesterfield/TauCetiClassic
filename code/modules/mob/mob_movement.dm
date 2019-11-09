@@ -136,7 +136,8 @@
 		if(world.time < move_delay)
 			return FALSE
 
-	if(mob.stat==DEAD)	return
+	if(!forced && mob.stat)
+		return
 
 /*	// handle possible spirit movement
 	if(istype(mob,/mob/spirit))

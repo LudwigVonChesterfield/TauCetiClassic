@@ -23657,7 +23657,7 @@
 /turf/simulated/floor{
 	icon_state = "wooden-2"
 	},
-/area/crew_quarters/gym)
+/area/station/civilian/gym)
 "gKb" = (
 /obj/machinery/airlock_sensor{
 	id_tag = "virology_sensor";
@@ -32191,7 +32191,7 @@
 /turf/simulated/floor{
 	icon_state = "wooden-2"
 	},
-/area/crew_quarters/gym)
+/area/station/civilian/gym)
 "jFI" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
@@ -76437,7 +76437,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/security/prison)
+/area/station/security/prison)
 "xWW" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,

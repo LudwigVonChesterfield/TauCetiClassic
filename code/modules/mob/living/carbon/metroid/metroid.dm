@@ -741,14 +741,8 @@
 /mob/living/carbon/slime/getTrail()
 	return null
 
-/mob/living/carbon/slime/has_head(targetzone = null)
-	return TRUE
-
-/mob/living/carbon/slime/has_arm(targetzone = null)
-	return FALSE
-
-/mob/living/carbon/slime/has_leg(targetzone = null)
-	return FALSE
+/mob/living/carbon/slime/has_bodypart(name)
+	return (name in list(BP_HEAD))
 
 /mob/living/carbon/slime/get_species()
 	return SLIME

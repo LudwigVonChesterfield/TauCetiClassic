@@ -34,15 +34,9 @@
 	allowed_target_zones = list(BP_CHEST)
 
 /datum/combat_combo/push/execute(mob/living/victim, mob/living/attacker)
-	var/obj/item/organ/external/BP = attacker.get_targetzone()
+	var/armor_check = victim.run_armor_check(null, "melee")
 
-	var/armor_check = 0
-	if(ishuman(victim))
-		var/mob/living/carbon/human/H = victim
-		BP = H.get_bodypart(BP)
-		armor_check = victim.run_armor_check(BP, "melee")
-
-	victim.apply_effect(3, WEAKEN, BP, blocked = armor_check)
+	victim.apply_effect(3, WEAKEN, blocked = armor_check)
 	playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
 	victim.visible_message("<span class='danger'>[attacker] has pushed [victim] to the ground!</span>")
 
@@ -63,7 +57,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/slide_kick/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	var/slide_dir = get_dir(attacker, victim)
 
@@ -98,14 +94,8 @@
 				if(L.is_bigger_than(attacker))
 					continue slide_kick_loop
 
-				var/obj/item/organ/external/BP = attacker.get_targetzone()
-				var/armor_check = 0
-				if(ishuman(L))
-					var/mob/living/carbon/human/H = victim
-					BP = H.get_bodypart(BP)
-					armor_check = H.run_armor_check(BP, "melee")
-
-				L.apply_effect(2, WEAKEN, BP, blocked = armor_check)
+				var/armor_check = victim.run_armor_check(attacker.get_targetzone(), "melee")
+				L.apply_effect(2, WEAKEN, blocked = armor_check)
 
 				var/end_string = "to the ground!"
 				if(CLUMSY in attacker.mutations) // Make a funny
@@ -182,20 +172,19 @@
 			break
 
 	if(victim_G)
-		var/obj/item/organ/external/BP = attacker.get_targetzone()
-		var/armor_check = 0
+		var/target_zone = attacker.get_targetzone()
+		var/armor_check = victim.run_armor_check(target_zone, "melee")
+
 		if(ishuman(victim))
 			var/mob/living/carbon/human/H = victim
-			BP = H.get_bodypart(BP)
-			armor_check = H.run_armor_check(BP, "melee")
-
+			var/obj/item/organ/external/BP = H.get_bodypart(target_zone)
 			victim.visible_message("<span class='danger'>[attacker] [pick("bent", "twisted")] [victim]'s [BP.name] into a jointlock!</span>")
-			if(armor_check < 2)
+			if(armor_check < 30)
 				to_chat(victim, "<span class='danger'>You feel extreme pain!</span>")
 				victim.adjustHalLoss(CLAMP(0, 40 - victim.halloss, 40)) // up to 40 halloss
 
 		victim_G.force_down = TRUE
-		victim.apply_effect(3, WEAKEN, BP, blocked = armor_check)
+		victim.apply_effect(3, WEAKEN, blocked = armor_check)
 		victim.visible_message("<span class='danger'>[attacker] presses [victim] to the ground!</span>")
 
 		step_to(attacker, victim)
@@ -219,7 +208,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/uppercut/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	attacker.set_dir(pick(NORTH, SOUTH)) // So they will appear sideways, as if they are actually knocking with their fist.
 
@@ -265,10 +256,14 @@
 	var/prev_victim_pix_y = victim.pixel_y
 
 	animate(attacker, transform = M, pixel_y = attacker.pixel_y + 8, time = 2)
-	sleep(2)
+	if(!do_combo(victim, attacker, 2))
+		after_animation(victim, attacker)
+		return
 	animate(attacker, transform = prev_attacker_M, pixel_y = attacker.pixel_y + 8, time = 2)
 	animate(victim, transform = victim_M, pixel_y = victim.pixel_y + 16, time = 2)
-	sleep(2)
+	if(!do_combo(victim, attacker, 2))
+		after_animation(victim, attacker)
+		return
 
 	var/atom/move_attacker_to = victim.loc
 	var/atom/move_victim_dir = get_dir(victim, get_step_away(victim, attacker))
@@ -280,21 +275,18 @@
 
 	animate(attacker, pixel_y = attacker.pixel_y - 16, time = 2)
 	animate(victim, pixel_y = prev_victim_pix_y, time = 2)
-	sleep(2)
+	if(!do_combo(victim, attacker, 2))
+		after_animation(victim, attacker)
+		return
 
 	attacker.transform = prev_attacker_M
 	victim.transform = prev_victim_M
 	victim.layer = prev_victim_layer
 
-	var/obj/item/organ/external/BP = BP_HEAD
-	var/armor_check = 0
-	if(ishuman(victim))
-		var/mob/living/carbon/human/H = victim
-		BP = H.get_bodypart(BP)
-		armor_check = H.run_armor_check(BP, "melee")
+	var/armor_check = victim.run_armor_check(BP_HEAD, "melee")
 
-	victim.apply_effect(2, WEAKEN, BP, blocked = armor_check)
-	victim.apply_damage(20, BRUTE, BP, blocked = armor_check)
+	victim.apply_effect(2, WEAKEN, blocked = armor_check)
+	victim.apply_damage(20, BRUTE, BP_HEAD, blocked = armor_check)
 	victim.visible_message("<span class='danger'>[attacker] has performed an uppercut on [victim]!</span>")
 
 	if(iscarbon(victim))
@@ -328,7 +320,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/suplex/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	var/DTM = get_dir(attacker, victim)
 	var/victim_dir = get_dir(victim, attacker)
@@ -381,18 +375,15 @@
 	victim.anchored = TRUE
 	attacker.anchored = TRUE
 	animate(victim, pixel_x = victim.pixel_x - shift_x, pixel_y = victim.pixel_y - 20 - shift_y, time = 2)
-	sleep(2)
+	if(!do_combo(victim, attacker, 2))
+		after_animation(victim, attacker)
+		return
 
 	victim.forceMove(get_step(victim, victim_dir))
 	victim.anchored = prev_victim_anchored
 	attacker.anchored = prev_attacker_anchored
 
-	var/obj/item/organ/external/BP = BP_GROIN
-	var/armor_check = 0
-	if(ishuman(victim))
-		var/mob/living/carbon/human/H = victim
-		BP = H.get_bodypart(BP)
-		armor_check = H.run_armor_check(H, "melee")
+	var/armor_check = victim.run_armor_check(null, "melee")
 
 	victim.apply_effect(5, WEAKEN, blocked = armor_check)
 	victim.apply_damage(30, BRUTE, blocked = armor_check)
@@ -431,7 +422,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/diving_elbow_drop/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	var/DTM = get_dir(attacker, victim)
 	var/shift_x = 0
@@ -467,22 +460,29 @@
 	M.Turn(pick(-100, 100))
 
 	animate(attacker, transform = M, pixel_x = attacker.pixel_x + shift_x, pixel_y = attacker.pixel_y + shift_y + 36, time = 4)
-	sleep(4)
+	if(!do_combo(victim, attacker, 4))
+		after_animation(victim, attacker)
+		return
 
-	sleep(3) // Hover ominously.
+	// Hover ominously.
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	attacker.pixel_x = prev_pix_x
 	attacker.pixel_y = prev_pix_y + 32
 	attacker.forceMove(victim.loc)
 
 	animate(attacker, pixel_y = prev_pix_y, time = 2)
-	sleep(2)
+	if(!do_combo(victim, attacker, 2))
+		after_animation(victim, attacker)
+		return
 
 	for(var/mob/living/L in victim.loc)
 		if(L == attacker)
 			continue
 		if(L.lying || L.resting || L.crawling)
-			L.apply_damage(30, BRUTE, blocked =0) // A body dropped on us! Armor ain't helping.
+			L.apply_damage(30, BRUTE, blocked = 0) // A body dropped on us! Armor ain't helping.
 		L.apply_effect(6, WEAKEN, blocked = 0)
 
 	var/atom/dest = victim.loc
@@ -522,7 +522,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/dropkick/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	var/dropkick_dir = get_dir(attacker, victim)
 	var/face_dir = get_dir(victim, attacker)
@@ -555,7 +557,9 @@
 	attacker.set_dir(NORTH) // Face up.
 
 	animate(attacker, pixel_x = attacker.pixel_x + shift_x, pixel_y = attacker.pixel_y + shift_y, transform  = M, time = 3)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	attacker.pixel_x = prev_pix_x
 	attacker.pixel_y = prev_pix_y
@@ -614,7 +618,18 @@
 			for(var/mob/living/L in cur_movers)
 				INVOKE_ASYNC(GLOBAL_PROC, .proc/_step, L, dropkick_dir)
 
-			sleep(attacker.movement_delay() * 0.5) // Since they were the one to push.
+			// Since they were the one to push.
+			if(!do_combo(victim, attacker, attacker.movement_delay() * 0.5))
+				for(var/j in 1 to i)
+					var/mob/living/L = movers["[j]"]
+					var/list/prev_info_el = prev_info["[j]"]
+					L.pixel_x = prev_info_el["pix_x"]
+					L.pixel_y = prev_info_el["pix_y"]
+					L.pass_flags = prev_info_el["pass_flags"]
+					L.apply_effect(5, WEAKEN, blocked = 0)
+
+				after_animation(victim, attacker)
+				return
 
 	for(var/j in 1 to i)
 		var/mob/living/L = movers["[j]"]
@@ -653,7 +668,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/charge/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	attacker.Grab(victim, GRAB_NECK)
 	var/success = FALSE
@@ -692,38 +709,34 @@
 				if(T != attacker.loc) // We bumped into something, so we bumped our victim into it...
 					var/list/to_check = T.contents + attacker.loc.contents - list(attacker)
 					for(var/mob/living/L in to_check)
-					for(var/atom/A in to_check)
-						if(isliving(A))
-							var/mob/living/L = A
-							if(L.is_bigger_than(victim))
-								continue
-							var/obj/item/organ/external/BP = BP_CHEST
-							var/armor_check = 0
-							if(ishuman(L))
-								var/mob/living/carbon/human/H = victim
-								BP = H.get_bodypart(BP)
-								armor_check = H.run_armor_check(H, "melee")
+						if(L.is_bigger_than(victim))
+							continue
 
-							var/obj/structure/table/facetable = locate() in T
-							if(facetable)
-								facetable.attackby(victim_G, attacker)
-								playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
-								victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
-							else
-								playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
-								victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
+						var/armor_check = victim.run_armor_check(null, "melee")
 
-							L.apply_effect(6, WEAKEN, blocked = armor_check)
-							L.apply_damage(40, BRUTE, blocked = armor_check)
+						var/obj/structure/table/facetable = locate() in T
+						if(facetable)
+							facetable.attackby(victim_G, attacker)
+							playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
+							victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
 						else
-							var/atom/dest = victim.loc
-							var/datum/destruction_measure/DM = new(dest,
-								40.0,
-								1.0,
-								HITZONE_MIDDLE,
-								BRUTE,
-								DEST_BLUNT)
-							dest.react_to_damage(attacker, null, DM)
+							playsound(victim, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
+							victim.visible_message("<span class='danger'>[attacker] slams [victim] into an obstacle!</span>")
+
+						var/atom/dest = T
+						if(facetable)
+							dest = facetable
+
+						var/datum/destruction_measure/DM = new(dest,
+							L.get_size(),
+							1.0,
+							HITZONE_MIDDLE,
+							BRUTE,
+							DEST_BLUNT)
+						dest.react_to_damage(attacker, null, DM)
+
+						L.apply_effect(6, WEAKEN, blocked = armor_check)
+						L.apply_damage(40, BRUTE, blocked = armor_check)
 					break try_steps_loop
 
 				if(!do_after(attacker, attacker.movement_delay() * 0.5, can_move = TRUE, target = victim, progress = FALSE))
@@ -754,7 +767,9 @@
 	heavy_animation = TRUE
 
 /datum/combat_combo/spin_throw/animate_combo(mob/living/victim, mob/living/attacker)
-	sleep(3)
+	if(!do_combo(victim, attacker, 3))
+		after_animation(victim, attacker)
+		return
 
 	attacker.Grab(victim, GRAB_AGGRESSIVE)
 	var/success = FALSE

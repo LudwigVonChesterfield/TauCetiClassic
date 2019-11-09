@@ -12,6 +12,7 @@
 	if(buckled_mob)
 		if(user.is_busy())
 			return
+
 		if(buckled_mob.buckled == src)
 			if(buckled_mob != user)
 				buckled_mob.visible_message(\

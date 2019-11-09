@@ -463,11 +463,5 @@
 
 	..(message, null, verb, sanitize = 0)
 
-/mob/living/carbon/ian/has_head(targetzone = null)
-	return TRUE
-
-/mob/living/carbon/ian/has_arm(targetzone = null)
-	return FALSE
-
-/mob/living/carbon/ian/has_leg(targetzone = null)
-	return TRUE
+/mob/living/carbon/ian/has_bodypart(name)
+	return (name in list(BP_HEAD, BP_L_LEG, BP_R_LEG))

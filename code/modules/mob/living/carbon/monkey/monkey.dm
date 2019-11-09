@@ -239,14 +239,8 @@
 
 	..(message, speaking, verb, alt_name, italics, message_range, used_radios)
 
-/mob/living/carbon/monkey/has_head(targetzone = null)
-	return TRUE
-
-/mob/living/carbon/monkey/has_arm(targetzone = null)
-	return TRUE
-
-/mob/living/carbon/monkey/has_leg(targetzone = null)
-	return TRUE
+/mob/living/carbon/monkey/has_bodypart(name)
+	return (name in list(BP_HEAD, BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG))
 
 /mob/living/carbon/monkey/get_species()
 	return race

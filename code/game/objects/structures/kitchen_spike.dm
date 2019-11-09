@@ -50,6 +50,7 @@
 	else if(istype(I, /obj/item/weapon/grab))
 		if(user.is_busy())
 			return
+
 		var/obj/item/weapon/grab/G = I
 		if(istype(G.affecting, /mob/living))
 			if(!buckled_mob)

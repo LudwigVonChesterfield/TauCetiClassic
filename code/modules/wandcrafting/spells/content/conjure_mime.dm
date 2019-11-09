@@ -1,5 +1,5 @@
 /obj/item/spell/conjure/mime
-	time_to_live = 5 SECONDS
+	time_to_live = 10 SECONDS
 	var/apply_filter = TRUE
 
 /obj/item/spell/conjure/mime/get_amount(def_am, mult_am, add_am)
@@ -9,8 +9,14 @@
 	ent.name = "invisible [ent.name]"
 	ent.desc = "[ent.desc]. It's invisible!"
 
+	ent.flags |= ABSTRACT|NODECONSTRUCT
+
 	if(apply_filter)
 		ent.color = TO_GREYSCALE_COLOR
+		ent.alpha = 100
+
+	ent.spawn_destruction_reagents = null
+	ent.setup_destructability()
 
 	..()
 

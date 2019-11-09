@@ -75,3 +75,4 @@
 
 /obj/item/spell/sparks/trigger
 	spawn_with_component_types = list(/obj/item/spell/spell_component/trigger/impact)
+	can_be_crafted = FALSE

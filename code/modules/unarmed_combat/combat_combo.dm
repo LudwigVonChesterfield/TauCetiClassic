@@ -86,35 +86,54 @@ var/global/list/combat_combos_by_name = list()
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b> on [CS.victim]'s [target_zone].</span>")
 		return FALSE
 
-	if(require_head && !CS.victim.has_head(target_zone))
+	if(require_head && !CS.victim.has_bodypart(target_zone))
 		if(show_warning)
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b> on [CS.victim], since they don't have a head...</span>")
 		return FALSE
-	if(require_arm && !CS.victim.has_arm(target_zone))
+	if(require_arm && !CS.victim.has_bodypart(target_zone))
 		if(show_warning)
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b> on [CS.victim], since they don't have an arm...</span>")
 		return FALSE
-	if(require_leg && !CS.victim.has_leg(target_zone))
+	if(require_leg && !CS.victim.has_bodypart(target_zone))
 		if(show_warning)
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b> on [CS.victim], since they don't have a leg...</span>")
 		return FALSE
 
-	if(require_head_to_perform && !CS.attacker.has_head())
+	if(require_head_to_perform && !CS.attacker.is_usable_head())
 		if(show_warning)
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b>, since you don't have a head...</span>")
 		return FALSE
 
-	if(require_arm_to_perform && !CS.attacker.has_arm(CS.attacker.hand ? BP_L_ARM : BP_R_ARM))
+	if(require_arm_to_perform && !CS.attacker.is_usable_arm(CS.attacker.hand ? BP_L_ARM : BP_R_ARM))
 		if(show_warning)
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b>, since you don't have an arm...</span>")
 		return FALSE
 
-	if(require_leg_to_perform && !CS.attacker.has_leg())
+	if(require_leg_to_perform && !CS.attacker.is_usable_leg())
 		if(show_warning)
 			to_chat(CS.attacker, "<span class='notice'>You can't perform <b>[name]</b>, since you don't have a leg...</span>")
 		return FALSE
 
 	return TRUE
+
+/datum/combat_combo/proc/do_combo(mob/living/victim, mob/living/attacker, delay)
+	var/endtime = world.time + delay
+	while(world.time < endtime)
+		stoplag()
+		if(QDELING(victim))
+			return FALSE
+		if(QDELING(attacker))
+			return FALSE
+		if(victim.notransform || attacker.notransform)
+			return FALSE
+		if(!attacker.combo_animation)
+			return FALSE
+		if(additional_checks(victim, attacker))
+			return FALSE
+	return TRUE
+
+/datum/combat_combo/proc/additional_checks(mob/living/victim, mob/living/attacker)
+	return FALSE
 
 /datum/combat_combo/proc/get_combo_icon()
 	var/image/I = image(icon='icons/mob/unarmed_combat_combos.dmi', icon_state=combo_icon_state)
@@ -137,8 +156,8 @@ var/global/list/combat_combos_by_name = list()
 		if(attacker.buckled)
 			attacker.buckled.unbuckle_mob()
 
-		attacker.become_busy(victim, _hand = 0)
-		attacker.become_busy(victim, _hand = 1)
+		attacker.become_busy(_hand = 0)
+		attacker.become_busy(_hand = 1)
 		victim.in_use_action = TRUE
 
 		attacker.combo_animation = TRUE

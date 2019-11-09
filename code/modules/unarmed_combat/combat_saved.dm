@@ -68,7 +68,7 @@
 		sleep(1)
 
 /datum/combo_saved/proc/animate_attack(combo_element, combo_value, mob/living/V, mob/living/A)
-	if(A.attack_animation || A.combo_animation)
+	if(A.attack_animation || A.combo_animation || A.notransform)
 		return
 	A.attack_animation = TRUE
 
@@ -85,8 +85,12 @@
 
 	animate(A, transform=M, time=2)
 	sleep(2)
+	if(QDELING(A) || QDELING(src))
+		return
 	animate(A, transform=A.default_transform, time=1)
 	sleep(1)
+	if(QDELING(A) || QDELING(src))
+		return
 	A.transform = A.default_transform
 
 	A.attack_animation = FALSE

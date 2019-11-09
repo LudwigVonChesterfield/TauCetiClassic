@@ -231,14 +231,5 @@
 			"<span class='notice'>You [anchored? "secure" : "unsecure"] \the [src].</span>",
 			"<span class='notice'>You hear a ratchet.</span>")
 
-/mob/living/pbag/has_eyes()
-	return TRUE
-
-/mob/living/pbag/has_head(targetzone = null)
-	return TRUE
-
-/mob/living/pbag/has_arm(targetzone = null)
-	return TRUE
-
-/mob/living/pbag/has_leg(targetzone = null)
-	return TRUE
+/mob/living/pbag/has_bodypart(name)
+	return (name in list(BP_HEAD, BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG))

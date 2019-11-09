@@ -60,7 +60,6 @@
 			var/mana_catalyst_am = reagents.get_reagent_amount("mana_catalyst")
 			if(mana_catalyst_am > 0.0)
 				user.visible_message("<span class='notice'>[src] pops, as it's turn a shade of blue...</span>")
-				new /obj/effect/effect/sparks(loc)
 
 				var/to_convert = mana_catalyst_am
 				var/list/reags_to_pick = list() + reagents.reagent_list
@@ -86,10 +85,14 @@
 				if(reagents.total_volume >= 0.0)
 					var/ectoplasm_am = 0.0
 					for(var/datum/reagent/R in reagents.reagent_list)
+						if(R.id == "mana" || R.id == "mana_catalyst")
+							continue
+						if(R.mana_per_unit == 0.0)
+							continue
 						ectoplasm_am += R.volume * R.mana_per_unit
 						reagents.remove_reagent(R.id, R.volume)
 
-					if(ectoplasm_am)
+					if(ectoplasm_am > 0.0)
 						reagents.add_reagent("ectoplasm", ectoplasm_am)
 
 						var/datum/reagents/evaporate = new /datum/reagents
@@ -101,9 +104,15 @@
 							var/location = get_turf(src)
 							var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
 							S.attach(location)
-							S.set_up(evaporate, evaporated_volume, 0, location)
+							S.set_up(evaporate, CLAMP(evaporate.total_volume * 0.1, 1, 10), 0, location)
 							playsound(location, 'sound/effects/smoke.ogg', VOL_EFFECTS_MASTER, null, null, -3)
 							S.start()
+
+						var/obj/effect/effect/sparks/SP = new /obj/effect/effect/sparks(loc)
+						SP.color = TO_GREYSCALE_AND_APPLY(255, 168, 228)
+					else
+						var/obj/effect/effect/sparks/SP = new /obj/effect/effect/sparks(loc)
+						SP.color = TO_GREYSCALE_AND_APPLY(0, 28, 153)
 
 
 			// reagents.update_total()
@@ -136,14 +145,14 @@
 			user.visible_message("<span class='notice'>[user] puts [I] into [src].</span>",
 			"<span class='notice'>You put [I] into [src].</span>")
 
-			var/obj/effect/effect/sparks/S = new /obj/effect/effect/sparks(loc)
-			S.color = cur_mix_color
+			var/obj/effect/effect/sparks/SP = new /obj/effect/effect/sparks(loc)
+			var/list/cur_mix_rgb = ReadRGB(cur_mix_color)
+			SP.color = TO_GREYSCALE_AND_APPLY(cur_mix_rgb[1], cur_mix_rgb[2], cur_mix_rgb[3])
 
 			var/rune_color = ""
 			if(global.color_to_approx_rune_color[cur_mix_color])
 				rune_color = global.color_to_approx_rune_color[cur_mix_color]
 			else
-				var/list/cur_mix_rgb = ReadRGB(cur_mix_color)
 
 				var/list/closest_approx_cols
 				var/closest_approx_dist = sqrt((255^2) * 3)

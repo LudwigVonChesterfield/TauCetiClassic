@@ -180,7 +180,6 @@
 
 	spawn_destruction_reagents = list("iron" = 50)
 
-	health = 50
 	smooth = SMOOTH_FALSE
 
 /obj/structure/girder/reinforced

@@ -46,6 +46,11 @@
 
 	spawn_entries_types = list(/datum/spell_setup_entry/trigger, /datum/spell_setup_entry/cast_type)
 
+/obj/item/spell/spell_component/timer/get_additional_info()
+	var/dat = ..()
+	dat += "When applied to spell, the spell will issue a trigger-cast mechanic if certain conditions(\"triggers\") are met.<BR>"
+	return dat
+
 /obj/item/spell/spell_component/trigger/proc/on_trigger(obj/item/weapon/wand/holder, atom/casting_obj, list/targets, datum/spell_modifier/cur_mod, datum/spell_modifier/next_mod)
 	var/mob/caster = get_caster(casting_obj)
 

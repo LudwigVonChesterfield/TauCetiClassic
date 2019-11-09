@@ -1243,3 +1243,11 @@
 
 /mob/living/is_busy()
 	return combo_animation || attack_animation || ..()
+
+/mob/living/proc/has_bodypart(name)
+	return FALSE
+
+/mob/living/proc/has_organ(name)
+	if(name == O_EYES)
+		return TRUE
+	return FALSE

@@ -314,30 +314,30 @@
 	if(stat || paralysis || stunned || weakened || restrained(restrained_type))
 		return 1
 
-// These procs define whether this mob has a limb at a given targetzone. Heavily used in combo-combat.
+// These procs define whether this mob has a usable limb at a given targetzone. Heavily used in combo-combat.
 // If targetzone is not specified, returns TRUE if the mob has the bodypart in general.
-/mob/living/proc/has_eyes()
+/mob/living/proc/is_usable_eyes(targetzone = null)
 	return TRUE
 
-/mob/living/proc/has_head(targetzone = null)
+/mob/living/proc/is_usable_head(targetzone = null)
 	return FALSE
 
-/mob/living/proc/has_arm(targetzone = null)
+/mob/living/proc/is_usable_arm(targetzone = null)
 	return FALSE
 
-/mob/living/proc/has_leg(targetzone = null)
+/mob/living/proc/is_usable_leg(targetzone = null)
 	return FALSE
 
 /mob/living/proc/can_hit_zone(mob/living/attacker, targetzone)
 	switch(targetzone)
 		if(O_EYES)
-			return has_eyes() && has_head()
+			return has_organ(O_EYES) && has_bodypart(BP_HEAD)
 		if(BP_HEAD, O_MOUTH)
-			return has_head(targetzone)
+			return has_bodypart(BP_HEAD)
 		if(BP_L_ARM, BP_R_ARM)
-			return has_arm(targetzone)
+			return has_bodypart(targetzone)
 		if(BP_L_LEG, BP_R_LEG)
-			return has_leg(targetzone)
+			return has_bodypart(targetzone)
 		else
 			return TRUE
 	return FALSE // This is probably unused.

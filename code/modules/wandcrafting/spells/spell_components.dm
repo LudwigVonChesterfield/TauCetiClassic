@@ -178,19 +178,21 @@
 	spell_invocation = "whisper"
 	cast_light = FALSE
 
+	spell_components_slots = 0
+
+	compatible_flags = list()
+
 	var/obj/item/spell/holder
 	var/list/add_flags = list()
 
 /obj/item/spell/spell_component/examine(mob/user)
 	..()
+	if(add_flags[WAND_SPELL_TIMER])
+		to_chat(user, "<span class='info'>When applied to a spell, it will trigger after a set amount of time.</span>")
 	if(add_flags[WAND_SPELL_TRIGGER_ON_IMPACT])
-		to_chat(user, "<span class='info'>When applied to spell, it will trigger upon collision.</span>")
-
-/obj/item/spell/spell_component/get_additional_info(obj/item/weapon/storage/spellbook/SB)
-	var/dat = ..()
-	if(add_flags[WAND_SPELL_TRIGGER_ON_IMPACT])
-		dat += "When applied to spell, the spell will issue a trigger-cast mechanic on collision.<BR>"
-	return dat
+		to_chat(user, "<span class='info'>When applied to a spell, it will trigger upon collision.</span>")
+	if(add_flags[WAND_SPELL_TRIGGER_ON_STEP])
+		to_chat(user, "<span class='info'>When applied to a spell, it will trigger on each move.</span>")
 
 /obj/item/spell/spell_component/Destroy()
 	if(holder)

@@ -36,6 +36,10 @@
 
 	var/on_trigger_cast_type = WAND_COMP_OTHERSCAST
 
+	// Whether the timer event is issue in before_cast proc or not.
+	// Projectiles don't do this, since we want timer to be cast "from" projectile.
+	var/timer_before_cast = TRUE
+
 	var/can_be_crafted = TRUE
 
 /obj/item/spell/atom_init()
@@ -295,6 +299,9 @@
 		var/new_spell_light_power = spell_light_power * cur_mod.mult_power + cur_mod.add_power
 		set_light(new_spell_light_range, new_spell_light_power, spell_color)
 		addtimer(CALLBACK(src, /atom.proc/set_light, 0), spell_light_time_to_live)
+
+	if(timer_before_cast)
+		issue_event(WAND_SPELL_TIMER, holder, casting_obj, targets, cur_mod.get_copy(), next_mod.get_copy())
 
 /obj/item/spell/proc/after_cast(cast_type, obj/item/weapon/wand/holder, atom/casting_obj, list/targets, datum/spell_modifier/cur_mod, datum/spell_modifier/next_mod)
 	return
