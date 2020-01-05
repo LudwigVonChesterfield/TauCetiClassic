@@ -28,10 +28,11 @@
 	density = TRUE
 	anchored = TRUE
 
-	// It's a very special pot, it processes reactions when it wants to.
 	flags = OPENCONTAINER
 
 	spawn_destruction_reagents = list("stone" = 90, "wood" = 10)
+
+	var/my_reag_color = ""
 
 	var/amount_per_transfer_from_this = 1
 	var/possible_transfer_amounts = list(1, 5, 10, 25, 50, 100)
@@ -52,6 +53,22 @@
 	var/N = input("Amount per transfer from this:", "[src]") as null|anything in possible_transfer_amounts
 	if(N)
 		amount_per_transfer_from_this = N
+
+/obj/structure/rune_pot/examine(mob/living/user)
+	..()
+	to_chat(user, "<span class='notice'>The solution inside is somewhere <span color=[my_reag_color]>like this</span> in color.</span>")
+	if(isliving(user))
+		user.taste_reagents(reagents, "smell")
+
+/obj/structure/rune_pot/on_reagent_change()
+	my_reag_color = mix_color_from_reagents(reagents.reagent_list)
+
+	var/bubbles_am = round(reagents.total_volume * 0.1, 1.0)
+	if(bubbles_am >= 1.0)
+		var/image/bubble = image(icon=icon, icon_state="pot_bubble")
+		bubble.pixel_x = rand(-10, 10)
+		bubble.color = my_reag_color
+		flick_overlay(bubble, get_mob_with_client_list(), 1 SECOND)
 
 /obj/structure/rune_pot/attackby(obj/item/I, mob/user)
 	if(lit)
