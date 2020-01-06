@@ -290,10 +290,10 @@ var/global/list/wand_icon_by_icon_state = list(
 		"flags",
 		)
 	var/list/pos_attributes = list(
-		"add_spells_per_click"=0,
-		"add_max_mana"=0,
-		"add_passive_mana_charge"=0,
-		"flags"=0,
+		"add_spells_per_click"=1,
+		"add_max_mana"=1,
+		"add_passive_mana_charge"=1,
+		"flags"=1,
 		)
 	var/list/max_possible = list(
 		"add_spells_per_click"=100.0,
@@ -309,7 +309,7 @@ var/global/list/wand_icon_by_icon_state = list(
 		if(distribute_among.len == 0)
 			break
 		var/increase_stat = pick(distribute_among)
-		var/increase_by = rand(1, dist_strength)
+		var/increase_by = rand(1, round(dist_strength / pos_attributes[increase_stat]))
 
 		pos_attributes[increase_stat] += increase_by
 		dist_strength -= increase_by
@@ -354,7 +354,7 @@ var/global/list/wand_icon_by_icon_state = list(
 			if(distribute_among.len == 0)
 				break
 			var/increase_stat = pick(distribute_among)
-			var/increase_by = rand(1, dist_strength)
+			var/increase_by = rand(1, round(dist_strength / pos_attributes[increase_stat]))
 
 			pos_attributes[increase_stat] += increase_by
 			dist_strength -= increase_by
@@ -362,9 +362,9 @@ var/global/list/wand_icon_by_icon_state = list(
 				dist_strength += max_possible[increase_stat] - pos_attributes[increase_stat]
 				distribute_among -= increase_stat
 
-	random_comp.add_spells_per_click = rand_in_rang(pos_attributes["add_spells_per_click"], 0, max_possible["add_spells_per_click"], -2, 2, round_prec=1.0)
-	random_comp.add_max_mana = rand_in_rang(pos_attributes["add_max_mana"], 0, max_possible["add_max_mana"], -50, 50, round_prec=1.0)
-	random_comp.add_passive_mana_charge = rand_in_rang(pos_attributes["add_passive_mana_charge"], 0, max_possible["add_passive_mana_charge"], -2.0, 2.0, round_prec=0.1)
+	random_comp.add_spells_per_click = rand_in_rang(pos_attributes["add_spells_per_click"], 1, max_possible["add_spells_per_click"], -2, 2, round_prec=1.0)
+	random_comp.add_max_mana = rand_in_rang(pos_attributes["add_max_mana"], 1, max_possible["add_max_mana"], -50, 50, round_prec=1.0)
+	random_comp.add_passive_mana_charge = rand_in_rang(pos_attributes["add_passive_mana_charge"], 1, max_possible["add_passive_mana_charge"], -2.0, 2.0, round_prec=0.1)
 
 	if(random_comp.add_spells_per_click > 0.0)
 		pos_name_attr += "Familiar"
@@ -431,14 +431,14 @@ var/global/list/wand_icon_by_icon_state = list(
 		"always_casts",
 		)
 	var/list/pos_attributes = list(
-		"spells_per_click"=0,
-		"spells_slots"=0,
-		"wand_components_slots"=0,
-		"max_mana"=0,
-		"passive_mana_charge"=0,
-		"spell_cast_delay"=0,
-		"spell_recharge_delay"=0,
-		"always_casts"=0,
+		"spells_per_click"=1,
+		"spells_slots"=1,
+		"wand_components_slots"=1,
+		"max_mana"=1,
+		"passive_mana_charge"=1,
+		"spell_cast_delay"=1,
+		"spell_recharge_delay"=1,
+		"always_casts"=1,
 		)
 	var/list/max_possible = list(
 		"spells_per_click"=100.0,
@@ -470,7 +470,7 @@ var/global/list/wand_icon_by_icon_state = list(
 		if(distribute_among.len == 0)
 			break
 		var/increase_stat = pick(distribute_among)
-		var/increase_by = rand(1, dist_strength)
+		var/increase_by = rand(1, round(dist_strength / pos_attributes[increase_stat]))
 
 		pos_attributes[increase_stat] += increase_by
 		dist_strength -= increase_by
@@ -491,7 +491,7 @@ var/global/list/wand_icon_by_icon_state = list(
 			if(distribute_among.len == 0)
 				break
 			var/increase_stat = pick(distribute_among)
-			var/increase_by = rand(1, dist_strength)
+			var/increase_by = rand(1, round(dist_strength / pos_attributes[increase_stat]))
 
 			pos_attributes[increase_stat] += increase_by
 			dist_strength -= increase_by
@@ -499,13 +499,13 @@ var/global/list/wand_icon_by_icon_state = list(
 				dist_strength += max_possible[increase_stat] - pos_attributes[increase_stat]
 				distribute_among -= increase_stat
 
-	random_wand.spells_per_click = max(rand_in_rang(pos_attributes["spells_per_click"], 0, max_possible["spells_per_click"], 0, 3, round_prec=1.0), 1)
-	random_wand.spells_slots = rand_in_rang(pos_attributes["spells_slots"], 0, max_possible["spells_slots"], 1, 12, round_prec=1.0)
-	random_wand.wand_components_slots = rand_in_rang(pos_attributes["wand_components_slots"], 0, max_possible["wand_components_slots"], 1, 8, round_prec=1.0)
-	random_wand.max_mana = rand_in_rang(pos_attributes["max_mana"], 0, max_possible["max_mana"], 50, 300, round_prec=1.0)
-	random_wand.passive_mana_charge = rand_in_rang(pos_attributes["passive_mana_charge"], 0, max_possible["passive_mana_charge"], -1.0, 5.0, round_prec=0.1)
-	random_wand.spell_cast_delay = 16 - rand_in_rang(pos_attributes["spell_cast_delay"], 0, max_possible["spell_cast_delay"], 0, 16, round_prec=1.0)
-	random_wand.spell_recharge_delay = rand_in_rang(pos_attributes["spell_recharge_delay"], 0, max_possible["spell_recharge_delay"], 4.0 SECONDS, 0.3 SECONDS, round_prec=1.0)
+	random_wand.spells_per_click = max(rand_in_rang(pos_attributes["spells_per_click"], 1, max_possible["spells_per_click"], 0, 3, round_prec=1.0), 1)
+	random_wand.spells_slots = rand_in_rang(pos_attributes["spells_slots"], 1, max_possible["spells_slots"], 1, 12, round_prec=1.0)
+	random_wand.wand_components_slots = rand_in_rang(pos_attributes["wand_components_slots"], 1, max_possible["wand_components_slots"], 1, 8, round_prec=1.0)
+	random_wand.max_mana = rand_in_rang(pos_attributes["max_mana"], 1, max_possible["max_mana"], 50, 300, round_prec=1.0)
+	random_wand.passive_mana_charge = rand_in_rang(pos_attributes["passive_mana_charge"], 1, max_possible["passive_mana_charge"], -1.0, 5.0, round_prec=0.1)
+	random_wand.spell_cast_delay = 16 - rand_in_rang(pos_attributes["spell_cast_delay"], 1, max_possible["spell_cast_delay"], 0, 16, round_prec=1.0)
+	random_wand.spell_recharge_delay = rand_in_rang(pos_attributes["spell_recharge_delay"], 1, max_possible["spell_recharge_delay"], 4.0 SECONDS, 0.3 SECONDS, round_prec=1.0)
 
 	if(random_wand.spells_per_click > 1.0)
 		add_prefixal_attributes += "Familiar"

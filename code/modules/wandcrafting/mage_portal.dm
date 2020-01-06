@@ -49,6 +49,7 @@
 				// H.equip_to_slot_or_del(new /obj/item/weapon/staff(H), SLOT_L_HAND)
 				H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(H), SLOT_BACK)
 				H.equip_to_slot_or_del(new /obj/item/weapon/storage/box(H), SLOT_IN_BACKPACK)
+				H.equip_to_slot_or_del(new /obj/item/weapon/storage/pouch/wand_pouch(H), SLOT_L_STORE)
 
 /obj/effect/portal/mage_portal/exit
 	// An assoc list with ckey = list(*clothing which was stripped when teleporting inside*)

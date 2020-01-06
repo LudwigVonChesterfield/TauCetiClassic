@@ -1916,6 +1916,7 @@
 #include "code\modules\wandcrafting\mage_portal.dm"
 #include "code\modules\wandcrafting\spell_book.dm"
 #include "code\modules\wandcrafting\spell_modifier.dm"
+#include "code\modules\wandcrafting\spellpouch.dm"
 #include "code\modules\wandcrafting\wandcrafting.dm"
 #include "code\modules\wandcrafting\wands.dm"
 #include "code\modules\wandcrafting\alchemy\alchemic_precursor.dm"
