@@ -334,6 +334,12 @@
 	if(istype(src.loc, /obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = src.loc
 		S.remove_from_storage(src)
+	else if(istype(loc, /obj/item/weapon/wand))
+		var/obj/item/weapon/wand/W = loc
+		W.storage_ui.on_pre_remove(user, src)
+	else if(istype(loc, /obj/item/spell))
+		var/obj/item/spell/S = loc
+		S.storage_ui.on_pre_remove(user, src)
 
 	src.throwing = 0
 	if(src.loc == user)

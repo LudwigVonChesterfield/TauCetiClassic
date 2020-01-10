@@ -56,9 +56,10 @@
 
 /obj/structure/rune_pot/examine(mob/living/user)
 	..()
-	to_chat(user, "<span class='notice'>The solution inside is somewhere <span color=[my_reag_color]>like this</span> in color.</span>")
-	if(isliving(user))
-		user.taste_reagents(reagents, "smell")
+	if(reagents.total_volume > 0)
+		to_chat(user, "<span class='notice'>The solution inside is somewhere <font color=[my_reag_color]>like this</font> in color.</span>")
+		if(isliving(user))
+			user.taste_reagents(reagents, "smell")
 
 /obj/structure/rune_pot/on_reagent_change()
 	my_reag_color = mix_color_from_reagents(reagents.reagent_list)

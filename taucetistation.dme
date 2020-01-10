@@ -1923,6 +1923,7 @@
 #include "code\modules\wandcrafting\alchemy\magic_materials.dm"
 #include "code\modules\wandcrafting\alchemy\magic_reagents_holder.dm"
 #include "code\modules\wandcrafting\alchemy\rune_pot.dm"
+#include "code\modules\wandcrafting\random_wands\wand_pieces.dm"
 #include "code\modules\wandcrafting\runes\global_lists.dm"
 #include "code\modules\wandcrafting\runes\procs.dm"
 #include "code\modules\wandcrafting\runes\rune_anvil.dm"

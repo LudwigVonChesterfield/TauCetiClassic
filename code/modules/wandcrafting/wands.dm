@@ -64,10 +64,7 @@
 	cur_mod = get_default_cast_modifier()
 	next_mod = get_default_cast_modifier()
 
-	spells_storage = new(src, spells, spells_slots)
-	wand_components_storage = new(src, wand_components, wand_components_slots)
-
-	storage_ui = spells_storage
+	init_storage()
 
 	for(var/spell_type in default_spells)
 		var/obj/item/spell/S = new spell_type(null)
@@ -81,6 +78,12 @@
 		always_casts = new always_casts_spell_type(null)
 
 	return INITIALIZE_HINT_LATELOAD
+
+/obj/item/weapon/wand/proc/init_storage()
+	spells_storage = new(src, spells, spells_slots)
+	wand_components_storage = new(src, wand_components, wand_components_slots)
+
+	storage_ui = spells_storage
 
 /obj/item/weapon/wand/atom_init_late()
 	default_color = color

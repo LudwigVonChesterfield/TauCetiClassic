@@ -44,11 +44,15 @@
 	//	user.s_active.show_to(user)
 	for(var/mob/M in can_see_contents())
 		M.s_active.show_to(M)
+	var/obj/item/weapon/wand/W = storage
+	W.on_insertion(user, I)
 
-/datum/storage_ui/wands/on_pre_remove(mob/user, obj/item/W)
+/datum/storage_ui/wands/on_pre_remove(mob/user, obj/item/I)
 	for(var/mob/M in can_see_contents())
 		if(M.client)
-			M.client.screen -= W
+			M.client.screen -= I
+	var/obj/item/weapon/wand/W = storage
+	W.on_pre_remove(user, I)
 
 /datum/storage_ui/wands/on_post_remove(mob/user)
 	if(user.s_active)

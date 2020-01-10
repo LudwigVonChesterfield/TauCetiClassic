@@ -232,41 +232,6 @@
 		dat += "Is compatible with timer component.<BR>"
 	return dat
 
-/obj/item/spell/Moved(atom/OldLoc, Dir)
-	. = ..()
-	if(.)
-		if(istype(OldLoc, /obj/item/weapon/wand))
-			var/obj/item/weapon/wand/W = OldLoc
-			W.spells -= src
-			if(has_passive)
-				W.passive_spells -= src
-				if(W.passive_spells.len == 0)
-					W.passive_spells = null
-			W.spells_queue.Remove(src)
-			W.needs_reload = TRUE
-		else if(istype(OldLoc, /obj/item/spell/continuous))
-			var/obj/item/spell/continuous/C = OldLoc
-			C.spell_components -= src
-			if(istype(C.loc, /obj/item/weapon/wand))
-				var/obj/item/weapon/wand/W = C.loc
-				W.needs_reload = TRUE
-
-		if(istype(loc, /obj/item/weapon/wand))
-			var/obj/item/weapon/wand/W = loc
-			W.spells += src
-			if(has_passive)
-				if(W.passive_spells)
-					W.passive_spells += src
-				else
-					W.passive_spells = list(src)
-			W.needs_reload = TRUE
-		else if(istype(loc, /obj/item/spell/continuous))
-			var/obj/item/spell/continuous/C = loc
-			C.spell_components += src
-			if(istype(C.loc, /obj/item/weapon/wand))
-				var/obj/item/weapon/wand/W = C.loc
-				W.needs_reload = TRUE
-
 /obj/item/spell/proc/spell_can_cast(obj/item/weapon/wand/holder, atom/casting_obj, list/targets, datum/spell_modifier/cur_mod, spend_mana=TRUE)
 	if(spend_mana)
 		var/tots_mana_cost = mana_cost * targets.len

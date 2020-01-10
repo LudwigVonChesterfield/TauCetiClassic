@@ -69,19 +69,34 @@
 	copy_cur_mod = cur_mod.get_copy()
 	continuous_handler(holder, casting_obj, target)
 
-/obj/item/spell/continuous/handle_modification(obj/item/W, mob/user)
-	if(istype(W, /obj/item/spell))
+/obj/item/spell/continuous/add_spell_component(obj/item/spell/S)
+	return
+
+/obj/item/spell/continuous/on_pre_remove(mob/user, obj/item/I)
+	if(istype(I, /obj/item/spell))
+		spell_components -= I
+		if(istype(loc, /obj/item/weapon/wand))
+			var/obj/item/weapon/wand/W = loc
+			W.needs_reload = TRUE
+
+/obj/item/spell/continuous/handle_modification(obj/item/I, mob/user)
+	if(istype(I, /obj/item/spell))
 		if(spell_components.len >= spell_components_slots)
 			to_chat(user, "<span class='notice'>[src] can not contain any more spells.</span>")
 			return FALSE
 
-		user.remove_from_mob(W)
+		user.remove_from_mob(I)
 		user.update_icons()
-		W.forceMove(src)
+		I.forceMove(src)
+
+		spell_components += I
+		if(istype(loc, /obj/item/weapon/wand))
+			var/obj/item/weapon/wand/W = loc
+			W.needs_reload = TRUE
 
 		if(usr.client && usr.s_active != src)
-			usr.client.screen -= W
-		W.dropped(usr)
+			usr.client.screen -= I
+		I.dropped(usr)
 		add_fingerprint(usr)
 
 		storage_ui.prepare_ui()

@@ -42,14 +42,6 @@
 	if(add_flags[WAND_COMP_RELOADMOVE])
 		to_chat(user, "<span class='info'>This component will allow your wand to be reloaded on the move.</span>")
 
-/obj/item/wand_component/Moved(atom/OldLoc, Dir)
-	. = ..()
-	if(.)
-		if(istype(OldLoc, /obj/item/weapon/wand))
-			remove_from_holder()
-		if(istype(loc, /obj/item/weapon/wand))
-			apply_to_holder(loc)
-
 /obj/item/wand_component/proc/apply_to_holder(obj/item/weapon/wand/applied_to)
 	holder = applied_to
 	holder.wand_components += src

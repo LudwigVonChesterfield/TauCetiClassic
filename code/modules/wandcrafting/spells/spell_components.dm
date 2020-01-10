@@ -82,8 +82,16 @@
 /obj/item/spell/proc/can_be_inserted()
 	return FALSE
 
+/obj/item/spell/proc/on_insertion(mob/user, obj/item/I)
+	return
+
+/obj/item/spell/proc/on_pre_remove(mob/user, obj/item/W)
+	if(istype(W, /obj/item/spell/spell_component))
+		remove_spell_component(W)
+
 /obj/item/spell/proc/add_spell_component(obj/item/spell/spell_component/SC)
 	SC.forceMove(src)
+	SC.apply_to_holder(src)
 
 /obj/item/spell/proc/remove_spell_component(obj/item/spell/spell_component/SC)
 	var/atom/move_to = loc
@@ -92,6 +100,7 @@
 	if(ismob(move_to))
 		move_to = move_to.loc
 
+	SC.remove_from_holder()
 	SC.forceMove(move_to)
 
 // Returns TRUE if it was a spell component, and it got inserted.
@@ -107,6 +116,8 @@
 			if(!(new_fl in compatible_flags))
 				to_chat(user, "<span class='notice'><b>[SC]</b> is incompatible with <b>[src]</b>, because of it having a <b>[new_fl]</b>.</span>")
 				return FALSE
+
+		add_spell_component(W)
 
 		user.remove_from_mob(W)
 		user.update_icons()
@@ -276,11 +287,3 @@
 
 	holder.spell_flags = has_flags
 	holder = null
-
-/obj/item/spell/spell_component/Moved(atom/OldLoc, Dir)
-	. = ..()
-	if(.)
-		if(istype(OldLoc, /obj/item/spell) && !istype(OldLoc, /obj/item/spell/continuous))
-			remove_from_holder()
-		else if(istype(loc, /obj/item/spell) && !istype(OldLoc, /obj/item/spell/continuous))
-			apply_to_holder(loc)

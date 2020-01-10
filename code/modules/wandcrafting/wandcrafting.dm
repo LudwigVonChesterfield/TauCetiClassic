@@ -1,21 +1,37 @@
 /obj/item/weapon/wand/proc/add_wand_component(obj/item/wand_component/WC)
 	WC.forceMove(src)
+	WC.apply_to_holder(src)
 
 /obj/item/weapon/wand/proc/remove_wand_component(obj/item/wand_component/WC)
 	var/atom/move_to = loc
 	if(ismob(move_to))
 		var/mob/M = move_to
 		move_to = M.loc
+	WC.remove_from_holder()
 	WC.forceMove(move_to)
 
 /obj/item/weapon/wand/proc/add_spell(obj/item/spell/S)
 	S.forceMove(src)
+	spells += S
+	if(S.has_passive)
+		if(passive_spells)
+			passive_spells += S
+		else
+			passive_spells = list(S)
+	needs_reload = TRUE
 
 /obj/item/weapon/wand/proc/remove_spell(obj/item/spell/S)
 	var/atom/move_to = loc
 	if(ismob(move_to))
 		var/mob/M = move_to
 		move_to = M.loc
+	spells -= S
+	if(S.has_passive)
+		passive_spells -= src
+		if(passive_spells.len == 0)
+			passive_spells = null
+	spells_queue.Remove(S)
+	needs_reload = TRUE
 	S.forceMove(move_to)
 
 /obj/item/weapon/wand/proc/open(mob/user)
@@ -39,6 +55,15 @@
 /obj/item/weapon/wand/proc/can_be_inserted()
 	return FALSE
 
+/obj/item/weapon/wand/proc/on_insertion(mob/user, obj/item/I)
+	return
+
+/obj/item/weapon/wand/proc/on_pre_remove(mob/user, obj/item/W)
+	if(istype(W, /obj/item/spell))
+		remove_spell(W)
+	else if(istype(W, /obj/item/wand_component))
+		remove_wand_component(W)
+
 // Returns TRUE if it was a spell or wand component, and it got inserted.
 /obj/item/weapon/wand/proc/handle_modification(obj/item/W, mob/user)
 	var/datum/storage_ui/to_update
@@ -46,7 +71,9 @@
 		if(spells.len >= spells_slots)
 			to_chat(user, "<span class='notice'>[src] can not contain any more spells.</span>")
 			return FALSE
+		add_spell(W)
 		to_update = spells_storage
+
 	else if(istype(W, /obj/item/wand_component))
 		var/obj/item/wand_component/WC = W
 		if(wand_components.len >= wand_components_slots)
@@ -58,6 +85,7 @@
 					if((wand_flag in incomp_list) && (comp_flag in incomp_list) && wand_flag != comp_flag)
 						to_chat(user, "<span class='notice'><b>[WC]</b> is incompatible with <b>[src]</b>, because of <b>[comp_flag]</b> not being compatible with <b>[wand_flag]</b>.</span>")
 						return FALSE
+		add_wand_component(W)
 		to_update = wand_components_storage
 
 	if(!to_update)
