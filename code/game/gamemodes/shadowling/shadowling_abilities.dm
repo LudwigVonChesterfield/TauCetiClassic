@@ -76,7 +76,7 @@
 	for(var/mob/living/user in targets)
 		playsound(user, 'sound/effects/bamf.ogg', VOL_EFFECTS_MASTER)
 		user.visible_message("<span class='warning'>[user] vanishes in a puff of black mist!</span>", "<span class='shadowling'>You enter the space between worlds as a passageway.</span>")
-		user.SetStunned(0)
+		user.SetStun(0)
 		user.SetWeakened(0)
 		user.incorporeal_move = 1
 		user.alpha = 0
@@ -448,7 +448,7 @@
 			U.adjustToxLoss(-10)
 			U.adjustOxyLoss(-10)
 			U.AdjustWeakened(-1)
-			U.AdjustStunned(-1)
+			U.AdjustStun(-2 SECONDS)
 			M.adjustOxyLoss(20)
 			to_chat(M, "<span class='boldannounce'>You feel a wave of exhaustion and a curious draining sensation directed towards [usr]!</span>")
 			to_chat(usr, "<span class='shadowling'>You draw the life from [M] to heal your wounds.</span>")
@@ -519,7 +519,7 @@
 		charge_counter = charge_max
 		return
 
-	for(var/mob/boom in targets)
+	for(var/mob/living/boom in targets)
 		if(is_shadow_or_thrall(boom))
 			to_chat(usr, "<span class='warning'>Making an ally explode seems unwise.</span>")
 			charge_counter = charge_max
@@ -527,7 +527,7 @@
 		usr.visible_message("<span class='danger'>[usr]'s eyes flare as they gesture at [boom]!</span>", \
 							"<span class='shadowling'>You direct a lance of telekinetic energy at [boom].</span>")
 		to_chat(boom, "<span class='userdanger'><font size=3>You feel an immense pressure building all across your body!</span></font>")
-		boom.Stun(10)
+		boom.Stun(20 SECONDS)
 		//boom.audible_message("<b>[boom]</b> screams!")
 		boom.emote("scream",,, 1)
 		sleep(20)

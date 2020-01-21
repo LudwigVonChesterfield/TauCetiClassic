@@ -182,9 +182,7 @@
 // =============================================
 
 /mob/living/carbon/human/Stun(amount, updating = 1, ignore_canstun = 0, lock = null)
-	if(HULK in mutations)
-		stunned = 0
-	else
+	if(!(HULK in mutations))
 		..()
 
 /mob/living/carbon/human/Weaken(amount)

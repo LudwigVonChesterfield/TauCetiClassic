@@ -9,7 +9,7 @@
 /obj/effect/proc_holder/spell/aoe_turf/hulk_jump/cast(list/targets)
 	//for(var/turf/T in targets)
 	var/failure = 0
-	if (istype(usr.loc,/mob) || usr.lying || usr.stunned || usr.buckled || usr.stat)
+	if (istype(usr.loc,/mob) || usr.lying || usr.buckled || usr.incapacitated())
 		to_chat(usr, "<span class='warning'>You can't jump right now!</span>")
 		return
 
@@ -26,7 +26,9 @@
 		playsound(usr, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
 		if(failure)
 			usr.Weaken(5)
-			usr.Stun(5)
+			if(isliving(usr))
+				var/mob/living/L = usr
+				L.Stun(10 SECONDS)
 			usr.visible_message("<span class='warning'> \the [usr] attempts to leap away but is slammed back down to the ground!</span>",
 								"<span class='warning'>You attempt to leap away but are suddenly slammed back down to the ground!</span>",
 								"<span class='notice'>You hear the flexing of powerful muscles and suddenly a crash as a body hits the floor.</span>")
@@ -91,7 +93,9 @@
 			usr.visible_message("<span class='warning'><b>[usr.name]</b> crashes due to their heavy weight!</span>")
 			playsound(usr, 'sound/misc/slip.ogg', VOL_EFFECTS_MASTER)
 			usr.weakened += 10
-			usr.stunned += 5
+			if(isliving(usr))
+				var/mob/living/L = usr
+				L.Stun(10 SECONDS)
 
 		usr.density = 1
 		usr.canmove = 1
@@ -137,7 +141,7 @@
 		return
 
 	var/failure = 0
-	if (istype(usr.loc,/mob) || usr.lying || usr.stunned || usr.buckled || usr.stat)
+	if (istype(usr.loc,/mob) || usr.lying || usr.buckled || usr.incapacitated())
 		to_chat(usr, "<span class='warning'>You can't dash right now!</span>")
 		return
 
@@ -153,7 +157,9 @@
 		playsound(usr, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
 		if(failure)
 			usr.Weaken(5)
-			usr.Stun(5)
+			if(isliving(usr))
+				var/mob/living/L = usr
+				usr.Stun(5)
 			usr.visible_message("<span class='warning'> \the [usr] attempts to dash away but was interrupted!</span>",
 								"<span class='warning'>You attempt to dash but suddenly interrupted!</span>",
 								"<span class='notice'>You hear the flexing of powerful muscles and suddenly a crash as a body hits the floor.</span>")
@@ -266,7 +272,9 @@
 			usr.visible_message("<span class='warning'><b>[usr.name]</b> crashes due to their heavy weight!</span>")
 			playsound(usr, 'sound/misc/slip.ogg', VOL_EFFECTS_MASTER)
 			usr.weakened += 10
-			usr.stunned += 5
+			if(isliving(usr))
+				var/mob/living/L = usr
+				usr.Stun(10 SECONDS)
 
 		usr.density = 1
 		usr.canmove = 1

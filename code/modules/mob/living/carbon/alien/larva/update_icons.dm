@@ -19,13 +19,13 @@
 		icon_state = "larva[state]_cuff"
 	else if(stat == UNCONSCIOUS || lying || resting)
 		icon_state = "larva[state]_sleep"
-	else if (stunned)
+	else if (IsStun())
 		icon_state = "larva[state]_stun"
 	else
 		icon_state = "larva[state]"
 
 /mob/living/carbon/alien/larva/update_transform() //All this is handled in update_icons()
-	return update_icons() 
+	return update_icons()
 
 /mob/living/carbon/alien/larva/update_hud()
 	//TODO

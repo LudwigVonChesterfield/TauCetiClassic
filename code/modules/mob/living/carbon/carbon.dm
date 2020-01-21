@@ -300,7 +300,7 @@
 									"<span class='notice'>You hug [src] to make [t_him] feel better!</span>")
 
 			AdjustParalysis(-3)
-			AdjustStunned(-3)
+			AdjustStun(-6 SECONDS)
 			AdjustWeakened(-3)
 
 			playsound(src, 'sound/weapons/thudswoosh.ogg', VOL_EFFECTS_MASTER)
@@ -316,7 +316,7 @@
 	set name = "Crawl"
 	set category = "IC"
 
-	if( stat || weakened || stunned || paralysis || resting || (status_flags & FAKEDEATH) || buckled)
+	if( stat || weakened || IsStun() || paralysis || resting || (status_flags & FAKEDEATH) || buckled)
 		return
 	if(crawl_getup)
 		return

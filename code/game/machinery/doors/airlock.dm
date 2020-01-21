@@ -105,7 +105,7 @@ var/list/airlock_overlays = list()
 		else if(user.hallucination > 50 && prob(10) && !operating)
 			to_chat(user, "<span class='warning'><B>You feel a powerful shock course through your body!</B></span>")
 			user.halloss += 10
-			user.stunned += 10
+			user.Stun(10)
 			return
 	..(user)
 
@@ -1052,7 +1052,7 @@ var/list/airlock_overlays = list()
 				M.adjustBruteLoss(DOOR_CRUSH_DAMAGE * 0.5)
 			else
 				M.adjustBruteLoss(DOOR_CRUSH_DAMAGE)
-				M.SetStunned(5)
+				M.Stun(10 SECONDS)
 				M.SetWeakened(5)
 
 			var/turf/mob_turf = get_turf(M)

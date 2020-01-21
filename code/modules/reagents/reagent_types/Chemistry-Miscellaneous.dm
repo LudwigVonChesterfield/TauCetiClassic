@@ -340,7 +340,7 @@
 				M.adjustOxyLoss(1)
 		if(volume < 0.7)
 			if(prob(10))
-				M.AdjustStunned(-1)
+				M.AdjustStun(-2 SECONDS)
 				M.AdjustWeakened(-1)
 		if(volume > 1)
 			if(prob(80))

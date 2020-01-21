@@ -21,6 +21,10 @@
 	if(needs_update_stat || issilicon(owner)) //silicons need stat updates in addition to normal canmove updates
 		owner.update_stat()
 
+//STUN
+/datum/status_effect/incapacitating/stun
+	id = "stun"
+
 //SLEEPING
 /datum/status_effect/incapacitating/sleeping
 	id = "sleeping"

@@ -37,7 +37,7 @@
 		CtrlClickOn(A)
 		return
 
-	if(stat || lockcharge || weakened || stunned || paralysis)
+	if(stat || lockcharge || weakened || IsStun() || paralysis)
 		return
 
 	if(next_move >= world.time)

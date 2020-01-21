@@ -111,7 +111,7 @@
 
 	var/overeatduration = 0		// How long this guy is overeating //Carbon
 	var/paralysis = 0.0
-	var/stunned = 0.0
+
 	var/weakened = 0.0
 	var/losebreath = 0.0//Carbon
 	var/intent = null//Living

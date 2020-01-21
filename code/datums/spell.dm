@@ -216,7 +216,7 @@ var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin
 		if("oxyloss")
 			target.adjustOxyLoss(amount)
 		if("stunned")
-			target.AdjustStunned(amount)
+			target.AdjustStun(amount)
 		if("weakened")
 			target.AdjustWeakened(amount)
 		if("paralysis")

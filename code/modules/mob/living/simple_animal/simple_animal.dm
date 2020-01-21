@@ -89,8 +89,6 @@
 	if(client)
 		handle_vision()
 
-	if(stunned)
-		AdjustStunned(-1)
 	if(weakened)
 		AdjustWeakened(-1)
 	if(paralysis)

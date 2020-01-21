@@ -9,7 +9,7 @@
 	icon = 'icons/obj/decals.dmi'
 	icon_state = "shock"
 
-/obj/item/borg/stun/attack(mob/M, mob/living/silicon/robot/user)
+/obj/item/borg/stun/attack(mob/living/M, mob/living/silicon/robot/user)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])", user)
@@ -20,7 +20,7 @@
 	M.Weaken(5)
 	if (M.stuttering < 5)
 		M.stuttering = 5
-	M.Stun(5)
+	M.Stun(10 SECONDS)
 
 
 	M.visible_message("<span class='warning'><B>[user] has prodded [M] with an electrically-charged arm!</B></span>", blind_message = "<span class='warning'>You hear someone fall</span>")

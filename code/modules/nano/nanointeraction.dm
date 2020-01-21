@@ -26,7 +26,7 @@
 /mob/living/silicon/robot/can_use_topic(src_object, datum/topic_state/custom_state)
 	if(stat || !client)
 		return STATUS_CLOSE
-	if(lockcharge || stunned || weakened)
+	if(lockcharge || IsStun() || weakened)
 		return STATUS_DISABLED
 	if(isobj(src_object))
 		var/obj/O = src_object
@@ -83,7 +83,7 @@
 /mob/living/proc/shared_living_nano_interaction(src_object)
 	if (stat != CONSCIOUS)
 		return STATUS_CLOSE						// no updates, close the interface
-	else if (restrained() || lying || stat || stunned || weakened)
+	else if (restrained() || lying || stat || IsStun() || weakened)
 		return STATUS_UPDATE					// update only (orange visibility)
 	return STATUS_INTERACTIVE
 

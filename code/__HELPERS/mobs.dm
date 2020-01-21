@@ -249,9 +249,11 @@
 			. = FALSE
 			break
 
-		if(user.stat || user.weakened || user.stunned)
-			. = FALSE
-			break
+		if(isliving(user))
+			var/mob/living/L = user
+			if(L.stat || L.weakened || L.IsStun())
+				. = FALSE
+				break
 
 		if(Uloc && (user.loc != Uloc) || Tloc && (Tloc != target.loc))
 			. = FALSE

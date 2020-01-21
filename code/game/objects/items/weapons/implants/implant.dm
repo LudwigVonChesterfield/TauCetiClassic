@@ -296,10 +296,12 @@ Implant Specifics:<BR>"}
 		H.shock_stage = 0
 	imp_in.stat = CONSCIOUS
 	imp_in.SetParalysis(0)
-	imp_in.SetStunned(0)
+	imp_in.SetStun(0)
 	imp_in.SetWeakened(0)
 	imp_in.lying = 0
-	imp_in.update_canmove()
+	if(isliving(imp_in))
+		var/mob/living/L = imp_in
+		L.update_canmove()
 	imp_in.reagents.add_reagent("hyperzine", 1)
 	imp_in.reagents.add_reagent("stimulants", 4)
 	if (!uses)

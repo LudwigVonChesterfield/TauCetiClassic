@@ -83,8 +83,6 @@
 	if (src.stat != DEAD) //Alive.
 		if (src.paralysis || src.stunned || src.weakened || !src.has_power) //Stunned etc.
 			src.stat = UNCONSCIOUS
-			if (src.stunned > 0)
-				AdjustStunned(-1)
 			if (src.weakened > 0)
 				AdjustWeakened(-1)
 			if (src.paralysis > 0)
@@ -307,7 +305,7 @@
 			weaponlock_time = 120
 
 /mob/living/silicon/robot/update_canmove()
-	if(paralysis || stunned || weakened || buckled || lockcharge || pinned.len)
+	if(paralysis || IsStun() || weakened || buckled || lockcharge || pinned.len)
 		canmove = FALSE
 	else
 		canmove = TRUE

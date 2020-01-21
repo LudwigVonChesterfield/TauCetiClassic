@@ -1032,7 +1032,7 @@
 			adjustCloneLoss(-1)
 			adjustOxyLoss(-10)
 			SetWeakened(0)
-			SetStunned(0)
+			SetStun(0)
 
 	//The fucking FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
 	if(HAS_TRAIT_FROM(src, TRAIT_FAT, OBESITY_TRAIT))
@@ -1208,9 +1208,8 @@
 			ear_damage = max(ear_damage-0.05, 0)
 
 		//Other
-		if(stunned)
+		if(IsStun())
 			speech_problem_flag = 1
-			AdjustStunned(-1)
 
 		if(weakened)
 			weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times

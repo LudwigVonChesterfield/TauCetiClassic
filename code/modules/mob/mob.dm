@@ -722,12 +722,12 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 // Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 // We need speed out of this proc, thats why using incapacitated() helper here is a bad idea.
-/mob/proc/update_canmove(no_transform = FALSE)
+/mob/living/proc/update_canmove(no_transform = FALSE)
 
 	var/ko = weakened || paralysis || stat || (status_flags & FAKEDEATH)
 
 	lying = (ko || crawling || resting) && !captured && !buckled && !pinned.len
-	canmove = !(ko || resting || stunned || captured || pinned.len)
+	canmove = !(ko || resting || IsStun() || captured || pinned.len)
 	anchored = captured || pinned.len
 
 	if(buckled)
@@ -808,71 +808,22 @@ note dizziness decrements automatically in the mob's Life() proc.
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
 
-// ========== STUN ==========
-/mob/proc/Stun(amount, updating = 1, ignore_canstun = 0, lock = null)
-	if(!isnull(lock))
-		if(lock)
-			status_flags |= LOCKSTUN
-		else
-			status_flags &= ~LOCKSTUN
-	else if(status_flags & LOCKSTUN)
-		return
-
-	if(status_flags & CANSTUN || ignore_canstun)
-		stunned = max(max(stunned, amount), 0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
-		if(updating)
-			update_canmove()
-	else
-		stunned = 0
-
-/mob/proc/SetStunned(amount, updating = 1, ignore_canstun = 0, lock = null) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
-	if(!isnull(lock))
-		if(lock)
-			status_flags |= LOCKSTUN
-		else
-			status_flags &= ~LOCKSTUN
-	else if(status_flags & LOCKSTUN)
-		return
-
-	if(status_flags & CANSTUN || ignore_canstun)
-		stunned = max(amount, 0)
-		if(updating)
-			update_canmove()
-	else
-		stunned = 0
-
-/mob/proc/AdjustStunned(amount, updating = 1, ignore_canstun = 0, lock = null)
-	if(!isnull(lock))
-		if(lock)
-			status_flags |= LOCKSTUN
-		else
-			status_flags &= ~LOCKSTUN
-	else if(status_flags & LOCKSTUN)
-		return
-
-	if(status_flags & CANSTUN || ignore_canstun)
-		stunned = max(stunned + amount, 0)
-		if(updating)
-			update_canmove()
-	else
-		stunned = 0
-
 // ========== WEAKEN ==========
-/mob/proc/Weaken(amount)
+/mob/living/proc/Weaken(amount)
 	if(status_flags & CANWEAKEN)
 		weakened = max(max(weakened, amount), 0)
 		update_canmove() // updates lying, canmove and icons
 	else
 		weakened = 0
 
-/mob/proc/SetWeakened(amount)
+/mob/living/proc/SetWeakened(amount)
 	if(status_flags & CANWEAKEN)
 		weakened = max(amount, 0)
 		update_canmove()
 	else
 		weakened = 0
 
-/mob/proc/AdjustWeakened(amount)
+/mob/living/proc/AdjustWeakened(amount)
 	if(status_flags & CANWEAKEN)
 		weakened = max(weakened + amount, 0)
 		update_canmove()

@@ -132,7 +132,7 @@ This is what happens, when we attack aliens.
 			AdjustSleeping(-10 SECONDS)
 			resting = 0
 			AdjustParalysis(-3)
-			AdjustStunned(-3)
+			AdjustStun(-6 SECONDS)
 			AdjustWeakened(-3)
 			visible_message("<span class='notice'>[M.name] nuzzles [src] trying to wake it up!</span>")
 

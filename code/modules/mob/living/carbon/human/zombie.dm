@@ -167,7 +167,7 @@
 	H.setBrainLoss(0)
 	H.setHalLoss(0)
 	H.SetParalysis(0)
-	H.SetStunned(0)
+	H.SetStun(0)
 	H.SetWeakened(0)
 	H.nutrition = 400
 	H.SetSleeping(0)

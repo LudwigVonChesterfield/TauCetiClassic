@@ -123,7 +123,7 @@
 		var/mob/living/carbon/human/M = src.loc
 		M.stat = CONSCIOUS
 		M.SetParalysis(0)
-		M.SetStunned(0)
+		M.SetStun(0)
 		M.SetWeakened(0)
 		M.lying = 0
 		M.update_canmove()
@@ -496,7 +496,7 @@
 	return
 
 /obj/item/weapon/abductor_baton/proc/SleepAttack(mob/living/L,mob/living/user)
-	if(L.stunned)
+	if(L.IsStun())
 		L.SetSleeping(120 SECONDS)
 	L.visible_message("<span class='danger'>[user] has induced sleep in [L] with [src]!</span>", \
 							"<span class='userdanger'>You suddenly feel very drowsy!</span>")
@@ -649,7 +649,7 @@
 		sleep(7)
 		add_overlay(belt)
 		fastened.anchored = 1
-		fastened.SetStunned(INFINITY)
+		fastened.SetStun(INFINITY)
 		qdel(animation)
 	else
 		cut_overlay(belt)
@@ -658,7 +658,7 @@
 			else	animation.dir = 1
 		flick("belt_anim_off",animation)
 		sleep(9)
-		fastened.SetStunned(0)
+		fastened.SetStun(0)
 		fastened.anchored = 0
 		fastened = null
 		qdel(animation)

@@ -16,6 +16,48 @@
 /mob/living/proc/has_quirk(quirktype)
 	return roundstart_quirks[quirktype]
 
+////////////////////////////// STUN ////////////////////////////////////
+
+/mob/living/proc/IsStun() //If we're stunned
+	return has_status_effect(STATUS_EFFECT_STUN)
+
+/mob/living/proc/AmountStun() //How many deciseconds remain in our stun
+	var/datum/status_effect/incapacitating/stun/S = IsStun()
+	if(S)
+		return S.duration - world.time
+	return 0
+
+/mob/living/proc/Stun(amount, updating = TRUE, ignore_canstun = FALSE) //Can't go below remaining duration
+	if((status_flags & CANSTUN) || ignore_canstun)
+		var/datum/status_effect/incapacitating/stun/S = IsStun()
+		if(S)
+			S.duration = max(world.time + amount, S.duration)
+		else if(amount > 0)
+			S = apply_status_effect(STATUS_EFFECT_STUN, amount, updating)
+		return S
+
+/mob/living/proc/SetStun(amount, updating = TRUE, ignore_canstun = FALSE) //Sets remaining duration
+	if((status_flags & CANSTUN) || ignore_canstun)
+		var/datum/status_effect/incapacitating/stun/S = IsStun()
+		if(amount <= 0)
+			if(S)
+				qdel(S)
+		else
+			if(S)
+				S.duration = world.time + amount
+			else
+				S = apply_status_effect(STATUS_EFFECT_STUN, amount, updating)
+		return S
+
+/mob/living/proc/AdjustStun(amount, updating = TRUE, ignore_canstun = FALSE) //Adds to remaining duration
+	if((status_flags & CANSTUN) || ignore_canstun)
+		var/datum/status_effect/incapacitating/stun/S = IsStun()
+		if(S)
+			S.duration += amount
+		else if(amount > 0)
+			S = apply_status_effect(STATUS_EFFECT_STUN, amount, updating)
+		return S
+
 /////////////////////////////////// SLEEPING ////////////////////////////////////
 
 /mob/proc/IsSleeping() //non-living mobs shouldn't be sleeping either

@@ -275,7 +275,7 @@
 
 	if(buckled || resting)
 		pose_last = POSE_SIT
-	else if(stat || weakened || stunned)
+	else if(stat || weakened || IsStun())
 		pose_last = POSE_STAT
 	else if(crawling)
 		pose_last = POSE_REST

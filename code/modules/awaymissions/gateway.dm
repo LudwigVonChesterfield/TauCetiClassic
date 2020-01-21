@@ -211,7 +211,7 @@
 			sleep(12)
 			M.client.screen -= cinematic
 		qdel(cinematic)
-		M.AdjustStunned(-10, 1, 1, 0)
+		M.AdjustStun(-20 SECONDS, TRUE)
 	entered.freeze_movement = FALSE
 	entered.forceMove(target)
 	playsound(target, 'sound/machines/gateway/gateway_enter.ogg', VOL_EFFECTS_MASTER)

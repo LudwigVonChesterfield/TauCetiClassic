@@ -79,7 +79,7 @@
 	slot_flags = SLOT_FLAGS_BELT
 	force = 10
 
-/obj/item/weapon/melee/classic_baton/attack(mob/M, mob/living/user)
+/obj/item/weapon/melee/classic_baton/attack(mob/living/M, mob/living/user)
 	if ((CLUMSY in user.mutations) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
 		user.Weaken(3 * force)
@@ -101,12 +101,12 @@
 		playsound(src, pick(SOUNDIN_GENHIT), VOL_EFFECTS_MASTER)
 		if (M.stuttering < 8 && (!(HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 			M.stuttering = 8
-		M.Stun(8)
+		M.Stun(16 SECONDS)
 		M.Weaken(8)
 		user.visible_message("<span class='warning'><B>[M] has been beaten with \the [src] by [user]!</B></span>", blind_message = "<span class='warning'>You hear someone fall</span>")
 	else
 		playsound(src, 'sound/weapons/Genhit.ogg', VOL_EFFECTS_MASTER)
-		M.Stun(5)
+		M.Stun(10 SECONDS)
 		M.Weaken(5)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")

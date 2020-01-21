@@ -162,9 +162,9 @@
 	var/msg
 	var/self_msg
 
-	if(target == user && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+	if(target == user && !user.incapacitated(restrained_type = 0)) // restrained_type = 0 preserves the feature of people in handcuffs yeeting into the disposal bin.
 		user.visible_message("<span class='red'>[usr] starts climbing into the disposal.</span>")
-	if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+	if(target != user && !user.incapacitated())
 		if(target.anchored)
 			return
 		user.visible_message("<span class='red'>[usr] starts stuffing [target.name] into the disposal.</span>")
@@ -173,11 +173,11 @@
 		return
 	if(target_loc != target.loc)
 		return
-	if(target == user && !user.stat && !user.weakened && !user.stunned && !user.paralysis)	// if drop self, then climbed in
+	if(target == user && !user.incapacitated(restrained_type = 0))	// if drop self, then climbed in
 											// must be awake, not stunned or whatever
 		msg = "<span class='red'>[user.name] climbs into the [src].</span>"
 		self_msg = "<span class='notice'>You climb into the [src].</span>"
-	else if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+	else if(target != user && !user.incapacitated())
 		msg = "<span class='danger'>[user.name] stuffs [target.name] into the [src]!</span>"
 		self_msg = "<span class='red'>You stuff [target.name] into the [src]!</span>"
 
@@ -211,14 +211,16 @@
 		var/msg
 		var/self_msg
 
-		if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis) return
+		if(user.incapacitated())
+			return
 		user.visible_message("<span class='notice'>[user] starts stuffing [target.name] into the disposal.</span>")
 		if(user.is_busy() || !do_after(usr, 20, target = src))
 			return
 		if(target_loc != target.loc)
 			return
 
-		if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis) return
+		if(user.incapacitated())
+			return
 		msg = "<span class='notice'>[user.name] stuffs [target.name] into the [src]!</span>"
 		self_msg = "<span class='notice'>You stuff [target.name] into the [src]!</span>"
 

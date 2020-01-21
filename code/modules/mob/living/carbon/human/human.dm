@@ -1902,7 +1902,7 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
 	if(last_special > world.time)
 		return
 
-	if(stat || paralysis || stunned || weakened || lying)
+	if(stat || paralysis || IsStun() || weakened || lying)
 		to_chat(src, "<span class='warning'>You cannot do that in your current state.</span>")
 		return
 

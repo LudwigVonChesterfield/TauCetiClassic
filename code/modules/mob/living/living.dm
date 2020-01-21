@@ -461,7 +461,7 @@
 	setBrainLoss(0)
 	setHalLoss(0)
 	SetParalysis(0)
-	SetStunned(0)
+	SetStun(0)
 	SetWeakened(0)
 
 	// shut down ongoing problems
@@ -944,11 +944,11 @@
 		return
 
 //Already resting and have others debuffs
-	if( resting && (IsSleeping() || weakened || paralysis || stunned) )
+	if( resting && (IsSleeping() || weakened || paralysis || IsStun()) )
 		to_chat(src, "<span class='rose'>You can't wake up.</span>")
 
 //Restrained and some debuffs
-	else if( restrained() && (paralysis || stunned) )
+	else if( restrained() && (paralysis || IsStun()) )
 		to_chat(src, "<span class='rose'>You can't move.</span>")
 
 //Restrained and lying on optable or simple table
@@ -956,7 +956,7 @@
 		to_chat(src, "<span class='rose'>You can't move.</span>")
 
 //Debuffs check
-	else if(!resting && (IsSleeping() || weakened || paralysis || stunned) )
+	else if(!resting && (incapacitated(restrained_type = 0)) )
 		to_chat(src, "<span class='rose'>You can't control yourself.</span>")
 
 	else

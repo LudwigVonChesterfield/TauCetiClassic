@@ -24,7 +24,7 @@
 			M.SetSleeping(20 SECONDS)
 			M.adjustOxyLoss(-M.getOxyLoss())
 			M.SetWeakened(0)
-			M.SetStunned(0)
+			M.SetStun(0)
 			M.SetParalysis(0)
 			M.dizziness = 0
 			M.drowsyness = 0
@@ -297,7 +297,7 @@
 	M.eye_blurry = 0
 	M.eye_blind = 0
 	M.SetWeakened(0)
-	M.SetStunned(0)
+	M.SetStun(0)
 	M.SetParalysis(0)
 	M.silent = 0
 	M.dizziness = 0
@@ -326,7 +326,7 @@
 	..()
 	M.drowsyness = max(M.drowsyness - 5, 0)
 	M.AdjustParalysis(-1)
-	M.AdjustStunned(-1)
+	M.AdjustStun(-2 SECONDS)
 	M.AdjustWeakened(-1)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
@@ -616,7 +616,7 @@
 	..()
 	M.drowsyness = max(M.drowsyness - 5, 0)
 	M.AdjustParalysis(-3)
-	M.AdjustStunned(-3)
+	M.AdjustStun(-6 SECONDS)
 	M.AdjustWeakened(-3)
 	var/mob/living/carbon/human/H = M
 	H.adjustHalLoss(-30)
