@@ -2067,3 +2067,25 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
 	if(IsSleeping())
 		stat = UNCONSCIOUS
 		blinded = TRUE
+
+/mob/living/carbon/human/verb/set_xray_overlay()
+	var/list/xray_icons = list(
+		"human_no_skin",
+		"human",
+	)
+
+	var/I = input(src, "What number of pixels you want to scale down to?", "New pix amount. Default is 96", "96 to who knows") as null|anything in xray_icons
+	if(!I)
+		appearance = null
+		return
+
+	var/scale_factor = input(src, "What number of pixels you want to scale down to?", "New pix amount. Default is 96", "96 to who knows") as num
+
+	var/S = 1 / (96 / scale_factor)
+	var/matrix/M = matrix()
+	M.Scale(S, S)
+
+	var/image/X = image(icon='icons/mob/xray.dmi', icon_state=I)
+	X.transform = M
+
+	appearance = X
