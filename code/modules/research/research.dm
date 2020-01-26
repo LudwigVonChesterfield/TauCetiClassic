@@ -52,6 +52,10 @@ The tech datums are the actual "tech trees" that you improve through researching
 	var/research_points = 0
 
 /datum/research/New()
+	experiments = new /datum/experiment_data()
+	// This is a science station. Most tech is already at least somewhat known.
+	experiments.init_known_tech()
+
 	for(var/D in subtypesof(/datum/design))
 		var/datum/design/d = new D(src)
 		design_by_id[d.id] = d
@@ -76,8 +80,6 @@ The tech datums are the actual "tech trees" that you improve through researching
 		var/datum/design/D = design_by_id[design_id]
 		if(D.starts_unlocked)
 			AddDesign2Known(D)
-
-	experiments = new /datum/experiment_data()
 
 /datum/research/proc/IsResearched(datum/technology/T)
 	return !!researched_tech[T.id]
