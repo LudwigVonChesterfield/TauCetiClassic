@@ -34,7 +34,17 @@
 
 // /atom signals
 #define COMSIG_ATOM_ENTERED "atom_entered"						//from base of atom/Entered(): (atom/movable/entering, /atom)
+#define COMSIG_PRE_EXAMINE "pre_examine"                        //from base of mob/examinate() : (/mob)
+	#define COMPONENT_CANCEL_EXAMINE 1
 
 // /atom/movable signals
 #define COMSIG_MOVABLE_CROSSED "movable_crossed"				//from base of atom/movable/Crossed(): (/atom/movable)
 #define COMSIG_MOVABLE_MOVED "movable_moved"					//from base of atom/movable/Moved(): (/atom, dir)
+
+// /mob signals.
+#define COMSIG_MOB_EXAMINATE "examinate"                        //from base of mob/examinate() : (/atom)
+	#define COMPONENT_CANCEL_EXAMINATE 1
+
+// /datum/meme-related signals.
+#define COMSIG_PAPER_READ "paper_read"                          //from base of show_content() : (/mob)
+	#define COMPONENT_STAR_TEXT 1                               //makes the text appear starred.

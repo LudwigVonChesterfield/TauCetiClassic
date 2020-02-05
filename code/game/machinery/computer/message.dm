@@ -261,6 +261,17 @@
 	custommessage 	= "This is a test, please ignore."
 	customjob 		= "Admin"
 
+/obj/machinery/computer/message_monitor/proc/authenticate(mob/user)
+	var/authentified = FALSE
+	if(user.has_meme("PDA_password_" + linkedServer.decryptkey))
+		authentified = TRUE
+	else
+		var/dkey = sanitize(input(usr, "Please enter the decryption key.") as text|null)
+		if(linkedServer.decryptkey == dkey)
+			authentified = TRUE
+
+	return authentified
+
 /obj/machinery/computer/message_monitor/Topic(href, href_list)
 	. = ..()
 	if(!.)
@@ -272,12 +283,10 @@
 			auth = 0
 			screen = 0
 		else
-			var/dkey = sanitize(input(usr, "Please enter the decryption key.") as text|null)
-			if(dkey && dkey != "")
-				if(src.linkedServer.decryptkey == dkey)
-					auth = 1
-				else
-					message = incorrectkey
+			if(authenticate(usr))
+				auth = 1
+			else
+				message = incorrectkey
 
 	//Turn the server on/off.
 	if (href_list["active"])
@@ -323,19 +332,13 @@
 			message = noserver
 		else
 			if(auth)
-				var/dkey = sanitize(input(usr, "Please enter the decryption key.") as text|null)
-				if(dkey && dkey != "")
-					if(src.linkedServer.decryptkey == dkey)
-						var/newkey = sanitize(input(usr,"Please enter the new key (3 - 16 characters max):"))
-						if(length(newkey) <= 3)
-							message = "<span class='notice'>NOTICE: Decryption key too short!</span>"
-						else if(length(newkey) > 16)
-							message = "<span class='notice'>NOTICE: Decryption key too long!</span>"
-						else if(newkey && newkey != "")
-							src.linkedServer.decryptkey = newkey
-						message = "<span class='notice'>NOTICE: Decryption key set.</span>"
-					else
-						message = incorrectkey
+				if(authenticate(usr))
+					usr.remove_meme("PDA_password_" + linkedServer.decryptkey)
+					linkedServer.decryptkey = linkedServer.GenerateKey()
+					usr.attach_meme("PDA_password_" + linkedServer.decryptkey)
+					message = "<span class='notice'>NOTICE: Decryption key set.</span>"
+				else
+					message = incorrectkey
 
 	//Hack the Console to get the password
 	if (href_list["hack"])
@@ -490,7 +493,12 @@
 		for(var/obj/machinery/message_server/server in message_servers)
 			if(!isnull(server))
 				if(!isnull(server.decryptkey))
-					info = "<center><h2>Daily Key Reset</h2></center><br>The new message monitor key is '[server.decryptkey]'.<br>Please keep this a secret and away from the clown.<br>If necessary, change the password to a more secure one."
+					var/datum/meme/memory/PDA_password/pass = attach_meme("PDA_password_" + server.decryptkey)
+					if(!pass)
+						pass = create_meme(/datum/meme/memory/PDA_password, "PDA_password_" + server.decryptkey)
+						attach_meme("PDA_password_" + server.decryptkey)
+
+					info = "<center><h2>Daily Key Reset</h2></center><br>The new message monitor key is [pass.get_meme_text()].<br>Please keep this a secret and away from the clown.<br>If necessary, change the password to a more secure one."
 					info_links = info
 					icon_state = "paper_words"
 					break
