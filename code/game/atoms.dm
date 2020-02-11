@@ -96,6 +96,10 @@
 
 	QDEL_NULL(light)
 
+	QDEL_LIST_ASSOC_VAL(attached_memes)
+	QDEL_LIST_ASSOC_VAL(stacked_memes)
+	QDEL_LIST_ASSOC_VAL(counter_memes)
+
 	return ..()
 
 /atom/proc/CheckParts(list/parts_list)

@@ -19,6 +19,9 @@
 		clear_alert(alert, TRUE)
 	qdel(hud_used)
 	ghostize(bancheck = TRUE)
+
+	QDEL_LIST(browseable_memes)
+
 	..()
 	return QDEL_HINT_HARDDEL_NOW
 
@@ -303,6 +306,11 @@
 
 	if((sdisabilities & BLIND || blinded) && !in_range(A, usr) || stat == UNCONSCIOUS)
 		to_chat(usr, "<span class='notice'>Something is there but you can't see it.</span>")
+		return
+
+	if(SEND_SIGNAL(src, COMSIG_MOB_EXAMINATE, A) & COMPONENT_CANCEL_EXAMINATE)
+		return
+	if(SEND_SIGNAL(A, COMSIG_PRE_EXAMINE, src) & COMPONENT_CANCEL_EXAMINE)
 		return
 
 	face_atom(A)
