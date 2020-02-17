@@ -1,6 +1,7 @@
 /datum/meme/memory/password/PDA
 	name = "PDA servers password"
 	desc = "A password you can use to log into the PDA servers."
+	long_desc = "A password you can use to log into the PDA servers.A password you can use to log into the PDA servers.A password you can use to log into the PDA servers.A password you can use to log into the PDA servers.A password you can use to log into the PDA servers."
 
 	stack_id = "PDA_password"
 

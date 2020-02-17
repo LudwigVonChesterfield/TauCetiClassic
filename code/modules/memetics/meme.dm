@@ -21,6 +21,7 @@ var/global/datum/meme/list/memes_by_id = list()
 /datum/meme
 	var/name
 	var/desc
+	var/long_desc
 
 	// The unique ID of this very meme. No two memes share it.
 	var/id
