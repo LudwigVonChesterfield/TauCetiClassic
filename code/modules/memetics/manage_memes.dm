@@ -93,7 +93,6 @@
 			dat += "</table>"
 			dat += "</div>"
 	dat += "</div>"
-
 	set_content(dat)
 	open()
 
