@@ -30,7 +30,6 @@
 	/obj/effect/proc_holder/spell/targeted/charge/religion,
 	/obj/effect/proc_holder/spell/targeted/food,
 	/obj/effect/proc_holder/spell/aoe_turf/conjure/spawn_animal,
-	/obj/effect/proc_holder/spell/targeted/grease,
 	)
 	// Spells that combine with aspects and cast to God
 	var/list/spells = list()
@@ -170,7 +169,7 @@
 		pews_icon_state = pews_info
 	else
 		pews_icon_state = "general"
-	
+
 	var/altar_info = altar_info_by_name[name]
 	if(altar_info)
 		altar_icon_state = altar_info
