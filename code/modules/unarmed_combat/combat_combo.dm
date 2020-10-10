@@ -277,21 +277,26 @@ var/global/list/combat_combos_by_name = list()
 		if(QDELETED(attacker))
 			return FALSE
 
-		if(victim.notransform || attacker.notransform)
-			return FALSE
-		if(!attacker.combo_animation)
+		if(!continue_checks(attacker, victim))
 			return FALSE
 
 		// Since victim or attacker can suddenly get into something, we need to check both ways
 		// (since Adjacent does turf-level checks, and isturf(loc) checks only on side of the one issuing the proc)
 		if(!attacker.Adjacent(victim) || !victim.Adjacent(attacker))
 			return FALSE
-
-		if(additional_checks(victim, attacker))
-			return FALSE
 	return TRUE
 
-/datum/combat_combo/proc/additional_checks(mob/living/victim, mob/living/attacker)
+// Checks that are ought to be perofmred with a continious move. Is compatible for use in do_after.
+/datum/combat_combo/proc/continue_checks(mob/living/attacker, mob/living/victim)
+	if(victim.notransform || attacker.notransform)
+		return FALSE
+	if(!attacker.combo_animation)
+		return FALSE
+	if(additional_checks(victim, attacker))
+		return FALSE
+	return TRUE
+
+/datum/combat_combo/proc/additional_checks(mob/living/attacker, mob/living/victim)
 	return FALSE
 
 /datum/combat_combo/proc/get_combo_icon()
@@ -384,5 +389,5 @@ var/global/list/combat_combos_by_name = list()
 
 /// For combos that prepare grabs, at the end of the combo - destory them.
 /datum/combat_combo/proc/destroy_grabs(mob/living/victim, mob/living/attacker)
-	for(var/obj/item/weapon/grab/G in attacker.GetGrabs())
-		attacker.drop_from_inventory(G)
+	for(var/grab in attacker.GetGrabs())
+		attacker.drop_from_inventory(grab)

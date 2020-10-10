@@ -194,7 +194,7 @@
 		if(Uloc && (user.loc != Uloc) || Tloc && (Tloc != target.loc))
 			. = FALSE
 			break
-		if(extra_checks && !extra_checks.Invoke())
+		if(extra_checks && !extra_checks.Invoke(user, target))
 			. = FALSE
 			break
 

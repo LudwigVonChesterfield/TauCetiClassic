@@ -44,7 +44,6 @@
 
 		var/delay = shake_delay + rand(-delay_offset, delay_offset)
 		// replace 1 with delay when Stun( will be reworked. ~Luduk
-		attacker.Stun(1)
 		victim.Stun(1)
 
 		victim_G.adjust_position(adjust_time = 0, force_loc = TRUE, force_dir = turn(attacker.dir, 180))
@@ -72,13 +71,14 @@
 		animate(victim, transform = M, pixel_y = victim.pixel_y + shake_height, time = delay)
 		if(shake_attacker)
 			animate(attacker, transform = M_attacker, time = delay * pick(0.6, 0.8, 1.0))
-		if(!do_combo(victim, attacker, shake_delay))
+
+		if(!do_after(attacker, shake_delay, target = victim, progress = FALSE, extra_checks = CALLBACK(src, .proc/continue_checks)))
 			return
 
 		animate(victim, transform = prev_transform, pixel_y = prev_pixel_y, time = 1)
 		if(shake_attacker)
 			animate(attacker, transform = prev_attacker_transform, time = 1)
-		if(!do_combo(victim, attacker, 1))
+		if(!do_after(attacker, 1, target = victim, progress = FALSE, extra_checks = CALLBACK(src, .proc/continue_checks)))
 			return
 
 	var/shake_time = world.time - started_shaking
