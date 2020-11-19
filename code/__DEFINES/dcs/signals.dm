@@ -59,8 +59,10 @@
 #define COMSIG_ATOM_ENTERED "atom_entered"
 /// from base of atom/Exited(): (atom/movable/exiting, /atom/newLoc)
 #define COMSIG_ATOM_EXITED "atom_exited"
-/// from base of atom/movable/CanPass() & mob/CanPass(): (atom/movable/mover, atom/target, height, air_group)
-#define COMSIG_ATOM_CANPASS "movable_canpass"
+/// from base of atom/movable/CanPass() & mob/CanPass(), whether mover can pass over src: (atom/movable/mover, atom/target, height, air_group)
+#define COMSIG_ATOM_CANBEPASSED "atom_canbepassed"
+/// from base of atom/movable/CanPass() & mob/CanPass(), whether src can pass over obstacle: (atom/obstacle, atom/target, height, air_group)
+#define COMSIG_MOVABLE_CANPASS "movable_canpass"
 	#define COMPONENT_CANPASS  1
 	#define COMPONENT_CANTPASS 2
 /// from base of atom/attackby(): (/obj/item, /mob/living, params)
@@ -192,6 +194,12 @@
 #define COMSIG_LIVING_LEARN_COMBO "learn_combo"
 // from mob/living/forget_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
 #define COMSIG_LIVING_FORGET_COMBO "forget_combo"
+
+// from /atom/CanPass(), whether this object should be caught when flying past: (atom)
+#define COMSIG_MOVABLE_THROW_BEINTERCEPTED "movable_throw_beintercepted"
+// from /atom/CanPass(), whether should catch an object mover that is flying past: (atom/movable)
+#define COMSIG_ATOM_THROW_INTERCEPT "atom_throw_intercept"
+	#define COMPONENT_THROW_INTERCEPT 1
 
 // simple_animal/hostile signals
 /// from simple_animal/hostile/proc/AttackingTarget(): (atom/target)

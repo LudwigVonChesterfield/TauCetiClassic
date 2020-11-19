@@ -63,15 +63,25 @@ SUBSYSTEM_DEF(throwing)
 	var/diagonal_error
 	var/datum/callback/callback
 	var/datum/callback/early_callback // used when you want to call something before throw_impact().
+	var/throw_intent = INTENT_HARM
+
+/datum/thrownthing/proc/on_can_pass(datum/source, atom/obstacle, atom/target, height, airgroup)
+	if(SEND_SIGNAL(source, COMSIG_MOVABLE_THROW_BEINTERCEPTED, obstacle) & COMPONENT_THROW_INTERCEPT)
+		return COMPONENT_CANTPASS
+	if(SEND_SIGNAL(obstacle, COMSIG_ATOM_THROW_INTERCEPT, source) & COMPONENT_THROW_INTERCEPT)
+		return COMPONENT_CANTPASS
+
+	if(throw_intent == INTENT_HELP)
+		return COMPONENT_CANPASS
 
 /datum/thrownthing/proc/tick()
 	var/atom/movable/AM = thrownthing
 	if (!isturf(AM.loc) || !AM.throwing)
-		finialize()
+		finalize()
 		return
 
 	if (dist_travelled && hit_check()) //to catch sneaky things moving on our tile while we slept
-		finialize()
+		finalize()
 		return
 
 	var/atom/step
@@ -80,7 +90,7 @@ SUBSYSTEM_DEF(throwing)
 	var/tilestomove = CEIL(min(((((world.time + world.tick_lag) - start_time) * speed) - (dist_travelled ? dist_travelled : -1)), speed * MAX_TICKS_TO_MAKE_UP) * (world.tick_lag * SSthrowing.wait))
 	while (tilestomove-- > 0)
 		if ((dist_travelled >= maxrange || AM.loc == target_turf) && has_gravity(AM, AM.loc))
-			finialize()
+			finalize()
 			return
 
 		if (dist_travelled <= max(dist_x, dist_y)) //if we haven't reached the target yet we home in on it, otherwise we use the initial direction
@@ -94,26 +104,28 @@ SUBSYSTEM_DEF(throwing)
 			diagonal_error += (diagonal_error < 0) ? dist_x/2 : -dist_y
 
 		if (!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
-			finialize()
+			finalize()
 			return
 
 		AM.Move(step, get_dir(AM, step))
 
 		if (!AM.throwing) // we hit something during our move
-			finialize(hit = TRUE)
+			finalize(hit = TRUE)
 			return
 
 		dist_travelled++
 
 		if (dist_travelled > MAX_THROWING_DIST)
-			finialize()
+			finalize()
 			return
 
-/datum/thrownthing/proc/finialize(hit = FALSE, atom/movable/AM)
+/datum/thrownthing/proc/finalize(hit = FALSE, atom/movable/AM)
 	set waitfor = 0
 	SSthrowing.processing -= thrownthing
+
 	//done throwing, either because it hit something or it finished moving
 	if (!QDELETED(thrownthing) && thrownthing.throwing)
+		UnregisterSignal(thrownthing, list(COMSIG_MOVABLE_CANPASS))
 		thrownthing.throwing = FALSE
 
 		if(early_callback)
@@ -135,6 +147,7 @@ SUBSYSTEM_DEF(throwing)
 			else
 				thrownthing.newtonian_move(init_dir)
 		thrownthing.fly_speed = 0
+
 	if (callback)
 		callback.Invoke()
 
@@ -143,10 +156,23 @@ SUBSYSTEM_DEF(throwing)
 		var/atom/movable/AM = thing
 		if (AM == thrownthing)
 			continue
+
 		if (isliving(AM))
 			var/mob/living/L = AM
 			if (L.lying)
 				continue
-		if (AM.density && !AM.throwpass)
-			finialize(null, AM)
+
+		if(!AM.density || AM.throwpass)
+			return FALSE
+
+		if(SEND_SIGNAL(thrownthing, COMSIG_MOVABLE_THROW_BEINTERCEPTED, AM) & COMPONENT_THROW_INTERCEPT)
 			return TRUE
+		if(SEND_SIGNAL(AM, COMSIG_ATOM_THROW_INTERCEPT, thrownthing) & COMPONENT_THROW_INTERCEPT)
+			return TRUE
+
+		if(throw_intent == INTENT_HELP)
+			continue
+
+		finalize(null, AM)
+		return TRUE
+	return TRUE

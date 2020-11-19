@@ -75,51 +75,64 @@
 
 //this proc handles being hit by a thrown atom
 /mob/living/hitby(atom/movable/AM, datum/thrownthing/throwingdatum)//Standardization and logging -Sieve
-	if(istype(AM,/obj))
-		var/obj/O = AM
-		var/dtype = BRUTE
-		if(istype(O,/obj/item/weapon))
-			var/obj/item/weapon/W = O
-			dtype = W.damtype
-		var/throw_damage = O.throwforce * (AM.fly_speed / 5)
+	if(!istype(AM, /obj))
+		return
 
-		var/zone
-		var/mob/living/L = isliving(throwingdatum.thrower) ? throwingdatum.thrower : null
-		if(L)
-			zone = check_zone(L.zone_sel.selecting)
-		else
-			zone = ran_zone(BP_CHEST, 75) // Hits a random part of the body, geared towards the chest
+	var/obj/O = AM
 
-		//check if we hit
-		if(O.throw_source)
-			var/distance = get_dist(O.throw_source, loc)
-			zone = get_zone_with_miss_chance(zone, src, min(15 * (distance - 2), 0))
-		else
-			zone = get_zone_with_miss_chance(zone, src, 15)
+	if(istype(O, /obj/item))
+		if(in_throw_mode)
+			if(throwingdatum.throw_intent != INTENT_HARM && put_in_active_hand(AM))
+				visible_message("<span class='notice'>[src] catches \the [AM]!</span>")
+				return
 
-		if(!zone)
-			visible_message("<span class='notice'>\The [O] misses [src] narrowly!</span>")
+		if(throwingdatum.throw_intent == INTENT_HELP)
+			visible_message("<span class='notice'>[AM] gently lands near [src].</span>")
 			return
 
-		if(throwingdatum.thrower != src && check_shields(AM, throw_damage, "[O]", get_dir(O,src)))
-			return
+	var/dtype = BRUTE
+	if(istype(O,/obj/item/weapon))
+		var/obj/item/weapon/W = O
+		dtype = W.damtype
+	var/throw_damage = O.throwforce * (AM.fly_speed / 5)
 
-		resolve_thrown_attack(O, throw_damage, dtype, zone)
+	var/zone
+	var/mob/living/L = isliving(throwingdatum.thrower) ? throwingdatum.thrower : null
+	if(L)
+		zone = check_zone(L.zone_sel.selecting)
+	else
+		zone = ran_zone(BP_CHEST, 75) // Hits a random part of the body, geared towards the chest
 
-		if(L)
-			var/client/assailant = L.client
-			if(assailant)
-				log_combat(L, "hit with thrown [O]")
+	//check if we hit
+	if(O.throw_source)
+		var/distance = get_dist(O.throw_source, loc)
+		zone = get_zone_with_miss_chance(zone, src, min(15 * (distance - 2), 0))
+	else
+		zone = get_zone_with_miss_chance(zone, src, 15)
 
-		// Begin BS12 momentum-transfer code.
-		if(O.throw_source && AM.fly_speed >= 15)
-			var/obj/item/weapon/W = O
+	if(!zone)
+		visible_message("<span class='notice'>\The [O] misses [src] narrowly!</span>")
+		return
 
-			visible_message("<span class='warning'>[src] staggers under the impact!</span>",
-				"<span class='danger'>You stagger under the impact!</span>")
+	if(throwingdatum.thrower != src && check_shields(AM, throw_damage, "[O]", get_dir(O,src)))
+		return
 
-			var/atom/throw_target = get_edge_target_turf(src, get_dir(O.throw_source, src))
-			throw_at(throw_target, 5, 1, throwingdatum.thrower, FALSE, null, null, CALLBACK(src, .proc/pin_to_turf, W))
+	resolve_thrown_attack(O, throw_damage, dtype, zone)
+
+	if(L)
+		var/client/assailant = L.client
+		if(assailant)
+			log_combat(L, "hit with thrown [O]")
+
+	// Begin BS12 momentum-transfer code.
+	if(O.throw_source && AM.fly_speed >= 15)
+		var/obj/item/weapon/W = O
+
+		visible_message("<span class='warning'>[src] staggers under the impact!</span>",
+			"<span class='danger'>You stagger under the impact!</span>")
+
+		var/atom/throw_target = get_edge_target_turf(src, get_dir(O.throw_source, src))
+		throw_at(throw_target, 5, 1, throwingdatum.thrower, FALSE, null, null, CALLBACK(src, .proc/pin_to_turf, W))
 
 
 /mob/living/proc/resolve_thrown_attack(obj/O, throw_damage, dtype, zone, armor)

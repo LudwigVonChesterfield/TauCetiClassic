@@ -200,7 +200,7 @@
 	RegisterSignal(carrier, list(COMSIG_CLIENTMOB_MOVE), .proc/carrier_move)
 	RegisterSignal(carrier, list(COMSIG_CLIENTMOB_POSTMOVE), .proc/carrier_postmove)
 	RegisterSignal(carrier, list(COMSIG_MOVABLE_MOVED), .proc/check_proximity)
-	RegisterSignal(carrier, list(COMSIG_ATOM_CANPASS), .proc/check_canpass)
+	RegisterSignal(carrier, list(COMSIG_ATOM_CANBEPASSED), .proc/check_canpass)
 	// Prevents funny bugs from occuring.
 	RegisterSignal(carrier, list(COMSIG_MOVABLE_TRY_GRAB), .proc/on_grabbed)
 	RegisterSignal(carrier, list(COMSIG_MOVABLE_WADDLE), .proc/carrier_waddle)
@@ -214,7 +214,7 @@
 		COMSIG_CLIENTMOB_MOVE,
 		COMSIG_CLIENTMOB_POSTMOVE,
 		COMSIG_MOVABLE_MOVED,
-		COMSIG_ATOM_CANPASS,
+		COMSIG_ATOM_CANBEPASSED,
 		COMSIG_MOVABLE_TRY_GRAB,
 		COMSIG_MOVABLE_WADDLE,
 		COMSIG_LIVING_CLICK_CTRL,
@@ -340,7 +340,7 @@
 	if(carry_obj.buckled_mob)
 		on_buckle(carry_obj, carry_obj.buckled_mob)
 
-	RegisterSignal(carry_obj, list(COMSIG_ATOM_CANPASS), .proc/check_canpass)
+	RegisterSignal(carry_obj, list(COMSIG_ATOM_CANBEPASSED), .proc/check_canpass)
 	RegisterSignal(carry_obj, list(COMSIG_MOVABLE_MOVED), .proc/check_carriers)
 	RegisterSignal(carry_obj, list(COMSIG_MOVABLE_BUCKLE), .proc/on_buckle)
 	RegisterSignal(carry_obj, list(COMSIG_MOVABLE_UNBUCKLE), .proc/on_unbuckle)
@@ -373,7 +373,7 @@
 
 	UnregisterSignal(carry_obj, list(
 		COMSIG_MOVABLE_MOVED,
-		COMSIG_ATOM_CANPASS,
+		COMSIG_ATOM_CANBEPASSED,
 		COMSIG_MOVABLE_BUCKLE,
 		COMSIG_MOVABLE_UNBUCKLE
 	))

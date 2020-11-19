@@ -242,6 +242,8 @@
 	TT.diagonals_first = diagonals_first
 	TT.callback = callback
 	TT.early_callback = early_callback
+	if(thrower)
+		TT.throw_intent = thrower.a_intent
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -264,6 +266,8 @@
 	TT.dy = dy
 	TT.diagonal_error = dist_x/2 - dist_y
 	TT.start_time = world.time
+
+	TT.RegisterSignal(src, list(COMSIG_MOVABLE_CANPASS), /datum/thrownthing.proc/on_can_pass)
 
 	if(pulledby)
 		pulledby.stop_pulling()

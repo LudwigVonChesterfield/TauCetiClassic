@@ -1,5 +1,12 @@
 /mob/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	var/retVal = SEND_SIGNAL(src, COMSIG_ATOM_CANPASS, mover, target, height, air_group)
+	if(mover)
+		var/retVal = SEND_SIGNAL(mover, COMSIG_MOVABLE_CANPASS, src, target, height, air_group)
+		if(retVal & COMPONENT_CANTPASS)
+			return FALSE
+		else if(retVal & COMPONENT_CANPASS)
+			return TRUE
+
+	var/retVal = SEND_SIGNAL(src, COMSIG_ATOM_CANBEPASSED, mover, target, height, air_group)
 	if(retVal & COMPONENT_CANTPASS)
 		return FALSE
 	else if(retVal & COMPONENT_CANPASS)
