@@ -1,0 +1,9 @@
+{
+    "map_name": "Rugby",
+    "map_path": "rugby",
+    "map_file": "rugby.dmm",
+    "space_ruin_levels": 0,
+    "space_empty_levels": 0,
+    "load_junkyard": 0,
+    "minetype": null
+}
