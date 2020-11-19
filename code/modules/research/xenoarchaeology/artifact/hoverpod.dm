@@ -10,7 +10,7 @@
 
 //these three procs overriden to play different sounds
 /obj/mecha/working/hoverpod/mechturn(direction)
-	dir = direction
+	set_dir(direction)
 	//playsound(src, 'sound/machines/hiss.ogg', VOL_EFFECTS_MASTER)
 	return 1
 

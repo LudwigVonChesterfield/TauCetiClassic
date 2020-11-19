@@ -556,7 +556,7 @@
 
 	loc = D.trunk
 	active = 1
-	dir = DOWN
+	set_dir(DOWN)
 	addtimer(CALLBACK(src, .proc/move), 1)
 
 // movement process, persists while holder is moving through pipes
@@ -679,6 +679,7 @@
 	level = 1			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
+
 	var/health = 10 	// health points 0-10
 	layer = 2.3			// slightly lower than wires and other pipes
 	var/base_icon_state	// initial icon state on map
@@ -721,7 +722,7 @@
 //
 /obj/structure/disposalpipe/proc/transfer(obj/structure/disposalholder/H)
 	var/nextdir = nextdir(H.dir)
-	H.dir = nextdir
+	H.set_dir(nextdir)
 	var/turf/T = H.nextloc()
 	var/obj/structure/disposalpipe/P = H.findpipe(T)
 
@@ -827,7 +828,7 @@
 		for(var/D in cardinal)
 			if(D & dpdir)
 				var/obj/structure/disposalpipe/broken/P = new(src.loc)
-				P.dir = D
+				P.set_dir(D)
 
 	src.invisibility = 101	// make invisible (since we won't delete the pipe immediately)
 	var/obj/structure/disposalholder/H = locate() in src
@@ -928,7 +929,7 @@
 		if("pipe-tagger-partial")
 			C.ptype = 12
 	src.transfer_fingerprints_to(C)
-	C.dir = dir
+	C.set_dir(dir)
 	C.density = 0
 	C.anchored = 1
 	C.update()
@@ -1127,7 +1128,7 @@
 
 /obj/structure/disposalpipe/sortjunction/transfer(obj/structure/disposalholder/H)
 	var/nextdir = nextdir(H.dir, H.destinationTag)
-	H.dir = nextdir
+	H.set_dir(nextdir)
 	var/turf/T = H.nextloc()
 	var/obj/structure/disposalpipe/P = H.findpipe(T)
 
@@ -1302,7 +1303,7 @@
 /obj/structure/disposaloutlet/atom_init(mapload, dir)
 	..()
 	if(dir)
-		src.dir = dir
+		src.set_dir(dir)
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/structure/disposaloutlet/atom_init_late()
@@ -1359,7 +1360,7 @@
 				C.update()
 				C.anchored = 1
 				C.density = 1
-				C.dir = dir
+				C.set_dir(dir)
 				qdel(src)
 			return
 		else

@@ -295,7 +295,7 @@ Hit Procs
 			hud_used.l_hand_hud_object.icon_state = "hand_l_inactive"
 			hud_used.r_hand_hud_object.icon_state = "hand_r_active"
 	/*if (!( src.hand ))
-		src.hands.dir = NORTH
+		src.hands.set_dir(NORTH)
 	else
 		src.hands.dir = SOUTH*/
 	return

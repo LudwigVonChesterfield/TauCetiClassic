@@ -573,7 +573,7 @@
 		if(i > 2 && prob(33))
 			// We can't go a full loop though
 			next_angle = -next_angle
-			dir = angle2dir(dir2angle(dir) + next_angle)
+			set_dir(angle2dir(dir2angle(dir) + next_angle))
 
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/SpawnFloor(turf/T)
 	for(var/turf/S in range(2,T))

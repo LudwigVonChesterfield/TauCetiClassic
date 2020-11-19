@@ -44,7 +44,7 @@
 			target.client.eye = holder
 
 		if(phaseshift)
-			holder.dir = target.dir
+			holder.set_dir(target.dir)
 			flick("phase_shift", holder)
 
 			sleep(FLICK_OVERLAY_JAUNT_DURATION)
@@ -106,7 +106,7 @@
 		loc = newLoc
 	else
 		to_chat(user, "<span class='warning'>Some strange aura is blocking the way!</span>")
-	dir = direction
+	set_dir(direction)
 	last_move = world.time
 	if(indicator)
 		var/turf/T = get_turf(loc)

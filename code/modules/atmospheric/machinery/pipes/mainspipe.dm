@@ -100,7 +100,7 @@
 	name = "mains pipe"
 	desc = "A one meter section of 3-line mains pipe"
 
-	dir = SOUTH
+	set_dir(SOUTH)
 	initialize_mains_directions = SOUTH|NORTH
 
 	device_type = BINARY
@@ -175,7 +175,7 @@
 	name = "manifold pipe"
 	desc = "A manifold composed of mains pipes"
 
-	dir = SOUTH
+	set_dir(SOUTH)
 	initialize_mains_directions = EAST|NORTH|WEST
 	volume = 105
 
@@ -241,7 +241,7 @@
 	name = "manifold pipe"
 	desc = "A manifold composed of mains pipes"
 
-	dir = SOUTH
+	set_dir(SOUTH)
 	initialize_mains_directions = EAST|NORTH|WEST|SOUTH
 	volume = 105
 
@@ -469,7 +469,7 @@
 	name = "pipe cap"
 	desc = "A cap for the end of a mains pipe"
 
-	dir = SOUTH
+	set_dir(SOUTH)
 	initialize_directions = SOUTH
 	volume = 35
 
@@ -512,7 +512,7 @@
 
 	var/open = 1
 
-	dir = SOUTH
+	set_dir(SOUTH)
 	initialize_mains_directions = SOUTH|NORTH
 
 /obj/machinery/atmospherics/mains_pipe/valve/atom_init()

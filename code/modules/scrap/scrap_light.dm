@@ -110,7 +110,7 @@
 		var/image/stake = image('icons/obj/structures/scrap/bonfire.dmi', "bonfire_rod")
 		stake.pixel_y = 16
 		stake.layer = 5
-		dir = 2
+		set_dir(2)
 		underlays += stake
 			//if("Grill")
 			//	R.use(1)

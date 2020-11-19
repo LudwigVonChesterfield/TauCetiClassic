@@ -301,7 +301,7 @@
 	if(anchored)
 		to_chat(usr, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
 	else
-		dir = turn(dir, 90)
+		set_dir(turn(dir, 90))
 
 /obj/machinery/suspension_gen/verb/rotate_cw()
 	set src in view(1)
@@ -313,7 +313,7 @@
 	if(anchored)
 		to_chat(usr, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
 	else
-		dir = turn(dir, -90)
+		set_dir(turn(dir, -90))
 
 /obj/effect/suspension_field
 	name = "energy field"
