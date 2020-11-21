@@ -193,7 +193,7 @@
 			return helpReaction(attacker)
 
 		if(INTENT_PUSH)
-			var/combo_value = 2
+			var/combo_value = PUSH_COMBO_POINTS
 			if(!anchored && !is_bigger_than(attacker) && src != attacker)
 				var/turf/to_move = get_step(src, get_dir(attacker, src))
 				var/atom/A = get_step_away(src, get_turf(attacker))

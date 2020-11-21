@@ -7,6 +7,10 @@
 	name = "Pitch"
 	icon_state = "pitch_area"
 
+/area/rugby/bounds
+	name = "Bounds"
+	icon_state = "bounds_area"
+
 /area/rugby/dugout
 	name = "Dugout"
 	icon_state = "dugout_area"

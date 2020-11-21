@@ -17,16 +17,17 @@
 /area/rugby/facility)
 "ae" = (
 /obj/effect/decal/rugby/stripe,
-/obj/structure/grille,
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/bounds)
 "af" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 4
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
 	},
-/obj/structure/grille,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/spectators)
 "ag" = (
 /obj/effect/decal/rugby/stripe/blue,
 /obj/effect/decal/rugby/stripe{
@@ -55,12 +56,17 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/blue_end_zone)
 "aj" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 8
+/obj/machinery/floodlight/pitch{
+	dir = 4
 	},
-/obj/structure/grille,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/spectators)
 "ak" = (
 /obj/effect/decal/rugby/stripe/blue{
 	dir = 1
@@ -151,12 +157,17 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/pitch)
 "ax" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 4
+/obj/machinery/floodlight/pitch{
+	dir = 8
 	},
-/obj/machinery/door/airlock/glass,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/spectators)
 "ay" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 1
@@ -176,31 +187,40 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "aB" = (
-/obj/machinery/floodlight/pitch{
-	dir = 4
-	},
+/obj/structure/window/reinforced,
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "aC" = (
+/obj/machinery/door/window,
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"aD" = (
+/obj/machinery/floodlight/pitch{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"aE" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 4
 	},
-/turf/unsimulated/wall,
-/area/rugby/pitch)
-"aD" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 8
-	},
-/turf/unsimulated/wall,
-/area/rugby/pitch)
-"aE" = (
-/obj/effect/decal/rugby/stripe,
-/obj/machinery/door/airlock/glass,
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/bounds)
 "aF" = (
 /obj/structure/stool/bed/chair/schair/monorail_chair{
 	icon_state = "chair_a02"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"aG" = (
+/obj/machinery/door/window{
+	dir = 1;
+	icon_state = "left"
 	},
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
@@ -289,6 +309,11 @@
 /obj/machinery/floodlight/pitch{
 	dir = 8
 	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced,
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "aS" = (
@@ -299,11 +324,10 @@
 /area/rugby/dugout)
 "aT" = (
 /obj/effect/decal/rugby/stripe{
-	dir = 1
+	dir = 8
 	},
-/obj/machinery/door/airlock/glass,
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/bounds)
 "aU" = (
 /obj/structure/stool/bed/chair/schair/monorail_chair{
 	icon_state = "chair_a01"
@@ -321,12 +345,25 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "aX" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 1
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
 	},
-/obj/structure/grille,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/spectators)
+"aY" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Red Lineman"
+	},
+/obj/item/clothing/under/color/red,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/advanced/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
 "aZ" = (
 /obj/machinery/door/airlock/glass,
 /turf/unsimulated/floor/sport_facility{
@@ -334,12 +371,19 @@
 	},
 /area/rugby/facility)
 "ba" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 8
+/obj/machinery/floodlight/pitch{
+	dir = 4
 	},
-/obj/machinery/door/airlock/glass,
+/obj/structure/window/reinforced{
+	dir = 4;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/dugout)
 "bb" = (
 /turf/unsimulated/floor/sport_facility{
 	icon_state = "redchecker"
@@ -358,24 +402,24 @@
 /area/rugby/dugout)
 "bf" = (
 /obj/effect/decal/rugby/stripe{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/machinery/floodlight/pitch{
-	dir = 4
+	dir = 1
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/bounds)
 "bg" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 8
-	},
-/obj/structure/grille,
 /obj/machinery/floodlight/pitch{
 	dir = 8
 	},
+/obj/structure/window/reinforced{
+	dir = 8;
+	icon_state = "rwindow"
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/dugout)
 "bh" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 1
@@ -410,6 +454,7 @@
 	},
 /obj/item/clothing/shoes/black,
 /obj/item/clothing/under/color/blue,
+/obj/item/clothing/glasses/tackle/advanced/blue,
 /turf/unsimulated/floor/sport_facility{
 	icon_state = "bluechecker"
 	},
@@ -420,15 +465,12 @@
 	},
 /area/rugby/facility)
 "bn" = (
-/obj/structure/closet/crate/class_inventory{
-	class_name = "Red Lineman"
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
 	},
-/obj/item/clothing/under/color/red,
-/obj/item/clothing/shoes/black,
-/turf/unsimulated/floor/sport_facility{
-	icon_state = "redchecker"
-	},
-/area/rugby/facility)
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
 "bo" = (
 /obj/machinery/door/airlock/glass,
 /turf/unsimulated/floor/sport_facility{
@@ -30514,30 +30556,30 @@ aA
 aA
 aA
 ad
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
+aX
+aX
+aX
+aX
+aX
+aX
+aX
+aX
+aX
+aj
+aX
+aX
+aX
+aX
+aj
+aX
+aX
+aX
+aX
+aX
+aX
+aX
+aX
+aX
 ad
 aA
 aA
@@ -30770,34 +30812,34 @@ ad
 aF
 aA
 aA
-aB
-aC
-af
-af
-af
-af
-af
-af
-af
-af
-af
-bf
-af
-ax
-ax
-af
-bf
-af
-af
-af
-af
-af
-af
-af
-af
-af
-aC
-aB
+aD
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+aE
+ba
 aA
 aA
 bi
@@ -31027,7 +31069,7 @@ aa
 ad
 aS
 aA
-aA
+aB
 ae
 ag
 ak
@@ -31055,8 +31097,8 @@ an
 an
 aL
 aO
-aX
-aA
+bf
+bn
 aA
 bj
 ad
@@ -31285,7 +31327,7 @@ aa
 ad
 aS
 aA
-aA
+aB
 ae
 ah
 al
@@ -31313,8 +31355,8 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 aA
 bj
 ad
@@ -31543,7 +31585,7 @@ aa
 ad
 aS
 aA
-aA
+aB
 ae
 ah
 al
@@ -31571,8 +31613,8 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 aA
 bj
 ad
@@ -31801,7 +31843,7 @@ aa
 ad
 aS
 aA
-aA
+aB
 ae
 ah
 am
@@ -31829,8 +31871,8 @@ ap
 ap
 aN
 aP
-aX
-aA
+bf
+bn
 aA
 bj
 ad
@@ -32059,7 +32101,7 @@ aa
 ad
 aU
 aA
-aA
+aB
 ae
 ah
 ak
@@ -32087,8 +32129,8 @@ an
 an
 aL
 aP
-aX
-aA
+bf
+bn
 aA
 bk
 ad
@@ -32317,7 +32359,7 @@ ad
 ad
 ad
 aA
-aA
+aB
 ae
 ah
 al
@@ -32345,8 +32387,8 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 aA
 ad
 ad
@@ -32575,8 +32617,8 @@ aA
 aA
 aA
 aA
-aA
-aE
+aC
+ae
 ah
 al
 ao
@@ -32603,8 +32645,8 @@ ao
 ao
 aM
 aP
-aT
-aA
+bf
+aG
 aA
 aA
 aA
@@ -32833,7 +32875,7 @@ aA
 aA
 aA
 aA
-aA
+aB
 ae
 ah
 al
@@ -32861,8 +32903,8 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 aA
 aA
 aA
@@ -33091,8 +33133,8 @@ aA
 aA
 aA
 aA
-aA
-aE
+aC
+ae
 ah
 al
 ao
@@ -33119,8 +33161,8 @@ ao
 ao
 aM
 aP
-aT
-aA
+bf
+aG
 aA
 aA
 aA
@@ -33349,7 +33391,7 @@ ad
 ad
 ad
 aW
-aA
+aB
 ae
 ah
 al
@@ -33377,8 +33419,8 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 be
 ad
 ad
@@ -33607,7 +33649,7 @@ ab
 ad
 aV
 aA
-aA
+aB
 ae
 ah
 am
@@ -33635,8 +33677,8 @@ ap
 ap
 aN
 aP
-aX
-aA
+bf
+bn
 aA
 aV
 ad
@@ -33865,7 +33907,7 @@ ab
 ad
 aV
 aA
-aA
+aB
 ae
 ah
 ak
@@ -33893,8 +33935,8 @@ an
 an
 aL
 aP
-aX
-aA
+bf
+bn
 aA
 aV
 ad
@@ -34123,7 +34165,7 @@ bl
 ad
 aV
 aA
-aA
+aB
 ae
 ah
 al
@@ -34151,12 +34193,12 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 aA
 aV
 ad
-bn
+aY
 bm
 bp
 bm
@@ -34381,7 +34423,7 @@ ad
 ad
 aV
 aA
-aA
+aB
 ae
 ah
 al
@@ -34409,8 +34451,8 @@ ao
 ao
 aM
 aP
-aX
-aA
+bf
+bn
 aA
 aV
 ad
@@ -34639,7 +34681,7 @@ aa
 ad
 aV
 aA
-aA
+aB
 ae
 ai
 am
@@ -34667,8 +34709,8 @@ ap
 ap
 aN
 aQ
-aX
-aA
+bf
+bn
 aA
 aV
 ad
@@ -34899,33 +34941,33 @@ aV
 aA
 aA
 aR
-aD
-aj
-aj
-aj
-aj
-aj
-aj
-aj
-aj
-aj
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
+aT
 bg
-aj
-ba
-ba
-aj
-bg
-aj
-aj
-aj
-aj
-aj
-aj
-aj
-aj
-aj
-aD
-aR
 aA
 aA
 aV
@@ -35158,30 +35200,30 @@ aW
 aA
 aA
 ad
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
+af
+af
+af
+af
+af
+af
+af
+af
+af
+ax
+af
+af
+af
+af
+ax
+af
+af
+af
+af
+af
+af
+af
+af
+af
 ad
 aA
 aA

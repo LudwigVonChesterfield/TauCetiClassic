@@ -356,7 +356,9 @@ var/list/ghostteleportlocs = list()
 			used_environ += amount
 
 
-/area/Entered(A)
+/area/Entered(atom/movable/A, atom/oldLoc)
+	SEND_SIGNAL(src, COMSIG_ATOM_ENTERED, A, oldLoc)
+
 	if (!isliving(A))
 		return
 

@@ -61,6 +61,7 @@
 		return
 
 	var/atom/oldloc = loc
+	var/olddir = dir
 
 	if(loc != NewLoc)
 		if (!(Dir & (Dir - 1))) //Cardinal move
@@ -88,6 +89,9 @@
 						. = step(src, WEST)
 					else if (step(src, WEST))
 						. = step(src, SOUTH)
+
+	if(oldloc == loc && olddir != dir)
+		set_dir(dir)
 
 	if(!loc || (loc == oldloc && oldloc != NewLoc))
 		last_move = 0

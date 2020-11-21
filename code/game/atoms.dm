@@ -296,8 +296,13 @@
 
 //called to set the atom's dir and used to add behaviour to dir-changes
 /atom/proc/set_dir(new_dir)
+	if(SEND_SIGNAL(src, COMSIG_ATOM_BEFORE_SET_DIR, new_dir) & COMPONENT_PREVENT_DIR_CHANGE)
+		return FALSE
+
 	. = new_dir != dir
 	dir = new_dir
+
+	SEND_SIGNAL(src, COMSIG_ATOM_SET_DIR)
 
 /atom/proc/relaymove()
 	return

@@ -72,3 +72,5 @@
 #define MOVESET_JOB "moveset_job"
 #define MOVESET_SPECIES "moveset_species"
 #define MOVESET_TYPE "moveset_type"
+
+#define PUSH_COMBO_POINTS 2

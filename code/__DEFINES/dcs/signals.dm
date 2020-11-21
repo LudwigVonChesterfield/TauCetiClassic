@@ -65,6 +65,11 @@
 #define COMSIG_MOVABLE_CANPASS "movable_canpass"
 	#define COMPONENT_CANPASS  1
 	#define COMPONENT_CANTPASS 2
+/// from base of atom/set_dir(), before actually changing the dir: (new_dir)
+#define COMSIG_ATOM_BEFORE_SET_DIR "movable_before_set_dir"
+	#define COMPONENT_PREVENT_DIR_CHANGE 1
+/// from base of atom/set_dir(), after the dir is set: ()
+#define COMSIG_ATOM_SET_DIR "movable_set_dir"
 /// from base of atom/attackby(): (/obj/item, /mob/living, params)
 #define COMSIG_PARENT_ATTACKBY "atom_attackby"
 	// Return this in response if you don't want afterattack to be called
@@ -190,14 +195,14 @@
 /// from mob/living/check_shields(): (atom/attacker, damage, attack_text, hit_dir)
 #define COMSIG_LIVING_CHECK_SHIELDS "check_shields"
 	#define COMPONENT_ATTACK_SHIELDED 1
-// from mob/living/learn_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
+/// from mob/living/learn_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
 #define COMSIG_LIVING_LEARN_COMBO "learn_combo"
-// from mob/living/forget_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
+/// from mob/living/forget_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
 #define COMSIG_LIVING_FORGET_COMBO "forget_combo"
 
-// from /atom/CanPass(), whether this object should be caught when flying past: (atom)
+/// from /atom/CanPass(), whether this object should be caught when flying past: (atom)
 #define COMSIG_MOVABLE_THROW_BEINTERCEPTED "movable_throw_beintercepted"
-// from /atom/CanPass(), whether should catch an object mover that is flying past: (atom/movable)
+/// from /atom/CanPass(), whether should catch an object mover that is flying past: (atom/movable)
 #define COMSIG_ATOM_THROW_INTERCEPT "atom_throw_intercept"
 	#define COMPONENT_THROW_INTERCEPT 1
 
