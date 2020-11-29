@@ -155,7 +155,6 @@
 	if(origin && master)
 		origin.remove_eye_control(master)
 	origin = null
-	master = null
 	return ..()
 
 /mob/camera/Eye/remote/relaymove(mob/user,direct)

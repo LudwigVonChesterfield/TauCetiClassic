@@ -52,7 +52,7 @@
 	owner = null
 	return
 
-/datum/action/proc/Trigger()
+/datum/action/proc/Trigger(mob/living/user)
 	if(!Checks())
 		return
 	switch(action_type)
@@ -66,15 +66,15 @@
 				spell.Click()
 		if(AB_INNATE)
 			if(!active)
-				Activate()
+				Activate(user)
 			else
-				Deactivate()
+				Deactivate(user)
 	return
 
-/datum/action/proc/Activate()
+/datum/action/proc/Activate(mob/living/user)
 	return
 
-/datum/action/proc/Deactivate()
+/datum/action/proc/Deactivate(mob/living/user)
 	return
 
 /datum/action/proc/Process()
@@ -126,7 +126,7 @@
 		return 1
 	if(usr.next_move >= world.time) // Is this needed ?
 		return
-	owner.Trigger()
+	owner.Trigger(usr)
 	return 1
 
 /obj/screen/movable/action_button/proc/UpdateIcon()

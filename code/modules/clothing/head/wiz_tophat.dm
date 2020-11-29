@@ -195,11 +195,7 @@ var/global/list/tophats_list = list()
 			user.force_remote_viewing = TRUE
 			user.reset_view(TP)
 
-			for(var/i in 1 to 30)
-				if(do_after(user, 1 SECONDS, needhand = FALSE, target = src, progress = FALSE))
-					user.reset_view(TP)
-				else
-					break
+			do_after(user, 30 SECONDS, needhand = FALSE, target = src, progress = FALSE)
 
 			user.reset_view(null)
 			user.force_remote_viewing = FALSE

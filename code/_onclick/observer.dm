@@ -25,6 +25,8 @@
 		to_chat(src, "<span class='notice'>You will no longer interact with machines you click on.</span>")
 
 /mob/dead/observer/DblClickOn(atom/A, params)
+	..()
+
 	if(client.buildmode || istype(A, /obj/effect/statclick) || istype(A, /obj/screen)) // handled in normal click.
 		return
 	if(can_reenter_corpse && mind && mind.current)

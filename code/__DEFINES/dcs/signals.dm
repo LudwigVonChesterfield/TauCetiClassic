@@ -182,6 +182,8 @@
 #define COMSIG_LIVING_CLICK_CTRL "living_click_ctrl"
 /// from base of mob/CtrlShiftClickOn(): (atom/target)
 #define COMSIG_LIVING_CLICK_CTRL_SHIFT "living_click_ctrl_shift"
+/// from base of mob/DblClickOn(): (atom/target)
+#define COMSIG_LIVING_DOUBLE_CLICK "living_double_click"
 /// from slime CtrlClickOn(): (/mob)
 #define COMSIG_XENO_SLIME_CLICK_CTRL "xeno_slime_click_ctrl"
 /// from slime ShiftClickOn(): (/mob)

@@ -64,6 +64,9 @@
 	if(notransform)
 		return
 
+	if(SEND_SIGNAL(src, COMSIG_MOB_CLICK, A, params) & COMPONENT_CANCEL_CLICK)
+		return
+
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
@@ -72,9 +75,6 @@
 
 	if(client.cob && client.cob.in_building_mode)
 		cob_click(client, modifiers)
-		return
-
-	if(SEND_SIGNAL(src, COMSIG_MOB_CLICK, A, params) & COMPONENT_CANCEL_CLICK)
 		return
 
 	if(modifiers["shift"] && modifiers["ctrl"])
@@ -169,7 +169,8 @@
 
 // Default behavior: ignore double clicks (don't add normal clicks, as it will do three clicks instead of two with double).
 /mob/proc/DblClickOn(atom/A, params)
-	return
+	if(SEND_SIGNAL(src, COMSIG_LIVING_DOUBLE_CLICK, A) & COMPONENT_CANCEL_CLICK)
+		return
 
 
 //	Translates into attack_hand, etc.

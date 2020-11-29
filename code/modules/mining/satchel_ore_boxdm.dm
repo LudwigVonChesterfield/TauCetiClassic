@@ -24,6 +24,7 @@
 /obj/structure/ore_box/Entered(atom/movable/ORE)
 	if(istype(ORE, /obj/item/weapon/ore))
 		stored_ore[ORE.name]++
+	..()
 
 /obj/structure/ore_box/Exited(atom/movable/ORE)
 	..()

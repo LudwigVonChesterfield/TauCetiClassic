@@ -177,8 +177,76 @@ var/global/list/active_alternate_appearances = list()
 	seer = M
 	add_hud_to(seer)
 
+/datum/atom_hud/alternate_appearance/basic/one_person/Destroy()
+	seer = null
+	return ..()
+
 /datum/atom_hud/alternate_appearance/basic/one_person/mobShouldSee(mob/M)
 	if(M == seer || isobserver(M))
+		return TRUE
+	return FALSE
+
+// Fake-image that a group of people sees.
+/datum/atom_hud/alternate_appearance/basic/list_people
+	var/list/seers
+	add_ghost_version = TRUE
+
+/datum/atom_hud/alternate_appearance/basic/list_people/New(key, image/I, list/mob/living/seers)
+	..(key, I, FALSE)
+	seers = seers
+	for(var/s in seers)
+		add_hud_to(s)
+
+/datum/atom_hud/alternate_appearance/basic/list_people/Destroy()
+	seers = null
+	return ..()
+
+/datum/atom_hud/alternate_appearance/basic/list_people/mobShouldSee(mob/M)
+	if((M in seers) || isobserver(M))
+		return TRUE
+	return FALSE
+
+/datum/atom_hud/alternate_appearance/basic/area
+	var/area_type
+
+/datum/atom_hud/alternate_appearance/basic/area/New(key, image/I, area_type)
+	..(key, I, FALSE)
+	src.area_type = area_type
+
+	for(var/area/A in all_areas)
+		if(!istype(A, area_type))
+			continue
+		RegisterSignal(A, list(COMSIG_ATOM_ENTERED), .proc/check_entered_mob)
+		RegisterSignal(A, list(COMSIG_ATOM_EXITED), .proc/check_exited_mob)
+
+	for(var/turf/T in get_area_turfs(area_type))
+		for(var/mob/living/L in T)
+			if(!L.client)
+				continue
+			add_hud_to(L)
+
+/datum/atom_hud/alternate_appearance/basic/area/Destroy()
+	for(var/area/A in all_areas)
+		if(!istype(A, area_type))
+			continue
+		UnregisterSignal(A, list(COMSIG_ATOM_ENTERED, COMSIG_ATOM_EXITED))
+	return ..()
+
+/datum/atom_hud/alternate_appearance/basic/area/proc/check_entered_mob(datum/source, atom/movable/AM, atom/oldLoc)
+	if(!istype(AM, /mob))
+		return
+
+	add_hud_to(AM)
+
+/datum/atom_hud/alternate_appearance/basic/area/proc/check_exited_mob(datum/source, atom/movable/AM, atom/newLoc)
+	if(!istype(AM, /mob))
+		return
+
+	remove_hud_from(AM)
+
+/datum/atom_hud/alternate_appearance/basic/area/mobShouldSee(mob/M)
+	var/area/A = get_area(M)
+	if(istype(A, area_type))
 		return TRUE
 	return FALSE
 

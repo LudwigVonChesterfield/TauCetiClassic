@@ -30,7 +30,12 @@
 	AddComponent(/datum/component/multi_carry,
 		12,
 		/datum/carry_positions/coffin_four_man,
-		subtypesof(/datum/dance_move/coffin))
+		list(
+			/datum/dance_move/carrywaddle/coffin,
+			/datum/dance_move/rotate/coffin,
+			/datum/dance_move/swap/coffin
+		)
+	)
 
 /obj/structure/closet/coffin/can_open()
 	if(next_open > world.time)

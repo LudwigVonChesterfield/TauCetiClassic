@@ -1,11 +1,12 @@
 #define MOVE_TO_POS_DELAY 3
 
-// Is called on carry_obj Ctrl+Shift click. Does a waddle.
-#define DANCE_MOVE_CARRYWADDLE "carrywaddle"
-// Is called on Ctrl+Shift click on fellow carrier. Rotates everybody's positions. TO-DO: Make the rotation direction depend on clicker's direction?
-#define DANCE_MOVE_ROTATE      "rotate"
+// Is called on carry_obj Ctrl+Shift click.
+#define DANCE_CTRL_SHIFT_OBJ "ctrl_shift_obj"
+// Is called on Ctrl+Shift click on fellow carrier. Rotates everybody's positions.
+#define DANCE_CTRL_SHIFT_CARRIER "ctrl_shift_carrier"
 // Is called on Ctrl click on fellow carrier. Swaps user with the carrier they clicked on.
-#define DANCE_MOVE_SWAP        "swap"
+#define DANCE_CTRL_CARRIER "ctrl_carrier"
+
 
 // This proc is needed to update layers, offsets and etc when a buckled mob is being carried with us.
 // TO-DO: Replace with getters setters for: layer, pixel_x, pixel_y
@@ -14,38 +15,59 @@
 
 // This datum contains all info, and checks needed by multi_carry "dance move" integration.
 /datum/dance_move
-	var/name = null
+	// Cue used to trigget this dance move. See DANCE_ defines above.
+	var/cue
 
 /datum/dance_move/proc/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
-	return FALSE
+	return TRUE
+
+/datum/dance_move/proc/perform(mob/user, atom/target, datum/component/multi_carry/carry)
+	return
 
 
 
-/datum/dance_move/coffin/proc/check_shoes(mob/living/carbon/human/carrier)
+/datum/dance_move/carrywaddle
+	cue = DANCE_CTRL_SHIFT_OBJ
+
+/datum/dance_move/carrywaddle/perform(mob/user, atom/target, datum/component/multi_carry/carry)
+	carry.carrier_waddle(user, 28, 4)
+
+/datum/dance_move/rotate
+	cue = DANCE_CTRL_SHIFT_CARRIER
+
+/datum/dance_move/rotate/perform(mob/user, atom/target, datum/component/multi_carry/carry)
+	carry.rotate_positions(clockwise=!user.hand)
+
+/datum/dance_move/swap
+	cue = DANCE_CTRL_CARRIER
+
+/datum/dance_move/swap/perform(mob/user, atom/target, datum/component/multi_carry/carry)
+	carry.swap_positions(user, target)
+
+
+
+/proc/check_gravedigger_shoes(mob/living/carbon/human/carrier)
 	if(!istype(carrier))
 		return FALSE
 	return istype(carrier.shoes, /obj/item/clothing/shoes/jolly_gravedigger)
 
-/datum/dance_move/coffin/carrywaddle
-	name = DANCE_MOVE_CARRYWADDLE
+/datum/dance_move/carrywaddle/coffin
 
-/datum/dance_move/coffin/carrywaddle/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
-	return check_shoes(user)
+/datum/dance_move/carrywaddle/coffin/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
+	return check_gravedigger_shoes(user)
 
-/datum/dance_move/coffin/rotate
-	name = DANCE_MOVE_ROTATE
+/datum/dance_move/rotate/coffin
 
-/datum/dance_move/coffin/rotate/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
+/datum/dance_move/rotate/coffin/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
 	for(var/c in carry.carriers)
-		if(!check_shoes(c))
+		if(!check_gravedigger_shoes(c))
 			return FALSE
 	return TRUE
 
-/datum/dance_move/coffin/swap
-	name = DANCE_MOVE_SWAP
+/datum/dance_move/swap/coffin
 
-/datum/dance_move/coffin/swap/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
-	return check_shoes(user) && check_shoes(target)
+/datum/dance_move/swap/coffin/can_perform(mob/user, atom/target, datum/component/multi_carry/carry)
+	return check_gravedigger_shoes(user) && check_gravedigger_shoes(target)
 
 
 
@@ -162,7 +184,7 @@
 	// var/carry_layer = FLY_LAYER
 	// The positions in which carriers should stand, when carrying carry_obj.
 	var/datum/carry_positions/positions
-	// A list of dance moves permitted by carry_obj
+	/// A list of dance moves permitted by carry_obj
 	var/list/datum/dance_move/dance_moves
 
 /datum/component/multi_carry/Initialize(_carry_pixel_z, positions_type, list/dance_move_types)
@@ -172,7 +194,7 @@
 
 	for(var/dance_type in dance_move_types)
 		var/datum/dance_move/DM = new dance_type
-		LAZYSET(dance_moves, DM.name, DM)
+		LAZYSET(dance_moves, DM.cue, DM)
 
 	RegisterSignal(carry_obj, list(COMSIG_ATOM_START_PULL), .proc/carrier_join)
 	RegisterSignal(carry_obj, list(COMSIG_ATOM_STOP_PULL), .proc/carrier_leave)
@@ -485,48 +507,52 @@
 	carry_obj.update_buckle_mob(buckled)
 
 // Return TRUE to permit carrywaddle/rotatepositions/swappositions.
-/datum/component/multi_carry/proc/can_dance(mob/dancer, atom/target, movename)
+/datum/component/multi_carry/proc/try_dance_cue(mob/dancer, atom/target, cue)
 	if(!dance_moves)
 		return FALSE
 
-	var/datum/dance_move/DM = dance_moves[movename]
+	var/datum/dance_move/DM = dance_moves[cue]
 	if(!DM)
 		return FALSE
-	return DM.can_perform(dancer, target, src)
+	if(!DM.can_perform(dancer, target, src))
+		return FALSE
+
+	DM.perform(dancer, target, src)
+	return TRUE
 
 /datum/component/multi_carry/proc/on_ctrl_click(datum/source, atom/target)
 	if(target == carry_obj)
 		return NONE
 
 	if(target != source && (target in carriers))
-		if(!can_dance(source, target, DANCE_MOVE_SWAP))
+		if(!try_dance_cue(source, target, DANCE_CTRL_CARRIER))
+			// Pull prevention.
 			return COMPONENT_CANCEL_CLICK
 
 		var/mob/M = source
 		M.SetNextMove(CLICK_CD_RAPID)
-		swap_positions(source, target)
 		return COMPONENT_CANCEL_CLICK
+
 	// So carrier doesn't get an idea that they can pull something else.
 	return COMPONENT_CANCEL_CLICK
 
 /datum/component/multi_carry/proc/on_ctrl_shift_click(datum/source, atom/target)
 	if(target == carry_obj)
-		if(!can_dance(source, target, DANCE_MOVE_CARRYWADDLE))
+		if(!try_dance_cue(source, target, DANCE_CTRL_SHIFT_OBJ))
 			return NONE
 
 		var/mob/M = source
 		M.SetNextMove(CLICK_CD_RAPID)
-		carrier_waddle(source, 28, 4)
 		return COMPONENT_CANCEL_CLICK
 
 	if(target in carriers)
-		if(!can_dance(source, target, DANCE_MOVE_ROTATE))
+		if(!try_dance_cue(source, target, DANCE_CTRL_SHIFT_CARRIER))
 			return NONE
 
 		var/mob/M = source
 		M.SetNextMove(CLICK_CD_RAPID)
-		rotate_positions(clockwise=!M.hand)
 		return COMPONENT_CANCEL_CLICK
+
 	return NONE
 
 #undef MOVE_TO_POS_DELAY

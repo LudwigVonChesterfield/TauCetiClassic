@@ -8,10 +8,11 @@
 	},
 /area/rugby/facility)
 "ac" = (
+/obj/structure/table/woodentable,
 /turf/unsimulated/floor/sport_facility{
 	icon_state = "bluechecker"
 	},
-/area/space)
+/area/rugby/facility)
 "ad" = (
 /turf/unsimulated/wall,
 /area/rugby/facility)
@@ -354,14 +355,11 @@
 	},
 /area/rugby/spectators)
 "aY" = (
-/obj/structure/closet/crate/class_inventory{
-	class_name = "Red Lineman"
+/obj/machinery/light{
+	dir = 8
 	},
-/obj/item/clothing/under/color/red,
-/obj/item/clothing/shoes/black,
-/obj/item/clothing/glasses/tackle/advanced/red,
 /turf/unsimulated/floor/sport_facility{
-	icon_state = "redchecker"
+	icon_state = "bluechecker"
 	},
 /area/rugby/facility)
 "aZ" = (
@@ -394,6 +392,15 @@
 	icon_state = "bluechecker"
 	},
 /area/rugby/spectators)
+"bd" = (
+/obj/structure/closet,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
 "be" = (
 /obj/structure/sign/departments/medbay{
 	pixel_y = -32
@@ -421,12 +428,17 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "bh" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 1
+/obj/structure/stool/bed/chair/metal/blue{
+	dir = 8;
+	icon_state = "chair_blue"
 	},
-/obj/item/weapon/beach_ball,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/obj/effect/landmark/rugby/blue{
+	name = "Coach Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
 "bi" = (
 /obj/structure/stool/bed/chair/schair/monorail_chair{
 	dir = 1;
@@ -449,12 +461,7 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "bl" = (
-/obj/structure/closet/crate/class_inventory{
-	class_name = "Blue Lineman"
-	},
-/obj/item/clothing/shoes/black,
-/obj/item/clothing/under/color/blue,
-/obj/item/clothing/glasses/tackle/advanced/blue,
+/obj/structure/closet,
 /turf/unsimulated/floor/sport_facility{
 	icon_state = "bluechecker"
 	},
@@ -497,12 +504,884 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/pitch)
 "bs" = (
-/obj/effect/decal/rugby/stripe,
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 1);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bt" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 2);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bu" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 10);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bv" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 4);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bw" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 11);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bx" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 5);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"by" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 12);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bz" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 5);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bA" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 13);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bB" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 6);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bC" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 14);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bD" = (
+/obj/machinery/light,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bE" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 7);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bF" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 15);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bG" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Blue Blitzer"
+	},
+/obj/item/clothing/under/rugby/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bH" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 8);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bI" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/blue{
+	data = list("Player" = 16);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bJ" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Blue Lineman"
+	},
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/advanced/blue,
+/obj/item/clothing/suit/armor/rugby/blue,
+/obj/item/clothing/under/rugby/blue,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"bK" = (
+/obj/machinery/ready_button/blue{
+	pixel_x = -32
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"bL" = (
+/obj/structure/window/reinforced,
+/obj/structure/spectator_binoculars{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"bM" = (
+/obj/structure/spectator_binoculars{
+	dir = 4
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/spectators)
+"bN" = (
+/obj/structure/spectator_binoculars{
+	dir = 8
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/spectators)
+"bO" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bP" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bQ" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "e";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bR" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "e";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bS" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "a";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bT" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "a";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bU" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "d";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bV" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "d";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bW" = (
+/mob/living/carbon/human,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/spectators)
+"bX" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "y";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bY" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "y";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"bZ" = (
+/mob/living/carbon/human,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/spectators)
+"ca" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/obj/item/weapon/rugby,
 /obj/effect/landmark{
-	name = "Observer-Start"
+	name = "Pitch Cursor"
 	},
 /turf/unsimulated/floor/pitch,
 /area/rugby/pitch)
+"cb" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"cc" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"cd" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "e";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"ce" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "e";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"cf" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "a";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"cg" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "a";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"ch" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "d";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"ci" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "d";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"cj" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "y";
+	team_color = "red"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"ck" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/letter{
+	dir = 8;
+	icon_state = "y";
+	team_color = "blue"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/bounds)
+"cl" = (
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"cm" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	icon_state = "rwindow"
+	},
+/obj/structure/spectator_binoculars{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"cn" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"co" = (
+/mob/living/carbon/human,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"cp" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"cq" = (
+/obj/machinery/ready_button/red{
+	pixel_x = -32
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/dugout)
+"cr" = (
+/obj/structure/closet,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cs" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 1);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"ct" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 9);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cu" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Red Lineman"
+	},
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/advanced/red,
+/obj/item/clothing/suit/armor/rugby/red,
+/obj/item/clothing/under/rugby/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cv" = (
+/obj/structure/closet,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cw" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 2);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cx" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 10);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cy" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Red Blitzer"
+	},
+/obj/item/clothing/under/rugby/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cz" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 3);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cA" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 11);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cB" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cC" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 4);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cD" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch03";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 12);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cE" = (
+/mob/living/carbon/human,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "medstairs_middle"
+	},
+/area/rugby/facility)
+"cF" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 5);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cG" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 13);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cH" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"cI" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 6);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cJ" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 14);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cK" = (
+/obj/effect/landmark{
+	name = "Observer-Start"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"cL" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 7);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cM" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch02";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 15);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cN" = (
+/obj/machinery/light{
+	invisibility = 101;
+	name = "invisible light fixture"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "white"
+	},
+/area/rugby/facility)
+"cO" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 8);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cP" = (
+/obj/structure/sign/velocity_overlay{
+	desc = "Apply butt";
+	icon_state = "ch01";
+	name = "\improper stool"
+	},
+/obj/effect/landmark/rugby/red{
+	data = list("Player" = 16);
+	name = "Team Member Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cQ" = (
+/obj/structure/table/woodentable,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cR" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cS" = (
+/obj/structure/stool/bed/chair/metal/red{
+	dir = 8
+	},
+/obj/effect/landmark/rugby/red{
+	name = "Coach Spawn"
+	},
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"cT" = (
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/space)
+"cU" = (
+/turf/unsimulated/wall,
+/area/space)
 
 (1,1,1) = {"
 aa
@@ -30041,28 +30920,28 @@ aa
 aa
 ad
 bb
+bM
 bb
 bb
+bM
 bb
 bb
+bM
+bW
+bb
+bM
 bb
 bb
+bM
 bb
 bb
+bM
 bb
 bb
+bM
 bb
 bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
-bb
+bM
 bb
 ad
 aa
@@ -30797,17 +31676,17 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
 ad
 aF
 aA
@@ -30818,22 +31697,22 @@ aE
 aE
 aE
 aE
+bO
+bQ
+bS
+bU
+bX
 aE
 aE
 aE
 aE
 aE
 aE
-aE
-aE
-aE
-aE
-aE
-aE
-aE
-aE
-aE
-aE
+cb
+cd
+cf
+ch
+cj
 aE
 aE
 aE
@@ -30844,21 +31723,21 @@ aA
 aA
 bi
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -31055,17 +31934,17 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+bl
+bd
+bl
+bl
+bl
+ab
+ab
+bl
+bd
+bl
 ad
 aS
 aA
@@ -31102,21 +31981,21 @@ bn
 aA
 bj
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+cr
+cv
+cr
+bm
+bm
+cr
+cr
+cr
+cv
+cr
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -31313,21 +32192,21 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+bs
+bt
+bv
+bx
+bz
+ab
+ab
+bB
+bE
+bH
 ad
 aS
 aA
-aB
+bL
 ae
 ah
 al
@@ -31356,25 +32235,25 @@ ao
 aM
 aP
 bf
-bn
+cm
 aA
 bj
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+cs
+cw
+cz
+bm
+bm
+cC
+cF
+cI
+cL
+cO
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -31571,17 +32450,17 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
 ad
 aS
 aA
@@ -31618,21 +32497,21 @@ bn
 aA
 bj
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -31829,17 +32708,17 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+bs
+bu
+bw
+by
+bA
+ab
+ab
+bC
+bF
+bI
 ad
 aS
 aA
@@ -31876,21 +32755,21 @@ bn
 aA
 bj
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ct
+cx
+cA
+bm
+bm
+cD
+cG
+cJ
+cM
+cP
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -32087,17 +32966,17 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+bl
+bl
+bl
+bl
+bl
+ab
+ab
+bl
+bl
+bl
 ad
 aU
 aA
@@ -32134,21 +33013,21 @@ bn
 aA
 bk
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+cr
+cr
+cr
+bm
+bm
+cr
+cr
+cr
+cr
+cr
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -32345,14 +33224,14 @@ aa
 aa
 aa
 aa
-aa
-aa
 ad
 ad
 ad
 ad
 ad
 ad
+aZ
+aZ
 ad
 ad
 ad
@@ -32394,19 +33273,19 @@ ad
 ad
 ad
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+bo
+bo
+ad
+ad
+ad
+ad
+ad
+ad
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -32601,11 +33480,11 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+ab
+ab
+aY
+ab
+ab
 ab
 ab
 ab
@@ -32615,7 +33494,7 @@ ab
 aZ
 aA
 aA
-aA
+bK
 aA
 aC
 ae
@@ -32648,23 +33527,23 @@ aP
 bf
 aG
 aA
-aA
+cq
 aA
 aA
 bo
 bm
 bm
 bm
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bm
+bm
+bm
+bm
+bm
+cR
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -32859,17 +33738,17 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
 ab
 ab
 ab
 ab
 ab
 ab
+ab
+ab
+ab
+ab
+bD
 ad
 aA
 aA
@@ -32889,8 +33768,8 @@ ao
 ao
 ao
 ao
-bs
-bh
+at
+ca
 ao
 br
 ao
@@ -32910,19 +33789,19 @@ aA
 aA
 aA
 ad
+cB
 bm
 bm
 bm
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -33117,15 +33996,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
 ab
 ab
-ac
-ac
+ab
+ab
+ab
+ab
+ab
+ab
+ab
 ab
 ab
 aZ
@@ -33171,16 +34050,16 @@ bo
 bm
 bm
 bm
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+bm
+ad
 aa
 aa
 aa
@@ -33375,10 +34254,10 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
+ad
+ad
+ad
+aZ
 ad
 ad
 ad
@@ -33433,16 +34312,16 @@ ad
 ad
 ad
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bo
+ad
+ad
+ad
+ad
+ad
+cU
+cU
+cU
+cU
 aa
 aa
 aa
@@ -33633,10 +34512,10 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
+ad
+ab
+aY
+ab
 ad
 ab
 ab
@@ -33691,16 +34570,16 @@ bm
 bm
 bm
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bm
+cR
+bm
+ad
+cT
+cT
+cT
+cT
+cT
+cU
 aa
 aa
 aa
@@ -33891,10 +34770,10 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
+ad
+ab
+ab
+ab
 ad
 ab
 ab
@@ -33949,16 +34828,16 @@ bm
 bm
 bm
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+bm
+bm
+bm
+bo
+cT
+cT
+cT
+cT
+cT
+cU
 aa
 aa
 aa
@@ -34149,10 +35028,10 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
+ad
+ab
+ac
+ac
 ad
 ab
 ab
@@ -34160,8 +35039,8 @@ ar
 ab
 ab
 ar
-ab
-bl
+bG
+bJ
 ad
 aV
 aA
@@ -34198,8 +35077,8 @@ bn
 aA
 aV
 ad
-aY
-bm
+cu
+cy
 bp
 bm
 bm
@@ -34207,16 +35086,16 @@ bp
 bm
 bm
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+cQ
+cQ
+bm
+ad
+cT
+cT
+cT
+cT
+cT
+cU
 aa
 aa
 aa
@@ -34407,10 +35286,10 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
+ad
+ab
+bh
+ac
 ad
 ad
 ad
@@ -34423,7 +35302,7 @@ ad
 ad
 aV
 aA
-aB
+bL
 ae
 ah
 al
@@ -34452,7 +35331,7 @@ ao
 aM
 aP
 bf
-bn
+cm
 aA
 aV
 ad
@@ -34465,16 +35344,16 @@ ad
 ad
 ad
 ad
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+cQ
+cS
+bm
+ad
+cU
+cU
+cU
+cU
+cU
+cU
 aa
 aa
 aa
@@ -34665,11 +35544,11 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+ad
+ad
+ad
 aa
 aa
 aa
@@ -34722,11 +35601,11 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+ad
+ad
+ad
 aa
 aa
 aa
@@ -34946,22 +35825,22 @@ aT
 aT
 aT
 aT
+bP
+bR
+bT
+bV
+bY
 aT
 aT
 aT
 aT
 aT
 aT
-aT
-aT
-aT
-aT
-aT
-aT
-aT
-aT
-aT
-aT
+cc
+ce
+cg
+ci
+ck
 aT
 aT
 aT
@@ -35717,28 +36596,28 @@ aa
 aa
 ad
 bc
+bN
 bc
 bc
+bN
 bc
 bc
+bN
+bZ
+bc
+bN
 bc
 bc
+bN
 bc
 bc
+bN
 bc
 bc
+bN
 bc
 bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
-bc
+bN
 bc
 ad
 aa
@@ -37556,13 +38435,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+cl
+cK
+cl
+ad
+ad
 aa
 aa
 aa
@@ -37814,13 +38693,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -38072,13 +38951,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -38330,13 +39209,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -38588,13 +39467,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -38846,13 +39725,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+cH
+co
+cN
+ad
+ad
 aa
 aa
 aa
@@ -39104,13 +39983,13 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -39351,24 +40230,24 @@ aa
 aa
 aa
 aa
+ad
+ad
+ad
+ad
+ad
+ad
+ad
 aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -39608,25 +40487,25 @@ aa
 aa
 aa
 aa
+ad
+ad
+cl
+cl
+cn
+cl
+cl
+ad
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -39866,25 +40745,25 @@ aa
 aa
 aa
 aa
+ad
+cl
+cl
+cl
+cl
+cl
+cl
+cl
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -40124,25 +41003,25 @@ aa
 aa
 aa
 aa
+ad
+cl
+cl
+cl
+cl
+cl
+cl
+cl
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+cH
+co
+cN
+ad
+ad
 aa
 aa
 aa
@@ -40382,25 +41261,25 @@ aa
 aa
 aa
 aa
+ad
+cl
+cl
+cl
+co
+cl
+cl
+cl
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -40640,25 +41519,25 @@ aa
 aa
 aa
 aa
+ad
+cl
+cl
+cl
+cl
+cl
+cl
+cl
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -40898,25 +41777,25 @@ aa
 aa
 aa
 aa
+ad
+cl
+cl
+cl
+cl
+cl
+cl
+cl
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -41156,25 +42035,25 @@ aa
 aa
 aa
 aa
+ad
+ad
+cl
+cl
+cp
+cl
+cl
+ad
+ad
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+cE
+cl
+cl
+cl
+cE
+ad
 aa
 aa
 aa
@@ -41415,24 +42294,24 @@ aa
 aa
 aa
 aa
+ad
+ad
+ad
+ad
+ad
+ad
+ad
 aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+ad
+ad
+cl
+cl
+cl
+ad
+ad
 aa
 aa
 aa

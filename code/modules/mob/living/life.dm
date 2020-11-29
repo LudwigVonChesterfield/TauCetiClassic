@@ -88,6 +88,9 @@
 				else
 					clear_fullscreen("high")
 
+		if(force_remote_viewing)
+			return
+
 		if(machine)
 			if (!(machine.check_eye(src)))
 				reset_view(null)

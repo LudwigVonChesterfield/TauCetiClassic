@@ -24,6 +24,7 @@
 /mob/camera/Eye/ai/Destroy()
 	ai_eyes_list -= src
 	ai = null
+	master = null
 	return ..()
 
 /mob/camera/Eye/atom_init()

@@ -134,6 +134,16 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
 	make_blood()
 	regenerate_icons()
 
+	AddComponent(/datum/component/multi_carry,
+		12,
+		/datum/carry_positions/coffin_four_man,
+		list(
+			/datum/dance_move/carrywaddle,
+			/datum/dance_move/rotate,
+			/datum/dance_move/swap
+		)
+	)
+
 /mob/living/carbon/human/Destroy()
 	human_list -= src
 	if(my_master)
