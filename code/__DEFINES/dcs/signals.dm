@@ -163,6 +163,8 @@
 #define COMSIG_MOB_SLIP "movable_slip"
 /// from base of mob/death(): (gibbed)
 #define COMSIG_MOB_DIED "mob_died"
+/// from base of mob/Logout()
+#define COMSIG_MOB_LOGOUT "mob_logout"
 
 // living signals
 ///from base of mob/living/rejuvenate(): ()
@@ -201,6 +203,15 @@
 #define COMSIG_LIVING_LEARN_COMBO "learn_combo"
 /// from mob/living/forget_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
 #define COMSIG_LIVING_FORGET_COMBO "forget_combo"
+// from mob/living/Bump(): (atom/A)
+#define COMSIG_LIVING_MOBBUMPED "comsig_living_mobbumped"
+	#define COMPONENT_PREVENT_MOB_BUMP 1
+// from mob/living/Bump(): (atom/A)
+#define COMSIG_LIVING_OBJBUMPED "comsig_living_objbumped"
+	#define COMPONENT_PREVENT_OBJ_BUMP 1
+// from mob/living/Bump(): (atom/A)
+#define COMSIG_LIVING_AMPUSHED "comsig_living_ampushed"
+	#define COMPONENT_PREVENT_AM_PUSH 1
 
 /// from /atom/CanPass(), whether this object should be caught when flying past: (atom)
 #define COMSIG_MOVABLE_THROW_BEINTERCEPTED "movable_throw_beintercepted"

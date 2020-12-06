@@ -36,7 +36,7 @@
 
 /datum/action/collective/cursor/Remove(mob/living/T)
 	if(remote.state == action_state)
-		stop_action()
+		stop_action(T)
 		remote.state = require_state
 
 	return ..()

@@ -49,4 +49,6 @@
 	set name = "Start Match"
 	set category = "Event"
 
+	if(match.state == "setup")
+		return
 	match.setup()

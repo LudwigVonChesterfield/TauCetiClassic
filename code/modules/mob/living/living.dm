@@ -62,16 +62,22 @@
 
 	if(ismob(A))
 		var/mob/M = A
-		if(MobBump(M))
+		var/response = SEND_SIGNAL(src, COMSIG_LIVING_MOBBUMPED, M)
+
+		if(!(response & COMPONENT_PREVENT_MOB_BUMP) && MobBump(M))
 			return
 	..()
 	if(isobj(A))
 		var/obj/O = A
-		if(ObjBump(O))
+		var/response = SEND_SIGNAL(src, COMSIG_LIVING_OBJBUMPED, O)
+
+		if(!(response & COMPONENT_PREVENT_OBJ_BUMP) && ObjBump(O))
 			return
 	if(istype(A, /atom/movable))
 		var/atom/movable/AM = A
-		if(PushAM(AM))
+		var/response = SEND_SIGNAL(src, COMSIG_LIVING_AMPUSHED, AM)
+
+		if(!(response & COMPONENT_PREVENT_AM_PUSH) && PushAM(AM))
 			return
 
 //Called when we bump onto a mob

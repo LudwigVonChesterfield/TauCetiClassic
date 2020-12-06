@@ -109,3 +109,8 @@
 
 /obj/item/clothing/under/rugby/blue/get_team()
 	return match.blue
+
+
+
+/obj/item/clothing/shoes/rugby
+	name = "sneakers"

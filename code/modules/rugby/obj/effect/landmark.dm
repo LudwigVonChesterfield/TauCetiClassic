@@ -1,15 +1,9 @@
 /obj/effect/landmark/rugby
-	var/data
-
-/obj/effect/landmark/rugby/proc/get_team_color()
-	return ""
+	var/team
+	var/list/data
 
 /obj/effect/landmark/rugby/red
-
-/obj/effect/landmark/rugby/red/get_team_color()
-	return "red"
+	team = "red"
 
 /obj/effect/landmark/rugby/blue
-
-/obj/effect/landmark/rugby/blue/get_team_color()
-	return "blue"
+	team = "blue"

@@ -38,14 +38,14 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/blue_end_zone)
+/area/rugby/end_zone/blue)
 "ah" = (
 /obj/effect/decal/rugby/stripe/blue,
 /obj/effect/decal/rugby/stripe{
 	dir = 1
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/blue_end_zone)
+/area/rugby/end_zone/blue)
 "ai" = (
 /obj/effect/decal/rugby/stripe/blue,
 /obj/effect/decal/rugby/stripe{
@@ -55,7 +55,7 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/blue_end_zone)
+/area/rugby/end_zone/blue)
 "aj" = (
 /obj/machinery/floodlight/pitch{
 	dir = 4
@@ -76,13 +76,13 @@
 	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "al" = (
 /obj/effect/decal/rugby/stripe/blue{
 	dir = 1
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "am" = (
 /obj/effect/decal/rugby/stripe/blue{
 	dir = 1
@@ -91,31 +91,25 @@
 	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "an" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "ao" = (
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "ap" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "aq" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 8
-	},
-/obj/effect/decal/rugby/stripe{
-	dir = 8
-	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/east_wide_zone/blue)
 "ar" = (
 /obj/machinery/light{
 	dir = 4;
@@ -126,37 +120,40 @@
 	},
 /area/rugby/facility)
 "as" = (
-/obj/effect/decal/rugby/stripe,
 /obj/effect/decal/rugby/stripe{
-	dir = 8
+	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/east_wide_zone/blue)
 "at" = (
-/obj/effect/decal/rugby/stripe,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
-"au" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 4
-	},
-/obj/effect/decal/rugby/stripe,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
-"av" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 8
 	},
-/obj/effect/decal/rugby/stripe,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
-"aw" = (
-/obj/effect/decal/rugby/stripe,
 /obj/effect/decal/rugby/stripe{
-	dir = 4
+	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
+"au" = (
+/obj/effect/landmark/rugby/blue{
+	data = list("Spawn Area" = "west_wide_zone");
+	name = "West Wide Zone"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/blue)
+"av" = (
+/obj/effect/landmark/rugby/blue{
+	name = "Line of Scrimmage"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/blue)
+"aw" = (
+/obj/effect/landmark/rugby/blue{
+	data = list("Spawn Area" = "east_wide_zone");
+	name = "East Wide Zone"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/blue)
 "ax" = (
 /obj/machinery/floodlight/pitch{
 	dir = 8
@@ -170,20 +167,16 @@
 	},
 /area/rugby/spectators)
 "ay" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 1
-	},
+/obj/effect/decal/rugby/stripe,
 /obj/effect/decal/rugby/stripe{
 	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "az" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 1
-	},
+/obj/effect/decal/rugby/stripe,
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "aA" = (
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
@@ -226,86 +219,74 @@
 /turf/unsimulated/floor/pitch,
 /area/rugby/dugout)
 "aH" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 4
-	},
-/obj/effect/decal/rugby/stripe{
+/obj/effect/decal/rugby/stripe/blue{
 	dir = 1
 	},
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/line_of_scrimmage/blue)
 "aI" = (
-/obj/effect/decal/rugby/stripe{
-	dir = 8
-	},
-/obj/effect/decal/rugby/stripe{
+/obj/effect/decal/rugby/stripe/blue{
 	dir = 1
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/line_of_scrimmage/blue)
 "aJ" = (
-/obj/effect/decal/rugby/stripe{
+/obj/effect/decal/rugby/stripe/blue{
 	dir = 1
 	},
 /obj/effect/decal/rugby/stripe{
-	dir = 1
+	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/line_of_scrimmage/blue)
 "aK" = (
-/obj/effect/decal/rugby/stripe{
+/obj/effect/decal/rugby/stripe/blue{
 	dir = 1
 	},
 /obj/effect/decal/rugby/stripe{
-	dir = 4
+	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/east_wide_zone/blue)
 "aL" = (
-/obj/effect/decal/rugby/stripe/red,
-/obj/effect/decal/rugby/stripe{
-	dir = 8
+/obj/effect/decal/rugby/stripe/blue{
+	dir = 1
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/east_wide_zone/blue)
 "aM" = (
-/obj/effect/decal/rugby/stripe/red,
-/turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
-"aN" = (
-/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe/blue{
+	dir = 1
+	},
 /obj/effect/decal/rugby/stripe{
 	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
-"aO" = (
-/obj/effect/decal/rugby/stripe/red{
-	dir = 1
-	},
-/obj/effect/decal/rugby/stripe,
+/area/rugby/pitch/east_wide_zone/blue)
+"aN" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 8
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/red_end_zone)
-"aP" = (
-/obj/effect/decal/rugby/stripe/red{
-	dir = 1
-	},
-/obj/effect/decal/rugby/stripe,
+/area/rugby/pitch/line_of_scrimmage/blue)
+"aO" = (
 /turf/unsimulated/floor/pitch,
-/area/rugby/red_end_zone)
-"aQ" = (
-/obj/effect/decal/rugby/stripe/red{
-	dir = 1
-	},
-/obj/effect/decal/rugby/stripe,
+/area/rugby/pitch/line_of_scrimmage/blue)
+"aP" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 4
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/red_end_zone)
+/area/rugby/pitch/line_of_scrimmage/blue)
+"aQ" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/blue)
 "aR" = (
 /obj/machinery/floodlight/pitch{
 	dir = 8
@@ -498,11 +479,11 @@
 	in_throw_mode = 1
 	},
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/line_of_scrimmage/blue)
 "br" = (
 /mob/living/carbon/human,
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/line_of_scrimmage/blue)
 "bs" = (
 /obj/structure/sign/velocity_overlay{
 	desc = "Apply butt";
@@ -552,7 +533,7 @@
 	name = "\improper stool"
 	},
 /obj/effect/landmark/rugby/blue{
-	data = list("Player" = 4);
+	data = list("Player" = 3);
 	name = "Team Member Spawn"
 	},
 /turf/unsimulated/floor/sport_facility{
@@ -693,9 +674,11 @@
 /area/rugby/facility)
 "bG" = (
 /obj/structure/closet/crate/class_inventory{
-	class_name = "Blue Blitzer"
+	class_name = "Blue Thrower"
 	},
-/obj/item/clothing/under/rugby/red,
+/obj/item/clothing/under/rugby/blue,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/blue,
 /turf/unsimulated/floor/sport_facility{
 	icon_state = "bluechecker"
 	},
@@ -891,14 +874,11 @@
 /area/rugby/spectators)
 "ca" = (
 /obj/effect/decal/rugby/stripe{
-	dir = 1
+	dir = 4
 	},
-/obj/item/weapon/rugby,
-/obj/effect/landmark{
-	name = "Pitch Cursor"
-	},
+/obj/effect/decal/rugby/stripe,
 /turf/unsimulated/floor/pitch,
-/area/rugby/pitch)
+/area/rugby/pitch/west_wide_zone/blue)
 "cb" = (
 /obj/effect/decal/rugby/stripe{
 	dir = 4
@@ -1134,12 +1114,18 @@
 	},
 /area/rugby/facility)
 "cy" = (
-/obj/structure/closet/crate/class_inventory{
-	class_name = "Red Blitzer"
+/obj/machinery/light{
+	dir = 4;
+	icon_state = "tube1"
 	},
-/obj/item/clothing/under/rugby/red,
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Blue Catcher"
+	},
+/obj/item/clothing/under/rugby/blue,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/blue,
 /turf/unsimulated/floor/sport_facility{
-	icon_state = "redchecker"
+	icon_state = "bluechecker"
 	},
 /area/rugby/facility)
 "cz" = (
@@ -1382,6 +1368,332 @@
 "cU" = (
 /turf/unsimulated/wall,
 /area/space)
+"cV" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/decal/rugby/stripe,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/blue)
+"cW" = (
+/obj/effect/decal/rugby/stripe,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/blue)
+"cX" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/decal/rugby/stripe,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/blue)
+"cY" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/decal/rugby/stripe,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/blue)
+"cZ" = (
+/obj/effect/decal/rugby/stripe,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/blue)
+"da" = (
+/obj/effect/decal/rugby/stripe,
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/blue)
+"db" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dc" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dd" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"de" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"df" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dg" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/obj/item/weapon/rugby,
+/obj/effect/landmark{
+	name = "Pitch Cursor"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dh" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"di" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dj" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dk" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dl" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 1
+	},
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dm" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dn" = (
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"do" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dp" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dq" = (
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dr" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"ds" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dt" = (
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"du" = (
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dv" = (
+/mob/living/carbon/human,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dw" = (
+/obj/effect/landmark/rugby/red{
+	data = list("Spawn Area" = "west_wide_zone");
+	name = "West Wide Zone"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dx" = (
+/obj/effect/landmark/rugby/red{
+	data = list("Spawn Area" = "line_of_scrimmage");
+	name = "Line of Scrimmage"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dy" = (
+/obj/effect/landmark/rugby/red{
+	data = list("Spawn Area" = "east_side_zone");
+	name = "East Wide Zone"
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dz" = (
+/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dA" = (
+/obj/effect/decal/rugby/stripe/red,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dB" = (
+/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/west_wide_zone/red)
+"dC" = (
+/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dD" = (
+/obj/effect/decal/rugby/stripe/red,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dE" = (
+/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/line_of_scrimmage/red)
+"dF" = (
+/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dG" = (
+/obj/effect/decal/rugby/stripe/red,
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dH" = (
+/obj/effect/decal/rugby/stripe/red,
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/pitch/east_wide_zone/red)
+"dI" = (
+/obj/effect/decal/rugby/stripe/red{
+	dir = 1
+	},
+/obj/effect/decal/rugby/stripe,
+/obj/effect/decal/rugby/stripe{
+	dir = 8
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/end_zone/red)
+"dJ" = (
+/obj/effect/decal/rugby/stripe/red{
+	dir = 1
+	},
+/obj/effect/decal/rugby/stripe,
+/turf/unsimulated/floor/pitch,
+/area/rugby/end_zone/red)
+"dK" = (
+/obj/effect/decal/rugby/stripe/red{
+	dir = 1
+	},
+/obj/effect/decal/rugby/stripe,
+/obj/effect/decal/rugby/stripe{
+	dir = 4
+	},
+/turf/unsimulated/floor/pitch,
+/area/rugby/end_zone/red)
+"dL" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Blue Blitzer"
+	},
+/obj/item/clothing/under/rugby/blue,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/blue,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "bluechecker"
+	},
+/area/rugby/facility)
+"dM" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Red Blitzer"
+	},
+/obj/item/clothing/under/rugby/red,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"dN" = (
+/obj/machinery/light{
+	dir = 4;
+	icon_state = "tube1"
+	},
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Red Catcher"
+	},
+/obj/item/clothing/under/rugby/blue,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
+"dO" = (
+/obj/structure/closet/crate/class_inventory{
+	class_name = "Red Thrower"
+	},
+/obj/item/clothing/under/rugby/blue,
+/obj/item/clothing/shoes/black,
+/obj/item/clothing/glasses/tackle/red,
+/turf/unsimulated/floor/sport_facility{
+	icon_state = "redchecker"
+	},
+/area/rugby/facility)
 
 (1,1,1) = {"
 aa
@@ -31953,7 +32265,7 @@ ae
 ag
 ak
 an
-aq
+at
 an
 an
 an
@@ -31962,20 +32274,20 @@ an
 an
 an
 an
-as
 ay
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-aL
-aO
+db
+dm
+dm
+dm
+dm
+dm
+dm
+dm
+dm
+dm
+dm
+dz
+dI
 bf
 bn
 aA
@@ -32220,20 +32532,20 @@ ao
 ao
 ao
 ao
-at
 az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+dc
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dA
+dJ
 bf
 cm
 aA
@@ -32473,25 +32785,25 @@ ao
 ao
 ao
 ao
+au
 ao
 ao
 ao
 ao
-ao
-at
 az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+dc
+dn
+dn
+dn
+dn
+dw
+dn
+dn
+dn
+dn
+dn
+dA
+dJ
 bf
 bn
 aA
@@ -32736,20 +33048,20 @@ ap
 ap
 ap
 ap
-au
-aH
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-aN
-aP
+ca
+dd
+do
+do
+do
+do
+do
+do
+do
+do
+do
+do
+dB
+dJ
 bf
 bn
 aA
@@ -32983,31 +33295,31 @@ aA
 aB
 ae
 ah
-ak
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-av
-aI
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-aL
-aP
+aH
+aN
+aN
+aN
+aN
+aN
+aN
+aN
+aN
+aN
+aN
+cV
+de
+dp
+dp
+dp
+dp
+dp
+dp
+dp
+dp
+dp
+dp
+dC
+dJ
 bf
 bn
 aA
@@ -33241,31 +33553,31 @@ aA
 aB
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
+aI
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
 bq
-at
-az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+cW
+df
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dD
+dJ
 bf
 bn
 aA
@@ -33499,31 +33811,31 @@ aA
 aC
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-at
-az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+aI
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+cW
+df
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dD
+dJ
 bf
 aG
 aA
@@ -33757,31 +34069,31 @@ aA
 aB
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-at
-ca
-ao
-br
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+aI
+aO
+aO
+aO
+aO
+aO
+av
+aO
+aO
+aO
+aO
+cW
+dg
+dq
+dv
+dq
+dq
+dx
+dq
+dq
+dq
+dq
+dq
+dD
+dJ
 bf
 bn
 aA
@@ -34015,31 +34327,31 @@ aA
 aC
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-at
-az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+aI
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+cW
+df
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dD
+dJ
 bf
 aG
 aA
@@ -34273,31 +34585,31 @@ aW
 aB
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
+aI
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
+aO
 br
-at
-az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+cW
+df
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dq
+dD
+dJ
 bf
 bn
 be
@@ -34531,31 +34843,31 @@ aA
 aB
 ae
 ah
-am
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-au
-aH
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-aN
+aJ
 aP
+aP
+aP
+aP
+aP
+aP
+aP
+aP
+aP
+aP
+cX
+dh
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dr
+dE
+dJ
 bf
 bn
 aA
@@ -34789,31 +35101,31 @@ aA
 aB
 ae
 ah
-ak
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-av
-aI
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-aL
-aP
+aK
+aQ
+aQ
+aQ
+aQ
+aQ
+aQ
+aQ
+aQ
+aQ
+aQ
+cY
+di
+ds
+ds
+ds
+ds
+ds
+ds
+ds
+ds
+ds
+ds
+dF
+dJ
 bf
 bn
 aA
@@ -35037,9 +35349,9 @@ ab
 ab
 ar
 ab
-ab
-ar
 bG
+cy
+dL
 bJ
 ad
 aV
@@ -35047,40 +35359,40 @@ aA
 aB
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-at
-az
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+aL
+aq
+aq
+aq
+aq
+aq
+aw
+aq
+aq
+aq
+aq
+cZ
+dj
+dt
+dt
+dt
+dt
+dy
+dt
+dt
+dt
+dt
+dt
+dG
+dJ
 bf
 bn
 aA
 aV
 ad
 cu
-cy
-bp
-bm
+dM
+dN
+dO
 bm
 bp
 bm
@@ -35305,31 +35617,31 @@ aA
 bL
 ae
 ah
-al
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-at
-aJ
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-ao
-aM
-aP
+aL
+aq
+aq
+aq
+aq
+aq
+aq
+aq
+aq
+aq
+aq
+cZ
+dk
+dt
+dt
+dt
+dt
+dt
+dt
+dt
+dt
+dt
+dt
+dG
+dJ
 bf
 cm
 aA
@@ -35563,31 +35875,31 @@ aA
 aB
 ae
 ai
-am
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-aw
-aK
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-ap
-aN
-aQ
+aM
+as
+as
+as
+as
+as
+as
+as
+as
+as
+as
+da
+dl
+du
+du
+du
+du
+du
+du
+du
+du
+du
+du
+dH
+dK
 bf
 bn
 aA

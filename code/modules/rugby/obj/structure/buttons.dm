@@ -16,11 +16,11 @@ var/global/list/obj/effect/letter/blue_ready_letters = list()
 /obj/effect/letter/atom_init()
 	. = ..()
 	if(team_color == "red")
-		red_ready_letters += src
+		global.red_ready_letters += src
 		outline_col = "#ff0000a1"
 		outline_col_alpha = "#ff000000"
 	else
-		blue_ready_letters += src
+		global.blue_ready_letters += src
 		outline_col = "#0000ffa1"
 		outline_col_alpha = "#0000ff00"
 
@@ -28,6 +28,14 @@ var/global/list/obj/effect/letter/blue_ready_letters = list()
 	filters += outline
 
 	hide_letter()
+
+/obj/effect/letter/Destroy()
+	if(team_color == "red")
+		global.red_ready_letters -= src
+	else
+		global.blue_ready_letters -= src
+
+	QDEL_NULL(outline)
 
 /obj/effect/letter/proc/set_team_light()
 	if(team_color == "red")
@@ -47,6 +55,8 @@ var/global/list/obj/effect/letter/blue_ready_letters = list()
 
 
 
+var/global/list/ready_buttons = list()
+
 /obj/machinery/ready_button
 	name = "ready button"
 	icon = 'icons/obj/objects.dmi'
@@ -61,19 +71,33 @@ var/global/list/obj/effect/letter/blue_ready_letters = list()
 
 	var/next_toggle
 
+	var/toggleable = TRUE
+
+/obj/machinery/ready_button/atom_init()
+	. = ..()
+	global.ready_buttons += src
+
+/obj/machinery/ready_button/Destroy()
+	global.ready_buttons -= src
+	return ..()
+
 /obj/machinery/ready_button/attack_hand(mob/user)
+	if(!toggleable)
+		to_chat(user, "<span class='warning'>You can not toggle at this time.</span>")
+		return
+
+	if(!match.can_ready_up())
+		to_chat(user, "<span class='warning'>You can not toggle your ready state at this stage of a match.</span>")
+		return
+
 	if(next_toggle > world.time)
-		to_chat(user, "<span class='notice'>You can not toggle your ready state for next [(world.time - next_toggle) * 0.1] seconds.</span>")
+		to_chat(user, "<span class='warning'>You can not toggle your ready state for next [round((next_toggle - world.time) * 0.1)] seconds.</span>")
 		return
 	next_toggle = world.time + 1 SECOND
 
 	if(ready)
-		ready = FALSE
-		icon_state = "launcherbtt"
 		mark_unready()
 	else
-		ready = TRUE
-		icon_state = "launcheract"
 		mark_ready()
 
 /obj/machinery/ready_button/proc/get_letters()
@@ -82,6 +106,9 @@ var/global/list/obj/effect/letter/blue_ready_letters = list()
 	return blue_ready_letters
 
 /obj/machinery/ready_button/proc/mark_ready()
+	ready = TRUE
+	icon_state = "launcheract"
+
 	for(var/l in get_letters())
 		var/obj/effect/letter/L = l
 		L.show_letter()
@@ -91,7 +118,23 @@ var/global/list/obj/effect/letter/blue_ready_letters = list()
 	else
 		match.blue_ready = TRUE
 
+	if(match.red_ready && match.blue_ready)
+		for(var/obj/machinery/ready_button/RB in global.ready_buttons)
+			RB.toggleable = FALSE
+
+		addtimer(CALLBACK(src, .proc/both_ready), 1 SECOND)
+
+/obj/machinery/ready_button/proc/both_ready()
+	match.next_step()
+
+	for(var/obj/machinery/ready_button/RB in global.ready_buttons)
+		RB.mark_unready()
+		RB.toggleable = TRUE
+
 /obj/machinery/ready_button/proc/mark_unready()
+	ready = FALSE
+	icon_state = "launcherbtt"
+
 	for(var/l in get_letters())
 		var/obj/effect/letter/L = l
 		L.hide_letter()

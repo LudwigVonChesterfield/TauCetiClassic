@@ -14,10 +14,20 @@
 	// Used for more complex parent->component interactions, has action/palette_choice integration.
 	var/list/data
 
-/datum/component/remote_cursor/Initialize(cursor_type, image/cursor_image, actions, default_position)
+	var/datum/callback/on_click
+
+/datum/component/remote_cursor/Initialize(
+	cursor_type,
+	image/cursor_image,
+	actions,
+	default_position,
+	default_state,
+	datum/callback/on_click
+)
 	src.cursor_type = cursor_type
 	src.cursor_image = cursor_image
 	src.default_position = default_position
+	src.state = default_state
 
 	if(actions)
 		src.actions = list()
@@ -27,6 +37,8 @@
 				var/datum/action/collective/cursor/C = A
 				C.remote = src
 			src.actions += A
+
+	src.on_click = on_click
 
 /datum/component/remote_cursor/Destroy()
 	for(var/C in controllers)
@@ -39,7 +51,13 @@
 
 /datum/component/remote_cursor/proc/on_click(datum/source, atom/A, params)
 	// to-do: on-click Callback binds?
+	if(on_click)
+		return on_click.Invoke(source, A, params)
 	return COMPONENT_CANCEL_CLICK
+
+/datum/component/remote_cursor/proc/on_logout(datum/source)
+	revoke_actions(source)
+	return NONE
 
 /datum/component/remote_cursor/proc/grant_actions(mob/living/L)
 	for(var/V in actions)
@@ -69,12 +87,15 @@
 
 	L.remote_control = cursor
 	L.reset_view(cursor)
+	cursor.add_controller(L)
 
 	grant_actions(L)
 
 	L.force_remote_viewing = TRUE
 
 	RegisterSignal(L, list(COMSIG_MOB_CLICK), .proc/on_click)
+
+	RegisterSignal(L, list(COMSIG_MOB_LOGOUT), .proc/on_logout)
 
 	LAZYADD(cursor.viewer_image.seers, L)
 	cursor.viewer_image.add_hud_to(L)
@@ -86,13 +107,14 @@
 		L.reset_view(null)
 
 	L.remote_control = null
+	cursor.remove_controller(L)
 
 	LAZYREMOVE(cursor.viewer_image.seers, L)
 	cursor.viewer_image.remove_hud_from(L)
 
 	L.force_remote_viewing = FALSE
 
-	UnregisterSignal(L, list(COMSIG_MOB_CLICK))
+	UnregisterSignal(L, list(COMSIG_MOB_CLICK, COMSIG_MOB_LOGOUT))
 
 	LAZYREMOVE(controllers, L)
 	if(!controllers)

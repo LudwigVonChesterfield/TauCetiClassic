@@ -33,31 +33,39 @@
 			/datum/action/collective/cursor_off,
 			/datum/action/collective/cursor/toggle_choose_team_positions
 		),
-		T
+		T,
+		CT_STATE_NONE
 	)
 
 /obj/item/device/coach_tablet/Destroy()
 	team = null
 	return ..()
 
+/obj/item/device/coach_tablet/proc/try_in_game_action(mob/user)
+	if(!is_in_game())
+		to_chat(user, "<span class='warning'>You can not use this action if you're not a coach of a team currently in match.</span>")
+		return FALSE
+
+	return try_action(user)
+
+/obj/item/device/coach_tablet/proc/try_action(mob/user)
+	if(!team)
+		choose_team(user)
+		return FALSE
+
+	if(!team.coach)
+		team.set_coach(user)
+		to_chat(user, "<span class='notice'>You have become the coach of [team.name].</span>")
+
+	if(user.remote_control)
+		return FALSE
+
+	return TRUE
+
 /obj/item/device/coach_tablet/proc/is_in_game()
 	if(match.red != team && match.blue != team)
 		return FALSE
 	return TRUE
-
-/obj/item/device/coach_tablet/afterattack(atom/target, mob/user, proximity, params)
-	if(!ismob(target))
-		return
-
-	if(is_in_game())
-		return
-
-	if(!team)
-		choose_team(user)
-		return
-
-	to_chat(user, "<span class='notice'>Adding [target] to [team.name]!</span>")
-	team.add_player(target)
 
 /obj/item/device/coach_tablet/proc/choose_team(mob/user)
 	var/list/options = list()
@@ -69,7 +77,7 @@
 			repr += "([T.role])"
 		options[repr] = T
 
-	var/team_name = input(user, "Choose a team.") as null|anything in options
+	var/team_name = input(user, "Choose a team for [src].") as null|anything in options
 	if(!team_name)
 		return
 
@@ -79,18 +87,22 @@
 	icon_state = T.tablet_icon_state
 	name = "[name] ([T.name])"
 
+/obj/item/device/coach_tablet/afterattack(atom/target, mob/user, proximity, params)
+	if(!ismob(target))
+		return
+
+	if(!try_action(user))
+		return
+
+	to_chat(user, "<span class='notice'>Adding [target] to [team.name]!</span>")
+	team.add_player(target)
+
 /obj/item/device/coach_tablet/attack_self(mob/user)
 	if(!team)
 		choose_team(user)
 		return
 
-	if(is_in_game())
-		return
-
-	if(!team.coach)
-		team.set_coach(user)
-
-	if(user.remote_control)
+	if(!try_in_game_action(user))
 		return
 
 	cursor.grant_control(user)
@@ -120,34 +132,31 @@
 	QDEL_NULL(classes)
 	return ..()
 
-/datum/action/collective/cursor/toggle_choose_team_positions/proc/show_to(mob/living/L, obj/effect/landmark/rugby/R)
-	var/image/I = image('code/modules/rugby/icons/landmarks.dmi', "[R.get_team_color()]_[R.data["Player"]]")
-	I.override = TRUE
-	I.loc = R
-	I.appearance_flags |= RESET_ALPHA
-	R.add_alt_appearance(
-		/datum/atom_hud/alternate_appearance/basic/one_person,
-		"landmark_overlay",
-		I,
-		L
-	)
-
 /datum/action/collective/cursor/toggle_choose_team_positions/start_action(mob/living/user)
+	if(match.state != GS_POSITIONAL_PLANNING)
+		to_chat(user, "<span class='notice'>You cannot choose team positions at this time.</span>")
+		return FALSE
+
 	var/mob/living/L = user
 	var/obj/item/device/coach_tablet/CT = remote.parent
 
 	if(!classes)
-		classes = new /datum/palette(user, CT.team.class_choices)
+		classes = new /datum/palette(remote, CT.team.class_choices)
 
 	classes.Grant(user)
 
+	show_spawn_areas(user, CT)
+
 	for(var/O in landmarks_list)
-		if(!istype(O, CT.team.landmark_type))
+		if(!istype(O, /obj/effect/landmark/rugby))
 			continue
 
 		var/obj/effect/landmark/rugby/R = O
-		if(R.name == "Spawn Position")
-			show_to(L, R)
+		if(R.name != "Spawn Position")
+			continue
+
+		if(R.team == CT.team.role)
+			show_landmark_to(L, R)
 
 	RegisterSignal(L, list(COMSIG_MOB_CLICK), .proc/toggle_position)
 
@@ -155,60 +164,78 @@
 	button.UpdateIcon()
 	return TRUE
 
-/datum/action/collective/cursor/toggle_choose_team_positions/proc/toggle_position(datum/source, atom/A, params)
-	var/mob/living/L = source
+/datum/action/collective/cursor/toggle_choose_team_positions/proc/clear_position(datum/source, atom/A, params)
 	var/obj/item/device/coach_tablet/CT = remote.parent
 
-	var/found_landmark = FALSE
-
 	var/turf/T = get_turf(A)
+
 	for(var/O in T)
-		if(!istype(O, CT.team.landmark_type))
+		if(!istype(O, /obj/effect/landmark/rugby))
 			continue
 
 		var/obj/effect/landmark/rugby/R = O
-		if(R.name == "Spawn Position")
-			found_landmark = TRUE
-
-			for(var/p in CT.team.reserves)
-				var/datum/player/P = p
-				if(P.number != R.data["Player"])
-					continue
-				LAZYADD(CT.team.reserves, P)
-
-			R.remove_alt_appearance("landmark_overlay")
-			qdel(R)
-			break
-
-	if(found_landmark)
-		return COMPONENT_CANCEL_CLICK
-
-	if(!CT.team.reserves)
-		return COMPONENT_CANCEL_CLICK
-
-	var/list/pos_positions = list()
-	for(var/p in CT.team.reserves)
-		var/datum/player/P = p
-		pos_positions["[P.number] - [P.model.real_name] ([P.class])"] = P.number
-
-	var/position = input(L, "Choose a Player to put on the field.") as null|anything in pos_positions
-	if(!position)
-		return COMPONENT_CANCEL_CLICK
-
-	position = pos_positions[position]
-
-	for(var/p in CT.team.reserves)
-		var/datum/player/P = p
-		if(P.number != position)
+		if(R.name != "Spawn Position")
 			continue
-		LAZYREMOVE(CT.team.reserves, P)
 
-	var/obj/effect/landmark/rugby/R = new CT.team.landmark_type(T)
+		if(R.team != CT.team.role)
+			continue
+
+		CT.team.remove_number(R.data["Player"])
+
+		R.remove_alt_appearance("landmark_overlay")
+		qdel(R)
+		return TRUE
+
+	return FALSE
+
+/datum/action/collective/cursor/toggle_choose_team_positions/proc/get_class(mob/living/L)
+	if(!remote.data)
+		return null
+
+	return remote.data["Class"]
+
+/datum/action/collective/cursor/toggle_choose_team_positions/proc/add_position(datum/source, atom/A, params)
+	var/mob/living/L = source
+	var/obj/item/device/coach_tablet/CT = remote.parent
+
+	var/turf/T = get_turf(A)
+
+	var/area/area = get_area(A)
+	if(!istype(area, /area/rugby/pitch))
+		to_chat(L, "<span class='warning'>You can not place positionals there, please stay on the pitch.</span>")
+		return FALSE
+
+	if(CT.team.max_number == CT.team.max_players)
+		to_chat(L, "<span class='warning'>Maximum number of players placed!</span>")
+		return FALSE
+
+	var/class_role = get_class(L)
+	if(!class_role)
+		return FALSE
+
+	var/area/rugby/pitch/P = area
+	if(!P.can_place(class_role, CT.team, L))
+		return FALSE
+
+	var/obj/effect/landmark/rugby/R = new /obj/effect/landmark/rugby(T)
 	R.name = "Spawn Position"
+	R.team = CT.team.role
 	R.data = list()
-	R.data["Player"] = position
+	R.data["Player"] = CT.team.add_number()
+	R.data["Class"] = class_role
 
-	show_to(L, R)
+	show_landmark_to(L, R)
+	return TRUE
+
+/datum/action/collective/cursor/toggle_choose_team_positions/proc/toggle_position(datum/source, atom/A, params)
+	if(match.state != GS_POSITIONAL_PLANNING)
+		stop_action(source)
+		return COMPONENT_CANCEL_CLICK
+
+	if(clear_position(source, A, params))
+		return COMPONENT_CANCEL_CLICK
+
+	add_position(source, A, params)
 
 	return COMPONENT_CANCEL_CLICK
 
@@ -216,15 +243,28 @@
 	var/mob/living/L = user
 	var/obj/item/device/coach_tablet/CT = remote.parent
 
-	classes.Remove(user)
+	var/list/spawn_areas = CT.team.get_spawn_areas()
+
+	var/proper_setup = TRUE
+	for(var/area/rugby/pitch/P in spawn_areas)
+		if(!P.check_requirements(CT.team, user))
+			proper_setup = FALSE
+			break
 
 	for(var/O in landmarks_list)
-		if(!istype(O, CT.team.landmark_type))
+		if(!istype(O, /obj/effect/landmark/rugby))
 			continue
 
 		var/obj/effect/landmark/rugby/R = O
-		if(R.name == "Spawn Position")
+		if(R.name == "Spawn Position" && R.team == CT.team.role)
 			R.remove_alt_appearance("landmark_overlay")
+			if(!proper_setup)
+				CT.team.remove_number(R.data["Player"])
+				qdel(R)
+		else if(R.data && R.data["Spawn Area"])
+			R.remove_alt_appearance("spawn_area_overlay")
+
+	classes.Remove(user)
 
 	UnregisterSignal(L, list(COMSIG_MOB_CLICK))
 
