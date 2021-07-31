@@ -30,19 +30,21 @@
 
 	var/ore_amount = 0
 
+	var/rock_name = "Rock"
+
+	var/rock_icon_state = "rock"
+	var/side_icon_state = "rock"
+	var/mineral_icon_state = "rock"
+
 	has_resources = TRUE
 
 /turf/simulated/mineral/atom_init()
 	var/area/asteroid/mine/biome/biome = get_area(src)
 	if(istype(biome))
-		if(biome.enforce_air)
-			oxygen = MOLES_O2ATMOS
-			nitrogen = MOLES_N2ATMOS
-
-		basetype = biome.basetype_turf
+		biome.change_wall(src)
 
 	..()
-	icon_state = "rock"
+	icon_state = rock_icon_state
 	geologic_data = new(src)
 	return INITIALIZE_HINT_LATELOAD
 
@@ -53,29 +55,35 @@
 /turf/simulated/mineral/update_overlays()
 	cut_overlays()
 	if(!mineral)
-		name = "Rock"
-		icon_state = "rock"
+		name = rock_name
 	else
 		if(ore_amount >= 8)
 			name = "[mineral.display_name] rich deposit"
-			add_overlay("rock_[mineral.name]")
+			add_overlay("[mineral_icon_state]_[mineral.name]")
 		else
-			name = "Rock"
-			icon_state = "rock"
+			name = rock_name
 	if(excav_overlay)
 		add_overlay(excav_overlay)
 	if(archaeo_overlay)
 		add_overlay(archaeo_overlay)
-	var/turf/T
-	for(var/direction_to_check in cardinal)
-		if((istype(get_step(src, direction_to_check), /turf/simulated/floor)) || (istype(get_step(src, direction_to_check), /turf/space)) || (istype(get_step(src, direction_to_check), /turf/simulated/shuttle/floor)))
-			T = get_step(src, direction_to_check)
-			if (T)
-				var/image/I = image('icons/turf/asteroid.dmi', "rock_side_[direction_to_check]", layer=6)
-				I.plane = 6
-				T.add_overlay(I)
 
-	if((excav_overlay || archaeo_overlay || mineral) && !istype(src, /turf/simulated/floor/plating/airless/asteroid))
+	if(!side_icon_state)
+		return
+
+	for(var/direction_to_check in cardinal)
+		var/turf/T = get_step(src, direction_to_check)
+		if(istype(T, /turf/simulated/mineral))
+			var/turf/simulated/mineral/M = T
+			if(M.rock_icon_state == rock_icon_state)
+				continue
+		else if(!istype(T, /turf/simulated/floor) && !istype(T, /turf/space) && !istype(T, /turf/simulated/shuttle/floor))
+			continue
+
+		var/image/I = image(icon, "[side_icon_state]_side_[direction_to_check]", layer=6)
+		I.plane = 6
+		T.add_overlay(I)
+
+	if((excav_overlay || archaeo_overlay || mineral) && istype(src, /turf/simulated/mineral))
 		update_hud()
 
 /turf/simulated/mineral/proc/update_hud()
@@ -124,20 +132,31 @@
 			M.selected.action(src)
 
 /turf/simulated/mineral/proc/MineralSpread()
-	if(mineral && mineral.spread)
-		for(var/trydir in cardinal)
-			if(prob(mineral.spread_chance))
-				var/turf/simulated/mineral/random/target_turf = get_step(src, trydir)
-				if(istype(target_turf) && !target_turf.mineral)
-					target_turf.mineral = mineral
-					target_turf.UpdateMineral()
-					target_turf.MineralSpread()
+	if(!mineral)
+		return
+	if(!mineral.spread)
+		return
+
+	if(!prob(mineral.spread_chance))
+		return
+
+	for(var/trydir in cardinal)
+		var/turf/simulated/mineral/random/target_turf = get_step(src, trydir)
+		if(!istype(target_turf))
+			return
+		if(target_turf.mineral)
+			return
+
+		target_turf.mineral = mineral
+		target_turf.UpdateMineral()
+		target_turf.MineralSpread()
 
 /turf/simulated/mineral/proc/UpdateMineral()
 	if(!mineral)
-		name = "Rock"
-		icon_state = "rock"
+		name = rock_name
+		icon_state = rock_icon_state
 		return
+
 	else
 		if(prob(15))
 			ore_amount = rand(6,9)
@@ -145,13 +164,15 @@
 			ore_amount = rand(4,6)
 		else
 			ore_amount = rand(3,5)
+
 	if(ore_amount >= 8)
 		name = "[mineral.display_name] rich deposit"
 		cut_overlays()
-		add_overlay("rock_[mineral.name]")
+		add_overlay("[mineral_icon_state]_[mineral.name]")
+
 	else
-		name = "Rock"
-		icon_state = "rock"
+		name = rock_name
+		icon_state = rock_icon_state
 
 	update_hud()
 
@@ -170,7 +191,7 @@
 
 		var/turf/simulated/mineral/random/caves/C = target_turf
 
-		if(biome.enforce_air && !asteroid_air_check(C, alldirs))
+		if(!biome.air_check(C, alldirs))
 			continue
 
 		if(prob(biome.cave_chance))
@@ -466,7 +487,6 @@
 //todo: move cavespread from atominit for side trigger?
 /turf/simulated/mineral/random
 	name = "Mineral deposit"
-	icon_state = "rock"
 
 	var/mineralSpawnChanceList = list("Uranium" = 10, "Platinum" = 10, "Iron" = 20, "Coal" = 15, "Diamond" = 5, "Gold" = 15, "Silver" = 15, "Phoron" = 25,)
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
@@ -494,17 +514,9 @@
 	name = "Ice"
 	icon_state = "ice"
 
-/turf/simulated/mineral/forced_wall/ice/atom_init()
-	icon_state = "rock"
-	. = ..()
-
 /turf/simulated/mineral/random/caves
 	mineralChance = 25
 	icon_state = "rock_medchance"
-
-/turf/simulated/mineral/random/caves/atom_init()
-	icon_state = "rock"
-	. = ..()
 
 /turf/simulated/mineral/random/caves/low_chance
 	icon_state = "rock_lowchance"
@@ -520,26 +532,14 @@
 	mineralChance = 40
 	mineralSpawnChanceList = list("Uranium" = 35, "Platinum" = 45, "Diamond" = 30, "Gold" = 45, "Silver" = 50, "Phoron" = 50)
 
-/turf/simulated/mineral/random/high_chance/atom_init()
-	icon_state = "rock"
-	. = ..()
-
 /turf/simulated/mineral/random/low_chance
 	icon_state = "rock_lowchance"
 	mineralChance = 5
 	mineralSpawnChanceList = list("Uranium" = 1, "Platinum" = 1, "Iron" = 50, "Coal" = 20, "Diamond" = 1, "Gold" = 1, "Silver" = 1, "Phoron" = 1)
 
-/turf/simulated/mineral/random/low_chance/atom_init()
-	icon_state = "rock"
-	. = ..()
-
 /turf/simulated/mineral/random/labormineral
 	mineralSpawnChanceList = list("Uranium" = 1, "Platinum" = 1, "Iron" = 60, "Coal" = 30, "Diamond" = 1, "Gold" = 1, "Silver" = 1, "Phoron" = 2)
 	icon_state = "rock_labor"
-
-/turf/simulated/mineral/random/labormineral/atom_init()
-	icon_state = "rock"
-	. = ..()
 
 /turf/simulated/mineral/attack_animal(mob/living/simple_animal/user)
 	..()
@@ -551,13 +551,12 @@
 	basetype = /turf/simulated/floor/plating/airless/asteroid
 	can_deconstruct = FALSE
 
+	fertility = 1.0
+
 /turf/simulated/floor/plating/airless/asteroid/atom_init()
 	var/area/asteroid/mine/biome/biome = get_area(src)
 	if(istype(biome))
-		if(biome.enforce_air)
-			oxygen = MOLES_O2ATMOS
-			nitrogen = MOLES_N2ATMOS
-		basetype = biome.basetype_turf
+		biome.change_floor(src)
 
 	return ..()
 
@@ -577,41 +576,30 @@
 	// Get the opposite direction of our facing direction
 	var/backward_cave_dir = angle2dir(dir2angle(forward_cave_dir) + 180)
 
+	..()
+
 	// Make our tunnels
 	make_tunnel(forward_cave_dir)
 	if(go_backwards)
 		make_tunnel(backward_cave_dir)
 
-	..()
 	return INITIALIZE_HINT_LATELOAD
 
 /turf/simulated/floor/plating/airless/asteroid/cave/atom_init_late()
 	// Kill ourselves by replacing ourselves with a normal floor.
 	SpawnFloor(src)
 
-/proc/asteroid_air_check(turf/T, check_dirs)
-	for(var/d in check_dirs)
-		var/turf/to_check = get_step(T, d)
-		if(istype(to_check, /turf/space))
-			return FALSE
-
-		if(istype(to_check, /turf/simulated/floor))
-			var/turf/simulated/floor/F = to_check
-			if(F.oxygen < MOLES_O2STANDARD || F.nitrogen < MOLES_N2STANDARD)
-				return FALSE
-
-	return TRUE
-
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/make_tunnel(dir)
-
 	var/turf/simulated/mineral/tunnel = src
 	var/next_angle = pick(45, -45)
-
-	var/area/asteroid/mine/biome/biome = get_area(src)
 
 	for(var/i = 0; i < length; i++)
 		if(!sanity)
 			break
+
+		var/area/asteroid/mine/biome/biome = get_area(tunnel)
+		if(!istype(biome))
+			return
 
 		var/list/L = list(45)
 		if(IS_ODD(dir2angle(dir))) // We're going at an angle and we want thick angled tunnels.
@@ -623,7 +611,7 @@
 			if(!istype(edge) || istype(edge, /turf/simulated/mineral/forced_wall))
 				continue
 
-			if(biome.enforce_air && !asteroid_air_check(edge, alldirs))
+			if(!biome.air_check(edge, alldirs))
 				continue
 
 			SpawnFloor(edge)
@@ -633,7 +621,7 @@
 		if(!istype(tunnel) || istype(tunnel, /turf/simulated/mineral/forced_wall))
 			break
 
-		if(biome.enforce_air && !asteroid_air_check(tunnel, alldirs))
+		if(!biome.air_check(tunnel, alldirs))
 			break
 
 		// Small chance to have forks in our tunnel; otherwise dig our tunnel.
@@ -654,12 +642,16 @@
 
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/SpawnFloor(turf/T)
 	for(var/turf/S in range(2, T))
-		if(istype(S, /turf/space) || istype(S.loc, /area/asteroid/mine/biome/asteroids/explored))
+		if(istype(S.loc, /area/asteroid/mine/biome/asteroids/explored))
 			sanity = FALSE
 			break
 
 	if(!sanity)
 		return
+
+	var/area/asteroid/mine/biome/biome = get_area(T)
+	if(istype(biome))
+		biome.SpawnEverything(T)
 
 	if(prob(30))
 		SpawnMonster(T)

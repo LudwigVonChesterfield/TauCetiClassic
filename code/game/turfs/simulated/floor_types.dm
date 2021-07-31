@@ -385,8 +385,34 @@
 	. = ..()
 	icon_state = "ironsand[rand(1,15)]"
 
+/turf/simulated/floor/plating/rustsand
+	name = "Rusty Sand"
+	icon_state = "ironsand1"
+	basetype = /turf/simulated/floor/plating/rustsand
+	footstep = FOOTSTEP_SAND
+	barefootstep = FOOTSTEP_SAND
+	clawfootstep = FOOTSTEP_SAND
+	can_deconstruct = FALSE
+
+	fertility = 0.5
+
+/turf/simulated/floor/plating/rustsand/ex_act()
+	return 0
+
+/turf/simulated/floor/plating/rustsand/burn_tile()
+	return 0
+
+/turf/simulated/floor/plating/rustsand/atom_init()
+	. = ..()
+	icon_state = "ironsand[rand(1,15)]"
+
+/*
+/turf/simulated/floor/plating/rustsand/update_air_properties()
+	return
+*/
+
 /turf/simulated/floor/plating/snow
-	basetype = /turf/simulated/floor/plating/ironsand
+	basetype = /turf/simulated/floor/plating/rustsand
 	name = "snow"
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
@@ -394,6 +420,8 @@
 	barefootstep = FOOTSTEP_SAND
 	clawfootstep = FOOTSTEP_SAND
 	can_deconstruct = FALSE
+
+	fertility = 0.3
 
 /turf/simulated/floor/plating/snow/ex_act(severity)
 	return

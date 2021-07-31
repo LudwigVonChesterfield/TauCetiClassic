@@ -76,107 +76,165 @@
 	var/cave_chance = 2
 	var/cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave
 
+	var/rock_name = "Rock"
+	var/rock_icon_state = "rock"
+	var/side_icon_state = "rock"
+	var/mineral_icon_state = "rock"
+
 	var/enforce_air = FALSE
 
-/turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-	basetype = /turf/simulated/floor/plating/ironsand
+	var/oxygen = 0.01
+	var/nitrogen = 0.01
 
-/area/asteroid/mine/biome/normal
+	var/temperature = TCMB
+
+	var/mob_chance = 30
+	var/list/mobs_to_spawn
+
+	var/resource_chance = 10
+	var/list/resources_to_spawn
+
+/area/asteroid/mine/biome/proc/SpawnEverything(turf/T)
+	if(mob_chance)
+		SpawnMonsters(T)
+	if(resource_chance)
+		SpawnResources(T)
+
+/area/asteroid/mine/biome/proc/SpawnMonsters(turf/T)
+	return
+
+/area/asteroid/mine/biome/proc/SpawnTraps(turf/T)
+	return
+
+/area/asteroid/mine/biome/proc/SpawnResources(turf/T)
+	if(!resources_to_spawn)
+		return
+
+	var/resource = pickweight(resources_to_spawn)
+	new resource(T)
+
+/area/asteroid/mine/biome/proc/air_check(turf/T, check_dirs)
+	if(!enforce_air)
+		return TRUE
+
+	for(var/d in check_dirs)
+		var/turf/to_check = get_step(T, d)
+		if(istype(to_check, /turf/space))
+			return FALSE
+
+		if(istype(to_check, /turf/simulated/floor))
+			var/turf/simulated/floor/F = to_check
+			if(F.oxygen < oxygen || F.nitrogen < nitrogen)
+				return FALSE
+			if(F.temperature < temperature)
+				return FALSE
+
+	return TRUE
+
+/area/asteroid/mine/biome/breathable
+	enforce_air = TRUE
+
+	oxygen = 0.01
+	nitrogen = 0.01
+
+	temperature = T20C
+
+	basetype_turf = /turf/simulated/floor/plating/rustsand
+	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/rustsand
+
+/area/asteroid/mine/biome/proc/change_wall(turf/simulated/mineral/W)
+	W.oxygen = oxygen
+	W.nitrogen = nitrogen
+
+	W.rock_name = rock_name
+	W.rock_icon_state = rock_icon_state
+	W.side_icon_state = side_icon_state
+	W.mineral_icon_state = mineral_icon_state
+
+	W.basetype = basetype_turf
+
+/area/asteroid/mine/biome/proc/change_floor(turf/simulated/floor/F)
+	F.oxygen = oxygen
+	F.nitrogen = nitrogen
+
+	F.basetype = basetype_turf
+
+/turf/simulated/floor/plating/airless/asteroid/cave/rustsand
+	basetype = /turf/simulated/floor/plating/rustsand
+
+/turf/simulated/floor/plating/airless/asteroid/cave/snow
+	basetype = /turf/simulated/floor/plating/snow
+
+/area/asteroid/mine/biome/breathable/normal
 	name = "Normal"
 	icon_state = "ast-normal-biome"
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
-
-/area/asteroid/mine/biome/fungal
+/area/asteroid/mine/biome/breathable/fungal
 	name = "Fungal"
 	icon_state = "ast-fungal-biome"
 
 	cave_chance = 3
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
-
-/area/asteroid/mine/biome/glow_cave
+/area/asteroid/mine/biome/breathable/glow_cave
 	name = "Glow Cave"
 	icon_state = "ast-glow_cave-biome"
 
 	cave_chance = 3
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
+	resources_to_spawn = list(
+		/obj/effect/glowshroom = 100
+	)
 
 /area/asteroid/mine/biome/dark_horror
 	name = "Dark Horror"
 	icon_state = "ast-dark_horror-biome"
 
-/area/asteroid/mine/biome/ice
+	rock_icon_state = "rock-dark"
+
+/area/asteroid/mine/biome/breathable/ice
 	name = "Ice"
 	icon_state = "ast-ice-biome"
 
 	cave_chance = 4
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
+	basetype_turf = /turf/simulated/floor/plating/snow
+	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/snow
 
-	enforce_air = TRUE
+	rock_name = "Ice"
 
-/area/asteroid/mine/biome/lor
+	rock_icon_state = "ice"
+	side_icon_state = null
+
+	temperature = T0C - 40
+
+/area/asteroid/mine/biome/breathable/lor
 	name = "Lots of Resources"
 	icon_state = "ast-resources-biome"
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
-
-/area/asteroid/mine/biome/hollow_horror
+/area/asteroid/mine/biome/breathable/hollow_horror
 	name = "Hollow Horror"
 	icon_state = "ast-hollow_horror-biome"
-
-
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
 
 /area/asteroid/mine/biome/asteroids
 	name = "Asteroids"
 	icon_state = "ast-asteroids-biome"
 
-/area/asteroid/mine/biome/ruins
+/area/asteroid/mine/biome/breathable/asteroids
+	name = "Asteroids (breathable)"
+	icon_state = "ast-asteroids-biome"
+
+	rock_icon_state = "rock-dark"
+
+/area/asteroid/mine/biome/breathable/ruins
 	name = "Ruins"
 	icon_state = "ast-ruins-biome"
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
-
-/area/asteroid/mine/biome/flesh
+/area/asteroid/mine/biome/breathable/flesh
 	name = "Flesh"
 	icon_state = "ast-flesh-biome"
 
 	cave_chance = 3
 
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE
-
 /area/asteroid/mine/biome/boney_creaks
 	name = "Boney Creaks"
 	icon_state = "ast-boney_hills-biome"
-
-	cave_chance = 4
-
-	basetype_turf = /turf/simulated/floor/plating/ironsand
-	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/ironsand
-
-	enforce_air = TRUE

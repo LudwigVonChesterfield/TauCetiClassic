@@ -69,7 +69,9 @@
 				if(prob(spreadIntoAdjacentChance))
 					spreadsIntoAdjacent = 1
 
-				for(var/turf/simulated/floor/plating/airless/asteroid/earth in view(3,src))
+				for(var/turf/simulated/floor/earth in view(3,src))
+					if(!prob(earth.fertility * 100))
+						continue
 					if(spreadsIntoAdjacent || !locate(/obj/effect/glowshroom) in view(1,earth))
 						possibleLocs += earth
 

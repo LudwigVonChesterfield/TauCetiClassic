@@ -51,6 +51,8 @@ var/list/wood_icons = list("wood","wood-broken")
 
 	var/datum/holy_turf/holy
 
+	var/fertility = 0.0
+
 /turf/simulated/floor/proc/get_lightfloor_state()
 	return lightfloor_state & LIGHTFLOOR_STATE_BITS
 

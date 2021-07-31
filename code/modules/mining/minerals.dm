@@ -14,7 +14,7 @@ var/list/name_to_mineral
 	var/name	      // Tag for use in overlay generation/list population	.
 	var/display_name  // What am I called?
 	var/result_amount // How much ore?
-	var/spread = 1	  // Does this type of deposit spread?
+	var/spread = TRUE // Does this type of deposit spread?
 	var/spread_chance // Chance of spreading in any direction
 	var/ore	          // Path to the ore produced when tile is mined.
 
