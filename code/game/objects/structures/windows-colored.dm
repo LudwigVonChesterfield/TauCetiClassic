@@ -39,7 +39,7 @@
 							/area/asteroid/research_outpost/sample),
 		pick(blue)   = typesof(/area/station/medical),
 		pick(bar)    = list(/area/station/civilian/bar),
-		pick(dw)     = list(/area/asteroid/mine/dwarf),
+		pick(dw)     = list(/area/asteroid/mine/biome/asteroids/dwarf),
 		COLOR_WHITE  = typesof(/area/shuttle),
 	)
 

@@ -33,6 +33,14 @@
 	has_resources = TRUE
 
 /turf/simulated/mineral/atom_init()
+	var/area/asteroid/mine/biome/biome = get_area(src)
+	if(istype(biome))
+		if(biome.enforce_air)
+			oxygen = MOLES_O2ATMOS
+			nitrogen = MOLES_N2ATMOS
+
+		basetype = biome.basetype_turf
+
 	..()
 	icon_state = "rock"
 	geologic_data = new(src)
@@ -148,15 +156,28 @@
 	update_hud()
 
 /turf/simulated/mineral/proc/CaveSpread()	//Integration of cave system
-	if(mineral)
-		for(var/trydir in cardinal)
-			var/turf/simulated/mineral/random/target_turf = get_step(src, trydir)
-			if(istype(target_turf, /turf/simulated/mineral/random/caves))
-				if(prob(2))
-					if(SSticker.current_state > GAME_STATE_SETTING_UP)
-						ChangeTurf(/turf/simulated/floor/plating/airless/asteroid/cave)
-					else
-						new/turf/simulated/floor/plating/airless/asteroid/cave(src)
+	if(!mineral)
+		return
+
+	var/area/asteroid/mine/biome/biome = get_area(src)
+	if(!istype(biome))
+		return
+
+	for(var/trydir in cardinal)
+		var/turf/simulated/mineral/random/target_turf = get_step(src, trydir)
+		if(!istype(target_turf, /turf/simulated/mineral/random/caves))
+			continue
+
+		var/turf/simulated/mineral/random/caves/C = target_turf
+
+		if(biome.enforce_air && !asteroid_air_check(C, alldirs))
+			continue
+
+		if(prob(biome.cave_chance))
+			if(SSticker.current_state > GAME_STATE_SETTING_UP)
+				ChangeTurf(biome.cave_turf)
+			else
+				new biome.cave_turf(src)
 
 //Not even going to touch this pile of spaghetti
 /turf/simulated/mineral/attackby(obj/item/weapon/W, mob/user)
@@ -467,8 +488,32 @@
 			CaveSpread()
 	. = ..()
 
+/turf/simulated/mineral/forced_wall
+
+/turf/simulated/mineral/forced_wall/ice
+	name = "Ice"
+	icon_state = "ice"
+
+/turf/simulated/mineral/forced_wall/ice/atom_init()
+	icon_state = "rock"
+	. = ..()
+
 /turf/simulated/mineral/random/caves
 	mineralChance = 25
+	icon_state = "rock_medchance"
+
+/turf/simulated/mineral/random/caves/atom_init()
+	icon_state = "rock"
+	. = ..()
+
+/turf/simulated/mineral/random/caves/low_chance
+	icon_state = "rock_lowchance"
+	mineralChance = 5
+
+/turf/simulated/mineral/random/caves/high_chance
+	mineralChance = 40
+	icon_state = "rock_highchance"
+	mineralSpawnChanceList = list("Uranium" = 35, "Platinum" = 45, "Diamond" = 30, "Gold" = 45, "Silver" = 50, "Phoron" = 50)
 
 /turf/simulated/mineral/random/high_chance
 	icon_state = "rock_highchance"
@@ -506,6 +551,16 @@
 	basetype = /turf/simulated/floor/plating/airless/asteroid
 	can_deconstruct = FALSE
 
+/turf/simulated/floor/plating/airless/asteroid/atom_init()
+	var/area/asteroid/mine/biome/biome = get_area(src)
+	if(istype(biome))
+		if(biome.enforce_air)
+			oxygen = MOLES_O2ATMOS
+			nitrogen = MOLES_N2ATMOS
+		basetype = biome.basetype_turf
+
+	return ..()
+
 /turf/simulated/floor/plating/airless/asteroid/cave
 	var/length = 20
 	var/mob_spawn_list = list("Goliath" = 5, "Basilisk" = 4, "Hivelord" = 3, "Goldgrub" = 2, "Drone" = 1)
@@ -534,10 +589,25 @@
 	// Kill ourselves by replacing ourselves with a normal floor.
 	SpawnFloor(src)
 
+/proc/asteroid_air_check(turf/T, check_dirs)
+	for(var/d in check_dirs)
+		var/turf/to_check = get_step(T, d)
+		if(istype(to_check, /turf/space))
+			return FALSE
+
+		if(istype(to_check, /turf/simulated/floor))
+			var/turf/simulated/floor/F = to_check
+			if(F.oxygen < MOLES_O2STANDARD || F.nitrogen < MOLES_N2STANDARD)
+				return FALSE
+
+	return TRUE
+
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/make_tunnel(dir)
 
 	var/turf/simulated/mineral/tunnel = src
 	var/next_angle = pick(45, -45)
+
+	var/area/asteroid/mine/biome/biome = get_area(src)
 
 	for(var/i = 0; i < length; i++)
 		if(!sanity)
@@ -550,24 +620,31 @@
 		// Expand the edges of our tunnel
 		for(var/edge_angle in L)
 			var/turf/simulated/mineral/edge = get_step(tunnel, angle2dir(dir2angle(dir) + edge_angle))
-			if(istype(edge))
-				SpawnFloor(edge)
+			if(!istype(edge) || istype(edge, /turf/simulated/mineral/forced_wall))
+				continue
+
+			if(biome.enforce_air && !asteroid_air_check(edge, alldirs))
+				continue
+
+			SpawnFloor(edge)
 
 		// Move our tunnel forward
 		tunnel = get_step(tunnel, dir)
-
-		if(istype(tunnel))
-			// Small chance to have forks in our tunnel; otherwise dig our tunnel.
-			if(i > 3 && prob(20))
-				if(SSticker.current_state > GAME_STATE_SETTING_UP)
-					var/list/arguments = list(tunnel, rand(10, 15), 0, dir)
-					ChangeTurf(src.type, arguments)
-				else
-					new type(tunnel, rand(10, 15), 0, dir)
-			else
-				SpawnFloor(tunnel)
-		else //if(!istype(tunnel, src.parent)) // We hit space/normal/wall, stop our tunnel.
+		if(!istype(tunnel) || istype(tunnel, /turf/simulated/mineral/forced_wall))
 			break
+
+		if(biome.enforce_air && !asteroid_air_check(tunnel, alldirs))
+			break
+
+		// Small chance to have forks in our tunnel; otherwise dig our tunnel.
+		if(i > 3 && prob(20))
+			if(SSticker.current_state > GAME_STATE_SETTING_UP)
+				var/list/arguments = list(tunnel, rand(10, 15), 0, dir)
+				ChangeTurf(src.type, arguments)
+			else
+				new type(tunnel, rand(10, 15), 0, dir)
+		else
+			SpawnFloor(tunnel)
 
 		// Chance to change our direction left or right.
 		if(i > 2 && prob(33))
@@ -577,7 +654,7 @@
 
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/SpawnFloor(turf/T)
 	for(var/turf/S in range(2, T))
-		if(istype(S, /turf/space) || istype(S.loc, /area/asteroid/mine/explored))
+		if(istype(S, /turf/space) || istype(S.loc, /area/asteroid/mine/biome/asteroids/explored))
 			sanity = FALSE
 			break
 
@@ -596,7 +673,7 @@
 		t.update_overlays_full()
 
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/SpawnMonster(turf/T)
-	if(istype(loc, /area/asteroid/mine/explored))
+	if(istype(loc, /area/asteroid/mine/biome/asteroids/explored))
 		return
 	for(var/mob/living/simple_animal/hostile/A in range(DISTANCE_BEETWEEN_MOSTERS, T)) //Lowers chance of mob clumps
 		return
