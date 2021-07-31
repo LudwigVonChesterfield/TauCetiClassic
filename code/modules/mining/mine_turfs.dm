@@ -719,21 +719,23 @@
 	return INITIALIZE_HINT_LATELOAD
 
 /turf/proc/update_overlays()
-
 	cut_overlays()
 
 	for(var/direction_to_check in cardinal)
-		if(istype(get_step(src, direction_to_check), /turf/simulated/mineral))
+		var/turf/T = get_step(src, direction_to_check)
+		if(istype(T, /turf/simulated/mineral))
+			var/turf/simulated/mineral/M = T
 			var/overlay_name = null
+
 			switch(direction_to_check)
 				if(1)
-					overlay_name = "rock_side_2"
+					overlay_name = "[M.side_icon_state]_side_2"
 				if(2)
-					overlay_name = "rock_side_1"
+					overlay_name = "[M.side_icon_state]_side_1"
 				if(4)
-					overlay_name = "rock_side_8"
+					overlay_name = "[M.side_icon_state]_side_8"
 				if(8)
-					overlay_name = "rock_side_4"
+					overlay_name = "[M.side_icon_state]_side_4"
 			add_overlay(image('icons/turf/asteroid.dmi', "[overlay_name]", layer=6))
 
 /turf/simulated/floor/plating/airless/asteroid/update_overlays()

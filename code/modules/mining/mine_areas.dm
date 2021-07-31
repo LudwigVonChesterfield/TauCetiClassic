@@ -88,17 +88,15 @@
 
 	var/temperature = TCMB
 
-	var/mob_chance = 30
 	var/list/mobs_to_spawn
 
-	var/resource_chance = 10
 	var/list/resources_to_spawn
 
+	var/fertility = 0.0
+
 /area/asteroid/mine/biome/proc/SpawnEverything(turf/T)
-	if(mob_chance)
-		SpawnMonsters(T)
-	if(resource_chance)
-		SpawnResources(T)
+	SpawnMonsters(T)
+	SpawnResources(T)
 
 /area/asteroid/mine/biome/proc/SpawnMonsters(turf/T)
 	return
@@ -110,32 +108,50 @@
 	if(!resources_to_spawn)
 		return
 
-	var/resource = pickweight(resources_to_spawn)
-	new resource(T)
+	var/list/resources = pick(resources_to_spawn)
+	if(!prob(resources["chance"]))
+		return
+
+	for(var/resource in resources)
+		if(resource == "chance")
+			continue
+		if(!prob(resources[resource]))
+			continue
+
+		new resource(T)
 
 /area/asteroid/mine/biome/proc/air_check(turf/T, check_dirs)
-	if(!enforce_air)
-		return TRUE
-
 	for(var/d in check_dirs)
 		var/turf/to_check = get_step(T, d)
+
+		var/area/asteroid/mine/biome/other = get_area(to_check)
+		if(!istype(other))
+			if(enforce_air)
+				return FALSE
+			continue
+		if(!enforce_air && !other.enforce_air)
+			continue
+
 		if(istype(to_check, /turf/space))
 			return FALSE
 
-		if(istype(to_check, /turf/simulated/floor))
-			var/turf/simulated/floor/F = to_check
-			if(F.oxygen < oxygen || F.nitrogen < nitrogen)
-				return FALSE
-			if(F.temperature < temperature)
-				return FALSE
+		if(other.temperature != temperature)
+			return FALSE
+
+		if(other.oxygen != oxygen)
+			return FALSE
+		if(other.nitrogen != nitrogen)
+			return FALSE
 
 	return TRUE
 
 /area/asteroid/mine/biome/breathable
 	enforce_air = TRUE
 
-	oxygen = 0.01
-	nitrogen = 0.01
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+
+	fertility = 0.5
 
 	temperature = T20C
 
@@ -156,6 +172,8 @@
 /area/asteroid/mine/biome/proc/change_floor(turf/simulated/floor/F)
 	F.oxygen = oxygen
 	F.nitrogen = nitrogen
+
+	F.fertility = fertility
 
 	F.basetype = basetype_turf
 
@@ -182,7 +200,7 @@
 	cave_chance = 3
 
 	resources_to_spawn = list(
-		/obj/effect/glowshroom = 100
+		list(/obj/effect/glowshroom = 1)
 	)
 
 /area/asteroid/mine/biome/dark_horror
@@ -190,6 +208,8 @@
 	icon_state = "ast-dark_horror-biome"
 
 	rock_icon_state = "rock-dark"
+
+	fertility = 0.1
 
 /area/asteroid/mine/biome/breathable/ice
 	name = "Ice"
@@ -215,19 +235,33 @@
 	name = "Hollow Horror"
 	icon_state = "ast-hollow_horror-biome"
 
+	resources_to_spawn = list(
+		list(
+			"chance" = 5,
+			/obj/item/device/soulstone = 1,
+		)
+	)
+
 /area/asteroid/mine/biome/asteroids
 	name = "Asteroids"
 	icon_state = "ast-asteroids-biome"
+
+	rock_icon_state = "rock-dark"
+
+	fertility = 1.0
 
 /area/asteroid/mine/biome/breathable/asteroids
 	name = "Asteroids (breathable)"
 	icon_state = "ast-asteroids-biome"
 
-	rock_icon_state = "rock-dark"
-
 /area/asteroid/mine/biome/breathable/ruins
 	name = "Ruins"
 	icon_state = "ast-ruins-biome"
+
+	resources_to_spawn = list(
+		list(/obj/random/misc/all = 2),
+		list(/obj/random/scrap/moderate_weighted = 1),
+	)
 
 /area/asteroid/mine/biome/breathable/flesh
 	name = "Flesh"
@@ -238,3 +272,19 @@
 /area/asteroid/mine/biome/boney_creaks
 	name = "Boney Creaks"
 	icon_state = "ast-boney_hills-biome"
+
+	rock_icon_state = "rock-dark"
+
+	fertility = 2.0
+
+	resources_to_spawn = list(
+		list(
+			"chance" = 1,
+			/obj/structure/pit = 90,
+			/obj/structure/gravemarker = 70
+		),
+		list(
+			"chance" = 1,
+			/obj/item/device/soulstone = 1,
+		)
+	)
