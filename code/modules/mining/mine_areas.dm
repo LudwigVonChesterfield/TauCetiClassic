@@ -193,6 +193,17 @@
 
 	cave_chance = 3
 
+	resources_to_spawn = list(
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/amanita = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = 1),
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom = 1),
+	)
+
 /area/asteroid/mine/biome/breathable/glow_cave
 	name = "Glow Cave"
 	icon_state = "ast-glow_cave-biome"
@@ -226,6 +237,10 @@
 	side_icon_state = null
 
 	temperature = T0C - 40
+
+	resources_to_spawn = list(
+		list(/obj/item/snowball = 1)
+	)
 
 /area/asteroid/mine/biome/breathable/lor
 	name = "Lots of Resources"

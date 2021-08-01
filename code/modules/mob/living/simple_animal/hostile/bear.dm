@@ -50,6 +50,15 @@
 	response_disarm = "gently pushes aside"
 	response_harm   = "pokes"
 
+/mob/living/simple_animal/hostile/bear/HandleRest()
+	stop_automated_movement = TRUE
+	stance_step++
+	if(stance_step >= 10) //rests for 10 ticks
+		if(target && (target in ListTargets(10)))
+			stance = HOSTILE_STANCE_ATTACK //If the mob he was chasing is still nearby, resume the attack, otherwise go idle.
+		else
+			stance = HOSTILE_STANCE_IDLE
+
 /mob/living/simple_animal/hostile/bear/Life()
 	. =..()
 	if(!.)
@@ -63,13 +72,7 @@
 	switch(stance)
 
 		if(HOSTILE_STANCE_TIRED)
-			stop_automated_movement = TRUE
-			stance_step++
-			if(stance_step >= 10) //rests for 10 ticks
-				if(target && (target in ListTargets(10)))
-					stance = HOSTILE_STANCE_ATTACK //If the mob he was chasing is still nearby, resume the attack, otherwise go idle.
-				else
-					stance = HOSTILE_STANCE_IDLE
+			HandleRest()
 
 		if(HOSTILE_STANCE_ALERT)
 			stop_automated_movement = TRUE

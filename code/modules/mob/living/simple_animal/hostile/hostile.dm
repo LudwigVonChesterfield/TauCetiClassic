@@ -24,6 +24,9 @@
 	var/ranged_message = "fires" //Fluff text for ranged mobs
 	var/ranged_cooldown = 0 //What the starting cooldown is on ranged attacks
 	var/ranged_cooldown_cap = 3 //What ranged attacks, after being used are set to, to go back on cooldown, defaults to 3 life() ticks
+
+	var/min_ranged_dist = 2
+
 	var/retreat_distance = null //If our mob runs from players when they're too close, set in tile distance. By default, mobs do not retreat.
 	var/minimum_distance = 1 //Minimum approach distance, so ranged mobs chase targets down, but still keep their distance set in tiles to the target, set higher to make mobs keep distance
 	var/search_objects = 0 //If we want to consider objects when searching around, set this to 1. If you want to search for objects while also ignoring mobs until hurt, set it to 2. To completely ignore mobs, even when attacked, set it to 3
@@ -71,8 +74,14 @@
 				AttackTarget()
 				DestroySurroundings()
 
+			if(HOSTILE_STANCE_TIRED)
+				HandleRest()
+
 		if(ranged)
 			ranged_cooldown--
+
+/mob/living/simple_animal/hostile/proc/HandleRest()
+	return
 
 //////////////HOSTILE MOB TARGETTING AND AGGRESSION////////////
 /mob/living/simple_animal/hostile/proc/ListTargets()//Step 1, find out what we can see
@@ -156,9 +165,11 @@
 		return
 	if(target in ListTargets())
 		var/target_distance = get_dist(src, target)
+		var/attacked_range = FALSE
 		if(ranged)//We ranged? Shoot at em
-			if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
+			if(target_distance >= min_ranged_dist && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 				OpenFire(target)
+				attacked_range = TRUE
 		if(canmove && retreat_distance != null)//If we have a retreat distance, check if we need to run from our target
 			if(target_distance <= retreat_distance)//If target's closer than our retreat distance, run
 				walk_away(src,target,retreat_distance,move_to_delay)
@@ -166,7 +177,7 @@
 				Goto(target, move_to_delay, minimum_distance)//Otherwise, get to our minimum distance so we chase them
 		else if(canmove)
 			Goto(target, move_to_delay, minimum_distance)
-		if(isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
+		if(!attacked_range && isturf(loc) && target.Adjacent(src))	//If they're next to us, attack
 			AttackingTarget()
 		return
 	if(canmove && target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
@@ -243,7 +254,8 @@
 
 /mob/living/simple_animal/hostile/proc/OpenFire(the_target)
 	var/target = the_target
-	visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>")
+	if(ranged_message)
+		visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>")
 
 	INVOKE_ASYNC(src, .proc/start_shoot, target)
 

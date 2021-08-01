@@ -15,6 +15,9 @@
 	var/brightness_on = 5 //luminosity when on
 	var/last_button_sound = 0 // Prevents spamming for Object lights
 
+/obj/item/device/flashlight/on
+	on = TRUE
+
 /obj/item/device/flashlight/atom_init()
 	. = ..()
 	if(on)

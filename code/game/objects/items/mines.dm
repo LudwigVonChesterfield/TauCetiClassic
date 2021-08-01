@@ -5,9 +5,16 @@
 	icon_state = "mine"
 	layer = 3
 
+	var/anchor_on_impact = FALSE
+
 /obj/item/mine/atom_init()
 	. = ..()
 	if(anchored)
+		update_icon()
+
+/obj/item/mine/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
+	if(anchor_on_impact)
+		anchored = TRUE
 		update_icon()
 
 /obj/item/mine/attack_self(mob/living/user)

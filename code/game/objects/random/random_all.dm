@@ -5,6 +5,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "gift"
 	spawn_nothing_percentage = 80
+
 /obj/random/misc/all/item_to_spawn()
 		return pick(\
 						prob(10);/obj/random/meds/medical_supply,\
@@ -16,3 +17,6 @@
 						prob(2);/obj/preset/storage/weapons/random,\
 						prob(1);/obj/random/syndie/fullhouse\
 					)
+
+/obj/random/misc/all/guaranteed
+	spawn_nothing_percentage = 100

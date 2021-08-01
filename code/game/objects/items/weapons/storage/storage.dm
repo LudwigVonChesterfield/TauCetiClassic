@@ -270,6 +270,7 @@
 				else if (W && W.w_class >= ITEM_SIZE_NORMAL) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts [W] into [src].</span>", SHOWMSG_VISUAL)
 		if(crit_fail && prob(25))
+			usr.visible_message("<span class='warning'>[W] drops out of a hole in [src].</span>")
 			remove_from_storage(W, get_turf(src))
 		if(!NoUpdate)
 			update_ui_after_item_insertion()
