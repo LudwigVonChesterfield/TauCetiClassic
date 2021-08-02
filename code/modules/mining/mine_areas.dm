@@ -254,6 +254,10 @@
 		list(
 			"chance" = 5,
 			/obj/item/device/soulstone = 1,
+		),
+		list(
+			"chance" = 10,
+			/obj/item/weapon/reagent_containers/food/snacks/ectoplasm = 1,
 		)
 	)
 
@@ -276,6 +280,7 @@
 	resources_to_spawn = list(
 		list(/obj/random/misc/all = 2),
 		list(/obj/random/scrap/moderate_weighted = 1),
+		list(/obj/item/mine/shock/anchored = 1),
 	)
 
 /area/asteroid/mine/biome/breathable/flesh
