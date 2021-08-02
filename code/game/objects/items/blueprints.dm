@@ -81,8 +81,12 @@ move an amendment</a> to the drawing.</p>
 /obj/item/blueprints/proc/get_area_by_type(area/A = get_blueprint_area())
 	if (istype(A, /area/space))
 		return AREA_SPACE
+	// allow junkyard building
 	if (istype(A, /area/awaymission/junkyard))
-		return AREA_SPACE // allow junkyard building
+		return AREA_SPACE
+	// allow asteroid building.
+	if (istype(A, /area/asteroid/mine/biome))
+		return AREA_SPACE
 	var/list/SPECIALS = list(
 		/area/shuttle,
 		/area/centcom,
