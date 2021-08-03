@@ -49,6 +49,11 @@
 	icon_state = "holosign"
 	anchored = TRUE
 
+/obj/item/weapon/caution/examine(mob/user)
+	. = ..()
+	if(isliving(user))
+		var/mob/living/L = user
+		L.set_m_intent(MOVE_INTENT_WALK)
 
 /obj/item/weapon/caution
 	desc = "Caution! Wet Floor!"
@@ -61,3 +66,9 @@
 	throw_range = 5
 	w_class = ITEM_SIZE_SMALL
 	attack_verb = list("warned", "cautioned", "smashed")
+
+/obj/item/weapon/caution/examine(mob/user)
+	. = ..()
+	if(isliving(user))
+		var/mob/living/L = user
+		L.set_m_intent(MOVE_INTENT_WALK)
