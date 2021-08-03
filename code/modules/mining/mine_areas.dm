@@ -109,7 +109,11 @@
 		return
 
 	var/list/resources = pick(resources_to_spawn)
-	if(!prob(resources["chance"]))
+	var/chance = 100
+	if(resources["chance"])
+		chance = resources["chance"]
+
+	if(!prob(chance))
 		return
 
 	for(var/resource in resources)
@@ -202,6 +206,7 @@
 		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom = 1),
 		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = 1),
 		list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom = 1),
+		list(/obj/random/scrap/moderate_weighted = 1),
 	)
 
 /area/asteroid/mine/biome/breathable/glow_cave
@@ -239,7 +244,11 @@
 	temperature = T0C - 40
 
 	resources_to_spawn = list(
-		list(/obj/item/snowball = 1)
+		list(/obj/item/snowball = 2),
+		list(/obj/item/decoration/snowflake = 5),
+		list("chance" = 10,
+			/obj/item/decoration/snowman = 1,
+		)
 	)
 
 /area/asteroid/mine/biome/breathable/lor
@@ -252,11 +261,10 @@
 
 	resources_to_spawn = list(
 		list(
-			"chance" = 5,
+			"chance" = 50,
 			/obj/item/device/soulstone = 1,
 		),
 		list(
-			"chance" = 10,
 			/obj/item/weapon/reagent_containers/food/snacks/ectoplasm = 1,
 		)
 	)
@@ -279,8 +287,19 @@
 
 	resources_to_spawn = list(
 		list(/obj/random/misc/all = 2),
-		list(/obj/random/scrap/moderate_weighted = 1),
-		list(/obj/item/mine/shock/anchored = 1),
+		list(/obj/random/scrap/moderate_weighted = 7),
+		list(
+			"chance" = 1,
+			/obj/random/scrap/moderate_weighted = 100,
+			/obj/item/mine/shock/anchored=100
+			),
+		list(
+			"chance" = 1,
+			/obj/random/scrap/moderate_weighted = 100,
+			/obj/item/mine/incendiary/anchored=100
+			),
+		list(/obj/item/mine/shock/anchored = 3),
+		list(/obj/item/mine/incendiary/anchored = 3),
 	)
 
 /area/asteroid/mine/biome/breathable/flesh
@@ -299,12 +318,12 @@
 
 	resources_to_spawn = list(
 		list(
-			"chance" = 1,
-			/obj/structure/pit = 90,
+			"chance" = 3,
+			/obj/structure/pit/closed/grave = 90,
 			/obj/structure/gravemarker = 70
 		),
 		list(
-			"chance" = 1,
+			"chance" = 10,
 			/obj/item/device/soulstone = 1,
 		)
 	)

@@ -42,6 +42,7 @@
 	var/area/asteroid/mine/biome/biome = get_area(src)
 	if(istype(biome))
 		biome.change_wall(src)
+		update_overlays_full()
 
 	..()
 	icon_state = rock_icon_state
@@ -50,7 +51,11 @@
 
 /turf/simulated/mineral/atom_init_late()
 	MineralSpread()
-	update_overlays()
+
+	if(rock_icon_state != "rock")
+		update_overlays_full()
+	else
+		update_overlays()
 
 /turf/simulated/mineral/update_overlays()
 	cut_overlays()

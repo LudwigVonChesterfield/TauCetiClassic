@@ -69,7 +69,12 @@ var/global/announce_vox_departure = FALSE // Stealth systems - give an announcem
 		return
 	if(lastMove + VOX_SHUTTLE_COOLDOWN > world.time)
 		return
-	var/area/dest_location = locate(destination)
+	var/area/dest_location = locate(destination) in all_areas
+
+	if(!dest_location || dest_location.contents.len == 0)
+		visible_message("[bicon(src)] <span class='warning'>beeps angrily, indicating that such location does not exist.</span>")
+		return
+
 	if(curr_location == dest_location)
 		return
 
