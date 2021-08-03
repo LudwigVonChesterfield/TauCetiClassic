@@ -151,6 +151,16 @@
 		/obj/item/taperoll/engineering
 		)
 
+/obj/item/weapon/storage/pouch/engineering_supply/full/atom_init()
+	. = ..()
+	var/obj/item/stack/sheet/metal/M = new(src)
+	M.amount = 50
+	handle_item_insertion(M, prevent_warning=TRUE, NoUpdate=TRUE)
+
+	var/obj/item/stack/sheet/glass/G = new(src)
+	G.amount = 50
+	handle_item_insertion(G, prevent_warning=TRUE, NoUpdate=TRUE)
+
 /obj/item/weapon/storage/pouch/ammo
 	name = "ammo pouch"
 	desc = "Can hold ammo boxes and bullets."
