@@ -55,7 +55,7 @@
 
 	environment_smash = 1
 
-	move_to_delay = 8
+	move_to_delay = 10
 	speed = 0
 
 	ranged = TRUE
@@ -96,10 +96,14 @@
 	stamina -= amount
 
 	if(stamina <= 0)
-		stamina = 0
-		stance = HOSTILE_STANCE_TIRED
-		fill_bag()
-		emote("gasp")
+		Rest()
+
+/mob/living/simple_animal/hostile/asteroid/thrower/proc/Rest()
+	LoseTarget()
+	stamina = 0
+	stance = HOSTILE_STANCE_TIRED
+	fill_bag()
+	emote("gasp")
 
 /mob/living/simple_animal/hostile/asteroid/thrower/proc/create_bag()
 	bag = new /obj/item/weapon/storage/backpack/throwerbag(src)
@@ -240,8 +244,9 @@
 	. = ..()
 	if(!bag)
 		var/obj/item/weapon/storage/backpack/throwerbag/TB = locate() in loc
-		bag = TB
-		TB.forceMove(src)
+		if(TB)
+			bag = TB
+			TB.forceMove(src)
 
 	if(!bag)
 		return
