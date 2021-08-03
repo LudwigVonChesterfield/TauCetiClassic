@@ -1,5 +1,21 @@
 {
     "map_name": "DIY Station",
     "map_path": "diymap",
-    "map_file": "diymap.dmm"
+    "map_file": "diymap.dmm",
+
+	"station_name": "Аванпост \"Красная Площадь\"",
+	"station_name_ru": "Аванпост \"Красная Площадь\"",
+
+	"forced_items": [
+		"/obj/item/clothing/head/ushanka",
+		"/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka",
+		"/obj/item/weapon/storage/belt/utility/full/has_multi",
+		"/obj/item/weapon/storage/pouch/engineering_supply/full",
+		"/obj/item/comrade_package"
+	],
+
+	"forced_people_traits": [
+		"alcohol_tolerance",
+		"russkie"
+	]
 }

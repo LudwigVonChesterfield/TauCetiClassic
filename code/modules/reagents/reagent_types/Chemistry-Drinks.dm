@@ -806,7 +806,10 @@
 	boozepwr = 2
 
 /datum/reagent/consumable/ethanol/vodka/on_general_digest(mob/living/M)
-	..()
+	. = ..()
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(1 * REM, 1 * REM)
+
 	M.radiation = max(M.radiation - 1,0)
 
 /datum/reagent/consumable/ethanol/bilk
@@ -1029,6 +1032,12 @@
 	boozepwr = 3
 	taste_message = "schnapps"
 
+/datum/reagent/consumable/ethanol/goldschlager/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/patron
 	name = "Patron"
 	id = "patron"
@@ -1077,6 +1086,12 @@
 	boozepwr = 4
 	taste_message = "bitter martini"
 
+/datum/reagent/consumable/ethanol/vodkamartini/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/white_russian
 	name = "White Russian"
 	id = "whiterussian"
@@ -1093,6 +1108,12 @@
 	boozepwr = 3
 	taste_message = "fruity alcohol"
 
+/datum/reagent/consumable/ethanol/screwdrivercocktail/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/booger
 	name = "Booger"
 	id = "booger"
@@ -1108,6 +1129,12 @@
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 3
 	taste_message = "tomatoes with booze"
+
+/datum/reagent/consumable/ethanol/bloody_mary/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
 
 /datum/reagent/consumable/ethanol/brave_bull
 	name = "Brave Bull"
@@ -1177,6 +1204,12 @@
 	boozepwr = 4
 	taste_message = "fruity alcohol"
 
+/datum/reagent/consumable/ethanol/longislandicetea/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/moonshine
 	name = "Moonshine"
 	id = "moonshine"
@@ -1217,6 +1250,12 @@
 	boozepwr = 3
 	taste_message = "sweet alcohol"
 
+/datum/reagent/consumable/ethanol/black_russian/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/manhattan
 	name = "Manhattan"
 	id = "manhattan"
@@ -1255,6 +1294,10 @@
 
 /datum/reagent/consumable/ethanol/antifreeze/on_general_digest(mob/living/M)
 	..()
+
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 	if (M.bodytemperature < 330)
 		M.bodytemperature = min(330, M.bodytemperature + (20 * TEMPERATURE_DAMAGE_COEFFICIENT)) //310 is the normal bodytemp. 310.055
 
@@ -1316,6 +1359,12 @@
 	slurr_adj = 3
 	taste_message = "fizzy alcohol"
 
+/datum/reagent/consumable/ethanol/vodkatonic/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/ginfizz
 	name = "Gin Fizz"
 	id = "ginfizz"
@@ -1344,6 +1393,12 @@
 	slurr_adj = 15
 	taste_message = "infinity"
 
+/datum/reagent/consumable/ethanol/singulo/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/sbiten
 	name = "Sbiten"
 	id = "sbiten"
@@ -1354,6 +1409,10 @@
 
 /datum/reagent/consumable/ethanol/sbiten/on_general_digest(mob/living/M)
 	..()
+
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 	if (M.bodytemperature < BODYTEMP_HEAT_DAMAGE_LIMIT)
 		M.bodytemperature = min(BODYTEMP_HEAT_DAMAGE_LIMIT, M.bodytemperature + (50 * TEMPERATURE_DAMAGE_COEFFICIENT)) //310 is the normal bodytemp. 310.055
 
@@ -1430,6 +1489,12 @@
 	boozepwr = 2
 	taste_message = "bitter alcohol"
 
+/datum/reagent/consumable/ethanol/alliescocktail/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
+
 /datum/reagent/consumable/ethanol/acid_spit
 	name = "Acid Spit"
 	id = "acidspit"
@@ -1447,6 +1512,12 @@
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 2
 	taste_message = "a stunbaton"
+
+/datum/reagent/consumable/ethanol/amasec/on_general_digest(mob/living/M)
+	. = ..()
+	// Vodka derivatives have a similar, but weaker effect.
+	if(HAS_TRAIT(M, TRAIT_RUSSKIE))
+		M.heal_bodypart_damage(0.3 * REM, 0.3 * REM)
 
 /datum/reagent/consumable/ethanol/changelingsting
 	name = "Changeling Sting"

@@ -15,6 +15,11 @@
 	var/system_name_ru = "Тау Кита"
 	var/station_image = "exodus"
 
+	// Items to give to players forcefully before even equipping their job.
+	var/list/forced_items
+	// Traits to give to players forcefully that they can't remove.
+	var/list/forced_people_traits
+
 	// Config from maps.txt
 	var/config_max_users = 0
 	var/config_min_users = 0
@@ -135,6 +140,17 @@
 
 	if("station_image" in json)
 		station_image = json["station_image"]
+
+	if("forced_items" in json)
+		forced_items = list()
+		for(var/type_str in json["forced_items"])
+			var/item_type = text2path(type_str)
+			if(!item_type)
+				continue
+			forced_items += item_type
+
+	if("forced_people_traits" in json)
+		forced_people_traits = json["forced_people_traits"]
 
 	defaulted = FALSE
 	return TRUE

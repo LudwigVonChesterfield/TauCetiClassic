@@ -110,14 +110,35 @@
 	item_state = "ushankadown"
 	flags_inv = HIDEEARS
 
+/obj/item/clothing/head/ushanka/proc/protect_russkie(mob/user)
+	if(HAS_TRAIT(user, TRAIT_RUSSKIE))
+		armor = list(melee = 50, bullet = 60, laser = 50, energy = 20, bomb = 35, bio = 0, rad = 0)
+
+/obj/item/clothing/head/ushanka/proc/goodbye_russkie(mob/user)
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/head/ushanka/equipped(mob/user, slot)
+	..()
+	if(slot == SLOT_HEAD)
+		protect_russkie(user)
+	else if(slot_equipped == SLOT_HEAD)
+		goodbye_russkie(user)
+
+/obj/item/clothing/head/ushanka/dropped(mob/user)
+	..()
+	if(slot_equipped == SLOT_HEAD)
+		goodbye_russkie(user)
+
 /obj/item/clothing/head/ushanka/attack_self(mob/user)
 	if(src.icon_state == "ushankadown")
 		src.icon_state = "ushankaup"
 		src.item_state = "ushankaup"
+		flags_inv &= ~HIDEEARS
 		to_chat(user, "You raise the ear flaps on the ushanka.")
 	else
 		src.icon_state = "ushankadown"
 		src.item_state = "ushankadown"
+		flags_inv |= HIDEEARS
 		to_chat(user, "You lower the ear flaps on the ushanka.")
 
 /*

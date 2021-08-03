@@ -44,10 +44,10 @@
 		else
 			if(!disable_warning)
 				to_chat(src, "<span class='red'>You are unable to equip that.</span>")//Only print if del_on_fail is false
-		return 0
+		return FALSE
 
 	equip_to_slot(W, slot, redraw_mob) //This proc should not ever fail.
-	return 1
+	return TRUE
 
 //This is an UNSAFE proc. It merely handles the actual job of equipping. All the checks on whether you can or can't eqip need to be done before! Use mob_can_equip() for that task.
 //In most cases you will want to use equip_to_slot_if_possible()
@@ -104,6 +104,8 @@ var/list/slot_equipment_priority = list(
 	if(W.mob_can_equip(src, slot, 1))
 		//Mob can equip.  Equip it.
 		equip_to_slot_or_del(W, slot)
+		return null
+
 	else
 		//Mob can't equip it.  Put it in a bag B.
 		// Do I have a backpack?
@@ -113,15 +115,30 @@ var/list/slot_equipment_priority = list(
 			B = back
 		else
 			//not wearing backpack.  Check if player holding plastic bag
-			B=is_in_hands(/obj/item/weapon/storage/bag/plasticbag)
+			B = is_in_hands(/obj/item/weapon/storage/bag/plasticbag)
 			if(!B) //If not holding plastic bag, give plastic bag
-				B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
+				B = new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
 				if(!put_in_hands(B))
 					return // Bag could not be placed in players hands.  I don't know what to do here...
 		//Now, B represents a container we can insert W into.
 		B.handle_item_insertion(W,1)
 		return B
 
+// Convinience proc. Tries to put the item anywhere on the person.
+/mob/living/carbon/human/proc/equip_anywhere(obj/item/I)
+	var/atom/placed_in = equip_or_collect(I)
+	if(placed_in)
+		to_chat(src, "<span class='notice'>Placing \the [I] in your [placed_in.name]!</span>")
+		return
+	if(equip_to_appropriate_slot(I))
+		to_chat(src, "<span class='notice'>Placing \the [I] in your inventory!</span>")
+		return
+	if(put_in_hands(I))
+		to_chat(src, "<span class='notice'>Placing \the [I] in your hands!</span>")
+		return
+
+	to_chat(src, "<span class='danger'>Failed to locate a storage object on your mob, either you spawned with no arms and no backpack or this is a bug.</span>")
+	qdel(I)
 
 //These procs handle putting s tuff in your hand. It's probably best to use these rather than setting l_hand = ...etc
 //as they handle all relevant stuff like adding it to the player's screen and updating their overlays.

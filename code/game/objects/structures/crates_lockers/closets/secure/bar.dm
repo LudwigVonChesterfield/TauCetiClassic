@@ -8,9 +8,11 @@
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
 
+	var/drink = /obj/item/weapon/reagent_containers/food/drinks/bottle/beer
+
 /obj/structure/closet/secure_closet/bar/PopulateContents()
-	for (var/i in 1 to 10)
-		new /obj/item/weapon/reagent_containers/food/drinks/bottle/beer(src)
+	for(var/i in 1 to 10)
+		new drink(src)
 
 /obj/structure/closet/secure_closet/bar/update_icon()
 	if(broken)

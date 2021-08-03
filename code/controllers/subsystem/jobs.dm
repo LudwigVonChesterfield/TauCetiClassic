@@ -415,6 +415,13 @@ SUBSYSTEM_DEF(job)
 		if(H.species)
 			H.species.before_job_equip(H, job)
 
+		for(var/item_type in SSmapping.config.forced_items)
+			var/obj/item/I = new item_type(H)
+			H.equip_anywhere(I)
+
+		for(var/T in SSmapping.config.forced_people_traits)
+			ADD_TRAIT(H, T, ROUNDSTART_TRAIT)
+
 		job.equip(H)
 
 		for(var/thing in custom_equip_leftovers)
@@ -523,18 +530,7 @@ SUBSYSTEM_DEF(job)
 		var/metadata = H.client.prefs.gear[G.display_name]
 		var/item = G.spawn_item(null, metadata)
 
-		var/atom/placed_in = H.equip_or_collect(item)
-		if(placed_in)
-			to_chat(H, "<span class='notice'>Placing \the [item] in your [placed_in.name]!</span>")
-			continue
-		if(H.equip_to_appropriate_slot(item))
-			to_chat(H, "<span class='notice'>Placing \the [item] in your inventory!</span>")
-			continue
-		if(H.put_in_hands(item))
-			to_chat(H, "<span class='notice'>Placing \the [item] in your hands!</span>")
-			continue
-		to_chat(H, "<span class='danger'>Failed to locate a storage object on your mob, either you spawned with no arms and no backpack or this is a bug.</span>")
-		qdel(item)
+		H.equip_anywhere(item)
 
 	to_chat(H, "<B>You are the [alt_title ? alt_title : rank].</B>")
 	to_chat(H, "<b>As the [alt_title ? alt_title : rank] you answer directly to [job.supervisors]. Special circumstances may change this.</b>")

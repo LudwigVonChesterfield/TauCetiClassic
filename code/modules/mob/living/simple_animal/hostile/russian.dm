@@ -48,6 +48,10 @@
 	projectilesound = 'sound/weapons/guns/Gunshot.ogg'
 	casingtype = /obj/item/ammo_casing/a357
 
+/mob/living/simple_animal/hostile/russian/CanAttack(atom/the_target)
+	if(HAS_TRAIT(the_target, TRAIT_RUSSKIE))
+		return FALSE
+	return ..()
 
 /mob/living/simple_animal/hostile/russian/death()
 	..()

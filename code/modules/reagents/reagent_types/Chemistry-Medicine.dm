@@ -538,7 +538,7 @@
 	taste_message = null
 	restrict_species = list(IPC, DIONA)
 
-/datum/reagent/bicaridine/on_general_digest(mob/living/M, alien)
+/datum/reagent/bicaridine/on_general_digest(mob/living/M)
 	..()
 	M.heal_bodypart_damage(2 * REM, 0)
 

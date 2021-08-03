@@ -83,6 +83,7 @@
 #define TRAIT_COOLED              "external_cooling_device"
 #define TRAIT_NO_RUN              "no_run"
 #define TRAIT_NO_CLONE            "no_clone"
+#define TRAIT_RUSSKIE			  "russkie"
 
 // common trait sources
 #define ROUNDSTART_TRAIT   "roundstart" //cannot be removed without admin intervention

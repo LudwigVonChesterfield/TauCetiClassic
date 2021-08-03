@@ -260,15 +260,4 @@
 			item.w_class = ITEM_SIZE_SMALL
 
 
-		var/atom/placed_in = H.equip_or_collect(item)
-		if(placed_in)
-			to_chat(H, "<span class='notice'>Placing \the [item] in your [placed_in.name]!</span>")
-			continue
-		if(H.equip_to_appropriate_slot(item))
-			to_chat(H, "<span class='notice'>Placing \the [item] in your inventory!</span>")
-			continue
-		if(H.put_in_hands(item))
-			to_chat(H, "<span class='notice'>Placing \the [item] in your hands!</span>")
-			continue
-		world.log << "Failed to locate a storage object for [H], either he spawned with no arms and no backpack or this is a bug"
-		qdel(item)
+		H.equip_anywhere(item)
