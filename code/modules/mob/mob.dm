@@ -1201,7 +1201,6 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 /mob/proc/RandomiseInputs()
 	if(!confused)
-		input_offsets = null
 		return
 	if(next_randomiseinputs > world.time)
 		return
@@ -1225,15 +1224,21 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 	if(confused > 0)
 		RandomiseInputs()
+	else
+		input_offsets = null
 
 /mob/proc/SetConfused(value)
 	confused = value
 
 	if(confused > 0)
 		RandomiseInputs()
+	else
+		input_offsets = null
 
 /mob/proc/MakeConfused(value)
 	confused = max(value, confused)
 
 	if(confused > 0)
 		RandomiseInputs()
+	else
+		input_offsets = null
