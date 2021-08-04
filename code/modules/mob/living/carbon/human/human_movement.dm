@@ -1,3 +1,5 @@
+/mob/living/var/mood_speed_modifier = 0.0
+
 /mob/living/carbon/human/movement_delay()
 	if(iszombie(src))
 		return zombie_movement_delay()
@@ -103,7 +105,9 @@
 
 	tally += max(2 * stance_damage, 0) //damaged/missing feet or legs is slow
 
-	return (tally + config.human_delay)
+	tally += mood_speed_modifier
+
+	return tally + config.human_delay
 
 /mob/living/carbon/human/Process_Spacemove(movement_dir = 0)
 

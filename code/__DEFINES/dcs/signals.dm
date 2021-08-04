@@ -12,6 +12,7 @@
 //////////////////////////////////////////////////////////////////
 
 // /datum signals
+
 /// when a component is added to a datum: (/datum/component)
 #define COMSIG_COMPONENT_ADDED "component_added"
 /// before a component is removed from a datum because of RemoveComponent: (/datum/component)
@@ -22,6 +23,7 @@
 #define COMSIG_PARENT_QDELETING "parent_qdeleting"
 
 // /datum/religion_rites signals
+
 /// from base of religion_rites/on_chosen(): (/mob, /obj)
 #define COMSIG_RITE_ON_CHOSEN "rite_on_chosen"
 /// from base of religion_rites/can_start_wrapper(): (/mob, /obj)
@@ -39,10 +41,12 @@
 	#define COMPONENT_CHECK_FAILED 1
 
 // /datum/religion signals
+
 /// from base of religion/add_membern(): (/mob, holy_role)
 #define COMSIG_REL_ADD_MEMBER "rel_add_member"
 
 // /datum/role signals
+
 /// from base of role/GetScoreboard(): ()
 #define COMSIG_ROLE_GETSCOREBOARD "role_getscoreboard"
 /// from base of role/extraPanelButtons(): ()
@@ -53,6 +57,7 @@
 #define COMSIG_ROLE_POSTSETUP "role_postsetup"
 
 // light related signals
+
 /// from base of /atom/movable/lighting_object/update(): (turf/my_turf)
 #define COMSIG_LIGHT_UPDATE_OBJECT "light_update_object"
 
@@ -68,6 +73,7 @@
 #define COMSIG_SPECIES_LOSS "species_loss"
 
 // /client signals
+
 /// from base of client/Move(): (atom/NewLoc, direction)
 #define COMSIG_CLIENTMOB_MOVE "client_move"
 	#define COMPONENT_CLIENTMOB_BLOCK_MOVE 1
@@ -75,12 +81,16 @@
 #define COMSIG_CLIENTMOB_POSTMOVE "client_postmove"
 
 // /area signals
+
 ///from base of area/Entered(): (atom/movable/M)
 #define COMSIG_AREA_ENTERED "area_entered"
 ///from base of area/Exited(): (atom/movable/M)
 #define COMSIG_AREA_EXITED "area_exited"
 
 // /atom signals
+
+///from base of atom/Click(): (location, control, params, mob/user)
+#define COMSIG_CLICK "atom_click"
 /// emp_act() : severity
 #define COMSIG_ATOM_EMP_ACT "atom_emp_act"
 	#define COMPONENT_PREVENT_EMP 1
@@ -122,6 +132,7 @@
 #define COMSIG_ATOM_CHANGE_DIR "change_dir"
 
 // /atom/movable signals
+
 /// from base of atom/movable/Move(): (/atom/newLoc)
 #define COMSIG_MOVABLE_PRE_MOVE "movable_pre_move"
 	#define COMPONENT_MOVABLE_BLOCK_PRE_MOVE 1
@@ -149,12 +160,14 @@
 #define COMSIG_EXIT_AREA "exit_area"
 
 // /obj
+
 /// from base of datum/religion_rites/reset_rite_wrapper(): ()
 #define COMSIG_OBJ_RESET_RITE "obj_reset_rite"
 /// from base of datum/religion_rites/start(): ()
 #define COMSIG_OBJ_START_RITE "obj_start_rite"
 
 // /obj/item signals
+
 /// from base of obj/item/attack(): (/mob/living/target, /mob/living/user, def_zone)
 #define COMSIG_ITEM_ATTACK "item_attack"
 	#define COMPONENT_ITEM_NO_ATTACK 1
@@ -183,6 +196,7 @@
 	// #define COMPONENT_NO_MOUSEDROP 1
 
 // hand_like /obj/item signals
+
 /// check if item is hand_like: ()
 #define COMSIG_HAND_IS "hand_is"
 /// from mob/living/silicon/robot/ClickOn(): (atom/T, mob/user, params)
@@ -194,7 +208,17 @@
 /// from mob/living/silicon/robot/get_active_hand(): (mob/user)
 #define COMSIG_HAND_GET_ITEM "hand_get_item"
 
+//Mood
+
+///called when you send a mood event from anywhere in the code.
+#define COMSIG_ADD_MOOD_EVENT "add_mood"
+///Mood event that only RnD members listen for
+#define COMSIG_ADD_MOOD_EVENT_RND "RND_add_mood"
+///called when you clear a mood event from anywhere in the code.
+#define COMSIG_CLEAR_MOOD_EVENT "clear_mood"
+
 // mob signals
+
 /// from  base of mob/ClickOn(): (atom/target, params)
 #define COMSIG_MOB_CLICK "mob_click"
 	#define COMPONENT_CANCEL_CLICK 1
@@ -202,6 +226,8 @@
 #define COMSIG_MOB_SLIP "movable_slip"
 /// from base of mob/death(): (gibbed)
 #define COMSIG_MOB_DIED "mob_died"
+///from base of mob/create_mob_hud(): ()
+#define COMSIG_MOB_HUD_CREATED "mob_hud_created"
 
 // living signals
 ///from base of mob/living/rejuvenate(): ()
@@ -239,13 +265,19 @@
 // from mob/living/forget_combo(): (datum/combat_combo/combo, datum/combat_moveset/moveset)
 #define COMSIG_LIVING_FORGET_COMBO "forget_combo"
 
+// /mob/living/carbon/human signals (and synths, I guess)
+///Whenever EquipRanked is called, called after job is set
+#define COMSIG_JOB_RECEIVED "job_received"
+
 // simple_animal/hostile signals
+
 /// from simple_animal/hostile/proc/AttackingTarget(): (atom/target)
 #define COMSIG_MOB_HOSTILE_ATTACKINGTARGET "mob_hostile_attackingtarget"
 /// from simple_animal/hostile/proc/Shoot(): (atom/target)
 #define COMSIG_MOB_HOSTILE_SHOOT "mob_hostile_shoot"
 
 // Component specific signals.
+
 /// send this signal to remove a list of tip ids(use tip_names as tip ids): (/list/tip_ids_to_remove)
 #define COMSIG_TIPS_REMOVE "comsig_tip_remove"
 

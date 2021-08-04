@@ -76,9 +76,13 @@
 //helper for inverting armor blocked values into a multiplier
 #define blocked_mult(blocked) max(1 - (blocked / 100), 0)
 
+/mob/var/mood_actionspeed_modifier = 0.0
+
 /proc/do_mob(mob/user , mob/target, time = 30, check_target_zone = FALSE, uninterruptible = FALSE, progress = TRUE, datum/callback/extra_checks = null)
 	if(!user || !target)
 		return FALSE
+
+	time *= (1.0 + user.mood_actionspeed_modifier)
 
 	var/busy_hand = user.hand
 	user.become_busy(_hand = busy_hand)
@@ -146,6 +150,8 @@
 /proc/do_after(mob/user, delay, needhand = TRUE, atom/target, can_move = FALSE, progress = TRUE, datum/callback/extra_checks)
 	if(!user || target && QDELING(target))
 		return FALSE
+
+	delay *= (1.0 + user.mood_actionspeed_modifier)
 
 	var/busy_hand = user.hand
 	user.become_busy(_hand = busy_hand)

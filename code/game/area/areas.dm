@@ -66,6 +66,25 @@
 		'sound/ambience/general_12.ogg'
 	)
 
+	/// All beauty in this area combined, only includes indoor area.
+	var/totalbeauty = 0
+	/// Beauty average per open turf in the area
+	var/beauty = 0
+	/// If a room is too big it doesn't have beauty.
+	var/beauty_threshold = 150
+
+	/// For space, the asteroid, lavaland, etc. Used with blueprints or with weather to determine if we are adding a new area (vs editing a station room)
+	var/outdoors = FALSE
+
+	/// Size of the area in open turfs, only calculated for indoors areas.
+	var/areasize = 0
+
+	/// Bonus mood for being in this area
+	var/mood_bonus = 0
+	/// Mood message for being here, only shows up if mood_bonus != 0
+	var/mood_message = "<span class='nicegreen'>This area is pretty nice!</span>\n"
+	/// Does the mood bonus require a trait?
+	var/mood_trait
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
