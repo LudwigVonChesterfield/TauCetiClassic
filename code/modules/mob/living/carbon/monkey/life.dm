@@ -446,7 +446,7 @@
 			Paralyse(5)
 
 	if(confused)
-		confused = max(0, confused - 1)
+		AdjustConfused(-1)
 
 	if(resting)
 		dizziness = max(0, dizziness - 5)

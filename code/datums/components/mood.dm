@@ -40,9 +40,6 @@
 /datum/component/mood/proc/register_job_signals(datum/source, job)
 	SIGNAL_HANDLER
 
-	if(job in list("Research Director", "Scientist", "Roboticist"))
-		RegisterSignal(parent, COMSIG_ADD_MOOD_EVENT_RND, .proc/add_event) //Mood events that are only for RnD members
-
 /datum/component/mood/proc/print_mood(mob/user)
 	var/msg = "<span class='info'>*---------*\n<EM>My current mental status:</EM></span>\n"
 	msg += "<span class='notice'>My current sanity: </span>" //Long term
@@ -286,6 +283,9 @@
 	var/datum/mood_event/event = mood_events[category]
 	if(!event)
 		return
+
+	if(istype(event, /datum/mood_event/vodka))
+		to_chat(world, "DELETING [event.type]")
 
 	mood_events -= category
 	qdel(event)

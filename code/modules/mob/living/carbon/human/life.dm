@@ -64,6 +64,10 @@
 	if(stat != DEAD && !IS_IN_STASIS(src))
 		if(SSmobs.times_fired%4==2 || failed_last_breath || (health < config.health_threshold_crit)) 	//First, resolve location and get a breath
 			breathe() 				//Only try to take a breath every 4 ticks, unless suffocating
+			if(failed_last_breath)
+				SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "suffocation", /datum/mood_event/suffocation)
+			else
+				SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "suffocation")
 
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj))
@@ -102,6 +106,8 @@
 				var/blood_volume = round(vessel.get_reagent_amount("blood"))
 				if(blood_volume > 0)
 					handle_blood(blood_volume)
+
+			handle_drunkenness()
 
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000))	//We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		return											//We go ahead and process them 5 times for HUD images and other stuff though.
@@ -662,8 +668,15 @@
 	if(status_flags & GODMODE)
 		return 1	//godmode
 
+	if(bodytemperature <= species.heat_level_1 && bodytemperature >= species.cold_level_1)
+		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "cold")
+		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "hot")
+
 	// +/- 50 degrees from 310.15K is the 'safe' zone, where no damage is dealt.
 	if(bodytemperature > species.heat_level_1)
+		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "cold")
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "hot", /datum/mood_event/hot)
+
 		//Body temperature is too hot.
 		if(bodytemperature > species.heat_level_3)
 			throw_alert("temp", /atom/movable/screen/alert/hot, 3)
@@ -679,6 +692,9 @@
 			throw_alert("temp", /atom/movable/screen/alert/hot, 1)
 			take_overall_damage(burn=HEAT_DAMAGE_LEVEL_1, used_weapon = "High Body Temperature")
 	else if(bodytemperature < species.cold_level_1)
+		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "hot")
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "cold", /datum/mood_event/cold)
+
 		if(!istype(loc, /obj/machinery/atmospherics/components/unary/cryo_cell))
 			if(bodytemperature < species.cold_level_3)
 				throw_alert("temp", /atom/movable/screen/alert/cold, 3)
@@ -1064,7 +1080,7 @@
 			Sleeping(10 SECONDS)
 			Paralyse(5)
 
-	confused = max(0, confused - 1)
+	AdjustConfused(-1)
 	// decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 15)

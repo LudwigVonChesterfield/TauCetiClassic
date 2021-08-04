@@ -110,7 +110,7 @@
 			return
 		if(prob(20))
 			bad_effects += 1
-			H.confused += 3
+			H.AdjustConfused(3)
 			var/msg = pick("You feel dizzy.", "Your head starts spinning.")
 			to_chat(H, "<span class='warning'>[msg]</span>")
 		if(prob(20))

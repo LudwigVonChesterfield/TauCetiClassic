@@ -74,6 +74,8 @@
 /obj/item/weapon/paper/personal_tasks/proc/get_room_name()
 	var/list/pos_rooms = list("баню", "казино", "коммунизм", "путь к докам", "доки", "мавзолей")
 	for(var/area_type in subtypesof(/area/station) - subtypesof(/area/station/maintenance))
+		if(area_type in areas_by_type)
+			continue
 		var/area/A = area_type
 		pos_rooms += lowertext(initial(A.name))
 

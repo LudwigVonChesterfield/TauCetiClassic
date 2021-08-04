@@ -360,7 +360,7 @@
 	data["ticks"]++
 	switch(data["ticks"])
 		if(1)
-			M.confused += 2
+			M.AdjustConfused(2)
 			M.drowsyness += 2
 		if(2 to 199)
 			M.Weaken(30)
@@ -422,7 +422,7 @@
 		data["ticks"] = 1
 	switch(data["ticks"])
 		if(1)
-			M.confused += 2
+			M.AdjustConfused(2)
 			M.drowsyness += 2
 		if(2 to 50)
 			M.SetSleeping(20 SECONDS)
@@ -802,9 +802,7 @@
 /datum/reagent/cryptobiolin/on_general_digest(mob/living/M)
 	..()
 	M.make_dizzy(1)
-	if(!M.confused)
-		M.confused = 1
-	M.confused = max(M.confused, 20)
+	M.MakeConfused(20)
 
 /datum/reagent/impedrezene
 	name = "Impedrezene"

@@ -76,7 +76,13 @@
 	var/blinded = null
 	var/daltonism = FALSE
 	var/druggy = 0			//Carbon
+
+	// Confused rework. Randomises inputs once every randomiseinputs_cooldown ticks.
 	var/confused = 0		//Carbon
+	var/list/input_offsets
+	var/next_randomiseinputs = 0
+	var/randomiseinputs_cooldown = 30 SECOND
+
 	var/antitoxs = null
 	var/phoron = null
 	var/resting = 0			//Carbon

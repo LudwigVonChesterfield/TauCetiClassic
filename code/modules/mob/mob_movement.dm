@@ -112,7 +112,7 @@
 		move_delay = world.time
 		//drunk driving
 		if(mob.confused)
-			direct = pick(cardinal)
+			direct = mob.ConfuseInput(direct)
 		return mob.buckled.relaymove(mob,direct)
 
 	if(!forced && !mob.canmove)
@@ -210,16 +210,10 @@
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused)
-			var/newdir = direct
-			if(mob.confused > 40)
-				newdir = pick(alldirs)
-			else if(prob(mob.confused * 1.5))
-				newdir = angle2dir(dir2angle(direct) + 180)
-			else if(prob(mob.confused * 3))
-				newdir = angle2dir(dir2angle(direct) + pick(90, -90))
-			step(mob, newdir)
 		else
+			if(mob.confused && !mob.crawling)
+				direct = mob.ConfuseInput(direct)
+				n = get_step(get_turf(mob), direct)
 			. = mob.SelfMove(n, direct)
 
 		for (var/obj/item/weapon/grab/G in mob.GetGrabs())

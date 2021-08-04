@@ -530,6 +530,8 @@
 	ear_damage = 0
 	heal_overall_damage(getBruteLoss(), getFireLoss())
 
+	SetDrunkenness(0)
+
 	if(iscarbon(src))
 		var/mob/living/carbon/C = src
 		C.shock_stage = 0
@@ -1343,3 +1345,49 @@
 
 /mob/living/proc/swap_hand()
 	return
+
+/mob/living/proc/AdjustDrunkenness(amount)
+	drunkenness += amount
+
+/mob/living/proc/SetDrunkenness(value)
+	drunkenness = value
+
+/mob/living/proc/MakeDrunkenness(value)
+	drunkenness = max(value, drunkenness)
+
+/mob/living/proc/handle_drunkenness()
+	if(drunkenness <= 0)
+		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "drunk")
+		return
+
+	if(drunkenness >= drunkenness_pass_out)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/drunk_catharsis)
+	else if(drunkenness >= drunkenness_confused)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/very_drunk)
+	else if(drunkenness >= drunkenness_slur)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/drunk)
+
+	if(drunkenness >= drunkenness_pass_out)
+		paralysis = max(paralysis, drunkenness)
+		drowsyness = max(drowsyness, drunkenness)
+		return
+
+	if(drunkenness >= drunkenness_blur)
+		if(eye_blurry < drunkenness)
+			eye_blurry += 2
+
+	if(drunkenness >= drunkenness_slur)
+		if(slurring < drunkenness)
+			slurring += 3
+
+	if(drunkenness >= drunkenness_confused)
+		if(confused < drunkenness)
+			confused += 2
+
+/mob/living/carbon/human/handle_drunkenness()
+	. = ..()
+	if(drunkenness >= drunkenness_pass_out)
+		var/obj/item/organ/internal/liver/IO = organs_by_name[O_LIVER]
+		if(istype(IO))
+			IO.take_damage(0.1, 1)
+		adjustToxLoss(0.1)

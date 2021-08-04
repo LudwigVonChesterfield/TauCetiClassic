@@ -87,8 +87,11 @@
 
 // common trait sources
 #define ROUNDSTART_TRAIT   "roundstart" //cannot be removed without admin intervention
+// self explanatory
+#define BEAUTY_ELEMENT_TRAIT "beauty_element"
+#define MOOD_COMPONENT_TRAIT "mood_component"
+// medical stuff I guess
 #define OBESITY_TRAIT      "obesity"
 #define LIFE_ASSIST_MACHINES_TRAIT            "life_assist_machines"
-#define MOOD_COMPONENT_TRAIT "mood_component"
 
 #define FEAR_TRAIT         "fear"
