@@ -25,11 +25,6 @@
 	desc = "Smells like rotten flesh. Disgusting!"
 	icon = 'icons/obj/structures/cellular_biomass/necromorphs.dmi'
 
-/obj/effect/decal/cleanable/cellular/necro
-	name = "Living mass"
-	desc = "Smells like rotten flesh. Disgusting!"
-	icon = 'icons/obj/structures/cellular_biomass/necromorphs.dmi'
-
 /obj/structure/cellular_biomass/core/necro
 	name = "Living mass"
 	desc = "Smells like rotten flesh. Disgusting!"

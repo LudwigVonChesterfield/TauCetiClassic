@@ -68,6 +68,7 @@
 		name = "poster - [name]"
 		desc = "A large piece of space-resistant printed paper. [desc]"
 
+	AddElement(/datum/element/beauty, 300)
 
 /proc/get_random_poster_type(base_type)
 	var/list/poster_types = subtypesof(base_type)

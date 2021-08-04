@@ -153,6 +153,17 @@ var/list/ghostteleportlocs = list()
 
 	power_change() // all machines set to current power level, also updates lighting icon
 
+/// Divides total beauty in the room by roomsize to allow us to get an average beauty per tile.
+/area/proc/update_beauty()
+	if(!areasize)
+		beauty = 0
+		return FALSE
+
+	if(areasize >= beauty_threshold)
+		beauty = 0
+		return FALSE
+
+	beauty = totalbeauty / areasize
 
 /area/proc/poweralert(state, obj/source)
 	if (state != poweralm)
@@ -374,10 +385,19 @@ var/list/ghostteleportlocs = list()
 		if(STATIC_ENVIRON)
 			used_environ += amount
 
-
+/**
+ * Call back when an atom enters an area
+ *
+ * Sends signals COMSIG_AREA_ENTERED and COMSIG_ENTER_AREA (to the atom)
+ * Sends signals COMSIG_AREA_ENTERED and COMSIG_ENTER_AREA (to a list of atoms)
+ *
+ * If the area has ambience, then it plays some ambience music to the ambience channel
+ */
 /area/Entered(atom/movable/A)
 	SEND_SIGNAL(src, COMSIG_AREA_ENTERED, A)
-	SEND_SIGNAL(A, COMSIG_ENTER_AREA, src) //The atom that enters the area
+	for(var/atom/movable/recipient as anything in A.area_sensitive_contents)
+		SEND_SIGNAL(recipient, COMSIG_ENTER_AREA, src)
+
 	if (!isliving(A))
 		return
 
@@ -420,13 +440,15 @@ var/list/ghostteleportlocs = list()
 		L.playsound_music(pick(ambience), VOL_AMBIENT, null, null, CHANNEL_AMBIENT)
 
 /**
-  * Called when an atom exits an area
-  *
-  * Sends signals COMSIG_EXIT_AREA (to the atom)
-  */
+ * Called when an atom exits an area
+ *
+ * Sends signals COMSIG_AREA_EXITED and COMSIG_EXIT_AREA (to the atom)
+ * Sends signals COMSIG_AREA_EXITED and COMSIG_EXIT_AREA (to a list of atoms)
+ */
 /area/Exited(atom/movable/A)
 	SEND_SIGNAL(src, COMSIG_AREA_EXITED, A)
-	SEND_SIGNAL(A, COMSIG_EXIT_AREA, src) //The atom that exits the area
+	for(var/atom/movable/recipient as anything in A.area_sensitive_contents)
+		SEND_SIGNAL(recipient, COMSIG_EXIT_AREA, src)
 
 /area/proc/gravitychange(gravitystate = FALSE)
 	has_gravity = gravitystate

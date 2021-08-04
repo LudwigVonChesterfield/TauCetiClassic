@@ -7,6 +7,8 @@
 
 	var/amount = 1 //Basically moles.
 
+	beauty = -50
+
 /obj/effect/decal/cleanable/liquid_fuel/atom_init(mapload, amt = 1)
 	amount = amt
 	. = ..()
