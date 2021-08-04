@@ -319,6 +319,7 @@
 #include "code\datums\keybinding\mob.dm"
 #include "code\datums\keybinding\movement.dm"
 #include "code\datums\keybinding\robot.dm"
+#include "code\datums\modifiable_value\_modifiable_value.dm"
 #include "code\datums\mood_events\_mood_event.dm"
 #include "code\datums\mood_events\beauty_events.dm"
 #include "code\datums\mood_events\drink_events.dm"
