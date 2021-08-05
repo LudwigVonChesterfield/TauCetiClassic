@@ -20,9 +20,9 @@
 
 	// Holly, we're drunk.
 	var/drunkenness = 0
-	var/drunkenness_slur = 90
+	var/drunkenness_slur = 30
 	var/drunkenness_confused = 150
-	var/drunkenness_blur = 300
+	var/drunkenness_blur = 400
 	var/drunkenness_pass_out = 600
 
 	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.

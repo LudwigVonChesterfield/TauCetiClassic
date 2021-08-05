@@ -1215,7 +1215,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 		input_offsets["[d]"] = map_to
 		pos_dirs -= map_to
 
-	addtimer(CALLBACK(src, .proc/RandomiseInputs), rand(randomiseinputs_cooldown, randomiseinputs_cooldown * 1.2))
+	addtimer(CALLBACK(src, .proc/RandomiseInputs), randomiseinputs_cooldown)
 
 /mob/proc/AdjustConfused(amount)
 	confused += amount
@@ -1226,6 +1226,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 		RandomiseInputs()
 	else
 		input_offsets = null
+		next_randomiseinputs = world.time
 
 /mob/proc/SetConfused(value)
 	confused = value
@@ -1234,6 +1235,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 		RandomiseInputs()
 	else
 		input_offsets = null
+		next_randomiseinputs = world.time
 
 /mob/proc/MakeConfused(value)
 	confused = max(value, confused)
@@ -1242,3 +1244,4 @@ note dizziness decrements automatically in the mob's Life() proc.
 		RandomiseInputs()
 	else
 		input_offsets = null
+		next_randomiseinputs = world.time

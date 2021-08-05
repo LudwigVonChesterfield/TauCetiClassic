@@ -158,6 +158,10 @@
 
 /datum/reagent/consumable/drink/milk/on_general_digest(mob/living/M)
 	..()
+
+	if(M.sleeping)
+		M.AdjustDrunkenness(-1)
+
 	if(M.getBruteLoss() && prob(20))
 		M.heal_bodypart_damage(1, 0)
 	if(holder.has_reagent("capsaicin"))
@@ -208,6 +212,10 @@
 
 /datum/reagent/consumable/drink/coffee/on_general_digest(mob/living/M)
 	..()
+
+	if(M.sleeping)
+		M.AdjustDrunkenness(-2)
+
 	M.make_jittery(5)
 	if(adj_temp > 0 && holder.has_reagent("frostoil"))
 		holder.remove_reagent("frostoil", 10 * REAGENTS_METABOLISM)

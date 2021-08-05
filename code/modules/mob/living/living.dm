@@ -1379,16 +1379,13 @@
 		return
 
 	if(drunkenness >= drunkenness_blur)
-		if(eye_blurry < drunkenness)
-			eye_blurry += 2
+		eye_blurry = max(eye_blurry, 2)
 
 	if(drunkenness >= drunkenness_slur)
-		if(slurring < drunkenness)
-			slurring += 3
+		slurring = max(slurring, 3)
 
 	if(drunkenness >= drunkenness_confused)
-		if(confused < drunkenness)
-			confused += 2
+		MakeConfused(2)
 
 /mob/living/carbon/human/handle_drunkenness()
 	. = ..()

@@ -27,6 +27,9 @@
 	return
 
 /mob/living/carbon/human/proc/clear_conversation(speaker)
+	if(!conversations || !conversations[speaker])
+		return
+
 	handle_conversation(speaker, conversations[speaker]["say"], conversations[speaker]["hear"])
 
 	conversations -= speaker
