@@ -198,6 +198,7 @@
 			setSanity(sanity + 0.6*  delta_time, SANITY_NEUTRAL, SANITY_MAXIMUM)
 
 	HandleNutrition()
+	HandleShock()
 
 ///Sets sanity to the specified amount and applies effects.
 /datum/component/mood/proc/setSanity(amount, minimum=SANITY_INSANE, maximum=SANITY_GREAT)
@@ -332,6 +333,25 @@
 	if(user != parent)
 		return
 	print_mood(user)
+
+/datum/component/mood/proc/HandleShock()
+	if(!iscarbon(parent))
+		return
+	var/mob/living/carbon/C = parent
+
+	switch(C.shock_stage)
+		if(0 to 10)
+			clear_event(null, "pain")
+		if(10 to 30)
+			add_event(null, "pain", /datum/mood_event/mild_pain)
+		if(30 to 60)
+			add_event(null, "pain", /datum/mood_event/moderate_pain)
+		if(60 to 80)
+			add_event(null, "pain", /datum/mood_event/intense_pain)
+		if(120 to 150)
+			add_event(null, "pain", /datum/mood_event/unspeakable_pain)
+		if(150 to INFINITY)
+			add_event(null, "pain", /datum/mood_event/agony)
 
 /datum/component/mood/proc/HandleNutrition()
 	var/mob/living/L = parent

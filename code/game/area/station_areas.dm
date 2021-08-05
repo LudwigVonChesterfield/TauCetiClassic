@@ -285,6 +285,9 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Bar"
 	icon_state = "bar"
 
+	mood_bonus = 5
+	mood_message = "<span class='nicegreen'>I love being in the bar!</span>\n"
+
 /area/station/civilian/playroom
 	name = "Play Room"
 	icon_state = "fitness"

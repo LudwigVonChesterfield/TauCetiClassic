@@ -1600,26 +1600,17 @@
 		shock_stage = max(shock_stage-1, 0)
 		return
 
-	if(shock_stage == 10)
-		to_chat(src, "<span class='danger'>[pick("It hurts so much!", "You really need some painkillers..", "Dear god, the pain!")]</span>")
-
 	if(shock_stage >= 30)
-		if(shock_stage == 30) emote("me",1,"is having trouble keeping their eyes open.")
 		eye_blurry = max(2, eye_blurry)
 		stuttering = max(stuttering, 5)
 
-	if(shock_stage == 40)
-		to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
-
-	if (shock_stage >= 60)
-		if(shock_stage == 60)
-			visible_message("<span class='name'>[src]'s</span> body becomes limp.")
-		if (prob(2))
+	if(shock_stage >= 80)
+		if (prob(5))
 			to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
 			Weaken(20)
 
-	if(shock_stage >= 80)
-		if (prob(5))
+	else if (shock_stage >= 60)
+		if (prob(2))
 			to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
 			Weaken(20)
 
@@ -1628,12 +1619,28 @@
 			to_chat(src, "<span class='danger'>[pick("You black out!", "You feel like you could die any moment now.", "You're about to lose consciousness.")]</span>")
 			Paralyse(5)
 
+	if(shock_stage >= 150)
+		Weaken(20)
+
 	if(shock_stage == 150)
 		emote("me",1,"can no longer stand, collapsing!")
 		Weaken(20)
 
-	if(shock_stage >= 150)
-		Weaken(20)
+	else if(shock_stage == 60)
+		visible_message("<span class='name'>[src]'s</span> body becomes limp.")
+		eye_blurry = max(2, eye_blurry)
+		stuttering = max(stuttering, 5)
+
+	else if(shock_stage == 40)
+		to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
+		eye_blurry = max(2, eye_blurry)
+		stuttering = max(stuttering, 5)
+
+	else if(shock_stage == 30)
+		emote("me",1,"is having trouble keeping their eyes open.")
+
+	else if(shock_stage == 10)
+		to_chat(src, "<span class='danger'>[pick("It hurts so much!", "You really need some painkillers..", "Dear god, the pain!")]</span>")
 
 /mob/living/carbon/human/proc/handle_heart_beat()
 

@@ -260,6 +260,11 @@
 	desc = "All hail the Communist party!"
 	icon_state = "poster18"
 
+/obj/structure/sign/poster/contraband/communist_state/examine(mob/user)
+	. = ..()
+	if(HAS_TRAIT(user, TRAIT_RUSSKIE))
+		SEND_SIGNAL(user, COMSIG_ADD_MOOD_EVENT, "communist_purpose", /datum/mood_event/communist_purpose)
+
 /obj/structure/sign/poster/contraband/lamarr
 	name = "Lamarr"
 	desc = "This poster depicts Lamarr. Probably made by a traitorous Research Director."
