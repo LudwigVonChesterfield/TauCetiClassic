@@ -59,6 +59,7 @@
 				continue
 			break
 
+		tasks += task
 		paper_text += "<li><b>*</b> [task] \[<span class=\"paper_field\"></span>\]</li>"
 		fields++
 
@@ -66,8 +67,8 @@
 
 /obj/item/weapon/paper/personal_tasks/proc/get_task()
 	return pickweight(list(
-		"Построить [get_room_name()]." = 6,
-		"Настроить [get_appliance_name()]." = 3,
+		"Построить [get_room_name()]." = 10,
+		"Настроить [get_appliance_name()]." = 1,
 		//"Добыть [get_resource_name()]." = 1,
 	))
 
