@@ -797,6 +797,11 @@
 		SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "soviet_idea", /datum/mood_event/vodka)
 		M.heal_bodypart_damage(1 * REM, 1 * REM)
 
+		if(M.health < config.health_threshold_crit && M.stat != CONSCIOUS && M.drunkenness > M.drunkenness_pass_out && prob(1))
+			to_chat(M, "<span class='nice boldgreen'>THROUGH THE POWER OF THE PROLETARIAT'S LIFE JUICE AND MENDELEEV'S MAGIC YOUR ARE BROUGHT BACK TO LIFE!</span>")
+			SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "catharsis", /datum/mood_event/catharsis)
+			M.rejuvenate()
+
 	M.radiation = max(M.radiation - 1,0)
 
 /datum/reagent/consumable/ethanol/bilk

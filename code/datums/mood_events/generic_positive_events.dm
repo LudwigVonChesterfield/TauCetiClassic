@@ -31,3 +31,8 @@
 	mood_change = 5
 	description = "<span class='bold nicegreen'>I remember my purpose now. My purpose is: Stolica, vodka, ushanka, Sovetskii medved nash!</span>\n"
 	timeout = 10 MINUTES
+
+/datum/mood_event/catharsis
+	mood_change = 50
+	description = "<span class='bold nicegreen'>I simply do not care any longer.</span>\n"
+	timeout = 10 MINUTES
