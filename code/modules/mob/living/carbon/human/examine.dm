@@ -550,17 +550,17 @@
 	if(mood)
 		switch(mood.shown_mood)
 			if(-INFINITY to MOOD_LEVEL_SAD4)
-				msg += "[t_He] look[p_s()] depressed."
+				msg += "[t_He] is looking depressed."
 			if(MOOD_LEVEL_SAD4 to MOOD_LEVEL_SAD3)
-				msg += "[t_He] look[p_s()] very sad."
+				msg += "[t_He] is looking very sad."
 			if(MOOD_LEVEL_SAD3 to MOOD_LEVEL_SAD2)
-				msg += "[t_He] look[p_s()] a bit down."
+				msg += "[t_He] is looking a bit down."
 			if(MOOD_LEVEL_HAPPY2 to MOOD_LEVEL_HAPPY3)
-				msg += "[t_He] look[p_s()] quite happy."
+				msg += "[t_He] is looking quite happy."
 			if(MOOD_LEVEL_HAPPY3 to MOOD_LEVEL_HAPPY4)
-				msg += "[t_He] look[p_s()] very happy."
+				msg += "[t_He] is looking very happy."
 			if(MOOD_LEVEL_HAPPY4 to INFINITY)
-				msg += "[t_He] look[p_s()] ecstatic."
+				msg += "[t_He] is looking ecstatic."
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)

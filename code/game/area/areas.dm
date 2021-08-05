@@ -168,7 +168,7 @@ var/list/ghostteleportlocs = list()
 	if(outdoors)
 		return FALSE
 	areasize = 0
-	for(var/turf/open/T in contents)
+	for(var/turf/simulated/floor/T in contents)
 		areasize++
 
 /// Divides total beauty in the room by roomsize to allow us to get an average beauty per tile.

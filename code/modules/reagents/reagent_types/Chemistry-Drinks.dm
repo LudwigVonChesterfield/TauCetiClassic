@@ -159,7 +159,7 @@
 /datum/reagent/consumable/drink/milk/on_general_digest(mob/living/M)
 	..()
 
-	if(M.sleeping)
+	if(M.IsSleeping())
 		M.AdjustDrunkenness(-1)
 
 	if(M.getBruteLoss() && prob(20))
@@ -213,7 +213,7 @@
 /datum/reagent/consumable/drink/coffee/on_general_digest(mob/living/M)
 	..()
 
-	if(M.sleeping)
+	if(M.IsSleeping())
 		M.AdjustDrunkenness(-2)
 
 	M.make_jittery(5)

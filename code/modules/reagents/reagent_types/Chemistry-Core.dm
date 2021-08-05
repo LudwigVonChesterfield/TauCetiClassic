@@ -77,7 +77,7 @@
 
 /datum/reagent/water/on_general_digest(mob/living/M)
 	. = ..()
-	if(M.sleeping)
+	if(M.IsSleeping())
 		M.AdjustDrunkenness(-1)
 
 /datum/reagent/water/on_diona_digest(mob/living/M)
