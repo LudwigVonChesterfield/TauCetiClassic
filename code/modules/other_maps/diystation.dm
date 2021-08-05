@@ -85,7 +85,7 @@
 /obj/item/weapon/paper/personal_tasks/proc/get_appliance_name()
 	var/list/pos_appliance = list(
 		"исскуственный интеллект",
-		"двигатель",
+		"генератор",
 		"систему жизнеобеспечения",
 		"атмосферный отсек"
 	)
