@@ -124,8 +124,11 @@
 
 
 /datum/component/mood/proc/update_mood_icon()
+	if(!screen_obj)
+		return
+
 	var/mob/living/owner = parent
-	if(!(owner.client || owner.hud_used))
+	if(!owner.client)
 		return
 
 	screen_obj.cut_overlays()
@@ -286,9 +289,6 @@
 	var/datum/mood_event/event = mood_events[category]
 	if(!event)
 		return
-
-	if(istype(event, /datum/mood_event/vodka))
-		to_chat(world, "DELETING [event.type]")
 
 	mood_events -= category
 	qdel(event)

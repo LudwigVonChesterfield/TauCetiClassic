@@ -42,7 +42,8 @@
 	if(!.)
 		return
 
-	hud_used.show_hud(hud_used.hud_version)
+	if(hud_used.mymob)
+		hud_used.show_hud(hud_used.hud_version)
 
 /mob/Login()
 	player_list |= src
@@ -52,7 +53,7 @@
 	client.images = null				//remove the images such as AIs being unable to see runes
 	client.screen = list()				//remove hud items just in case
 	if(hud_used)
-		qdel(hud_used)		//remove the hud objects
+		QDEL_NULL(hud_used)		//remove the hud objects
 
 	create_mob_hud()
 
