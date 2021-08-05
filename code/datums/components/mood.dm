@@ -339,18 +339,22 @@
 		return
 	var/mob/living/carbon/C = parent
 
-	switch(C.shock_stage)
-		if(0 to 10)
+	if(C.shock_stage <= 0)
+		if(C.traumatic_shock < 10)
 			clear_event(null, "pain")
-		if(10 to 30)
+		else
 			add_event(null, "pain", /datum/mood_event/mild_pain)
-		if(30 to 60)
+
+		return
+
+	switch(C.shock_stage)
+		if(0 to 30)
 			add_event(null, "pain", /datum/mood_event/moderate_pain)
-		if(60 to 80)
+		if(30 to 60)
 			add_event(null, "pain", /datum/mood_event/intense_pain)
-		if(120 to 150)
+		if(60 to 120)
 			add_event(null, "pain", /datum/mood_event/unspeakable_pain)
-		if(150 to INFINITY)
+		if(120 to INFINITY)
 			add_event(null, "pain", /datum/mood_event/agony)
 
 /datum/component/mood/proc/HandleNutrition()
