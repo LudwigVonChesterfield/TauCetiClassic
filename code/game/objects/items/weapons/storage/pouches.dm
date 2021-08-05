@@ -204,6 +204,13 @@
 	if(contents.len)
 		add_overlay(image('icons/obj/pouches.dmi', "flare_[contents.len]"))
 
+/obj/item/weapon/storage/pouch/flare/full/atom_init()
+	. = ..()
+	for(var/i in 1 to storage_slots)
+		var/obj/item/device/flashlight/flare/F = new(src)
+		handle_item_insertion(F, prevent_warning=TRUE, NoUpdate=TRUE)
+	update_icon()
+
 /obj/item/weapon/storage/pouch/flare/vial
 	name = "vial pouch"
 	desc = "Can hold about five vials. Rebranding!"
