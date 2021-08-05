@@ -137,7 +137,7 @@ var/list/ghostteleportlocs = list()
 /area/atom_init()
 	canSmoothWithAreas = typecacheof(canSmoothWithAreas)
 
-	. = ..()
+	..()
 
 	if(requires_power)
 		luminosity = 0
@@ -150,8 +150,26 @@ var/list/ghostteleportlocs = list()
 	if(dynamic_lighting == DYNAMIC_LIGHTING_IFSTARLIGHT)
 		dynamic_lighting = config.starlight ? DYNAMIC_LIGHTING_ENABLED : DYNAMIC_LIGHTING_DISABLED
 
+	update_areasize()
 
+	return INITIALIZE_HINT_LATELOAD
+
+/area/atom_init_late()
 	power_change() // all machines set to current power level, also updates lighting icon
+	update_beauty()
+
+/**
+ * Set the area size of the area
+ *
+ * This is the number of open turfs in the area contents, or FALSE if the outdoors var is set
+ *
+ */
+/area/proc/update_areasize()
+	if(outdoors)
+		return FALSE
+	areasize = 0
+	for(var/turf/open/T in contents)
+		areasize++
 
 /// Divides total beauty in the room by roomsize to allow us to get an average beauty per tile.
 /area/proc/update_beauty()

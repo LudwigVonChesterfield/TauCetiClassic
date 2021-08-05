@@ -86,7 +86,7 @@
 			var/datum/mood_event/event = mood_events[i]
 			msg += event.description
 	else
-		msg += "I don't have much of a reaction to anything right now.\n"
+		msg += "<span class='nicegreen'>I don't have much of a reaction to anything right now.</span>\n"
 	to_chat(user, msg)
 
 ///Called after moodevent/s have been added/removed.
@@ -391,6 +391,10 @@
 		return FALSE
 
 	switch(A.beauty)
+		if(-INFINITY to BEAUTY_LEVEL_HORRID)
+			add_event(null, "area_beauty", /datum/mood_event/horridroom)
+		if(BEAUTY_LEVEL_HORRID to BEAUTY_LEVEL_BAD)
+			add_event(null, "area_beauty", /datum/mood_event/badroom)
 		if(BEAUTY_LEVEL_BAD to BEAUTY_LEVEL_DECENT)
 			clear_event(null, "area_beauty")
 		if(BEAUTY_LEVEL_DECENT to BEAUTY_LEVEL_GOOD)
