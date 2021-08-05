@@ -11,23 +11,23 @@
 	timeout = 10 SECONDS
 
 /datum/mood_event/chit_chat/add_effects(_speaker)
-	description = "<span class='nicegreen'>I had a little chit-chat with [_speaker].</span>"
+	description = "<span class='nicegreen'>I had a little chit-chat with [_speaker].</span>\n"
 
 /datum/mood_event/conversation
 	mood_change = 3
 	timeout = 1 MINUTE
 
 /datum/mood_event/conversation/add_effects(_speaker)
-	description = "<span class='nicegreen'>I had a nice conversation with [_speaker].</span>"
+	description = "<span class='nicegreen'>I had a nice conversation with [_speaker].</span>\n"
 
 /datum/mood_event/deep_conversation
 	mood_change = 5
 	timeout = 1 MINUTE
 
 /datum/mood_event/deep_conversation/add_effects(_speaker)
-	description = "<span class='bold nicegreen'>I just had the deepest conversation of my life with [_speaker]. Lots to ponder about...</span>"
+	description = "<span class='bold nicegreen'>I just had the deepest conversation of my life with [_speaker]. Lots to ponder about...</span>\n"
 
 /datum/mood_event/communist_purpose
 	mood_change = 5
-	description = "<span class='bold nicegreen'>I remember my purpose now. My purpose is: Stolica, vodka, ushanka, Sovetskii medved nash!</span>"
+	description = "<span class='bold nicegreen'>I remember my purpose now. My purpose is: Stolica, vodka, ushanka, Sovetskii medved nash!</span>\n"
 	timeout = 10 MINUTES

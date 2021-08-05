@@ -11,6 +11,6 @@
 	description = "<span class='bold nicegreen'>Whatever happens - happens. I do not care any longer. Void, consume me.</span>\n"
 
 /datum/mood_event/vodka
-	description = "<span class='bold nicegreen'>I'm high on the soviet idea! Da!</span>"
+	description = "<span class='bold nicegreen'>I'm high on the soviet idea! Da!</span>\n"
 	mood_change = 5
 	timeout = 1 MINUTE
