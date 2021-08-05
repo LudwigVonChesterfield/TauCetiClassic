@@ -84,7 +84,7 @@
 			visible_message("[src] pushes [target] out of the way.")
 
 		melee_can_hit = 0
-		if(do_after(melee_cooldown))
+		if(do_after(occupant, melee_cooldown))
 			melee_can_hit = 1
 		return
 
