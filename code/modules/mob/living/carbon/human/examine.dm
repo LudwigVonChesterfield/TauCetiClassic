@@ -518,6 +518,21 @@
 		msg += "<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n"
 		msg += "<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 
+	var/datum/component/mood/mood = GetComponent(/datum/component/mood)
+	if(mood)
+		switch(mood.shown_mood)
+			if(-INFINITY to MOOD_LEVEL_SAD4)
+				msg += "[t_He] is looking depressed."
+			if(MOOD_LEVEL_SAD4 to MOOD_LEVEL_SAD3)
+				msg += "[t_He] is looking very sad."
+			if(MOOD_LEVEL_SAD3 to MOOD_LEVEL_SAD2)
+				msg += "[t_He] is looking a bit down."
+			if(MOOD_LEVEL_HAPPY2 to MOOD_LEVEL_HAPPY3)
+				msg += "[t_He] is looking quite happy."
+			if(MOOD_LEVEL_HAPPY3 to MOOD_LEVEL_HAPPY4)
+				msg += "[t_He] is looking very happy."
+			if(MOOD_LEVEL_HAPPY4 to INFINITY)
+				msg += "[t_He] is looking ecstatic."
 
 	if(!skipface && print_flavor_text())
 		msg += "[print_flavor_text()]\n"
@@ -545,23 +560,6 @@
 		var/mob/dead/observer/O = user
 		if(O.started_as_observer)
 			msg += "<span class='notice'>[t_He] has these traits: [get_trait_string()].</span>"
-
-	var/datum/component/mood/mood = GetComponent(/datum/component/mood)
-	if(mood)
-		switch(mood.shown_mood)
-			if(-INFINITY to MOOD_LEVEL_SAD4)
-				msg += "[t_He] is looking depressed."
-			if(MOOD_LEVEL_SAD4 to MOOD_LEVEL_SAD3)
-				msg += "[t_He] is looking very sad."
-			if(MOOD_LEVEL_SAD3 to MOOD_LEVEL_SAD2)
-				msg += "[t_He] is looking a bit down."
-			if(MOOD_LEVEL_HAPPY2 to MOOD_LEVEL_HAPPY3)
-				msg += "[t_He] is looking quite happy."
-			if(MOOD_LEVEL_HAPPY3 to MOOD_LEVEL_HAPPY4)
-				msg += "[t_He] is looking very happy."
-			if(MOOD_LEVEL_HAPPY4 to INFINITY)
-				msg += "[t_He] is looking ecstatic."
-	msg += "*---------*</span>"
 
 	to_chat(user, msg)
 
