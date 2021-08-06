@@ -314,8 +314,10 @@
 /atom/proc/relaymove()
 	return
 
-/atom/proc/ex_act()
-	return
+/atom/proc/ex_act(severity)
+	// SHOULD_CALL_PARENT(TRUE)
+
+	SEND_SIGNAL(src, COMSIG_ATOM_EX_ACT, severity)
 
 /atom/proc/blob_act()
 	return

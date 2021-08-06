@@ -394,10 +394,12 @@
 	clawfootstep = FOOTSTEP_SAND
 	can_deconstruct = FALSE
 
+	has_resources = TRUE
+
 	fertility = 0.5
 
-/turf/simulated/floor/plating/rustsand/ex_act()
-	return 0
+/turf/simulated/floor/plating/rustsand/ex_act(severity)
+	SEND_SIGNAL(src, COMSIG_ATOM_EX_ACT, severity)
 
 /turf/simulated/floor/plating/rustsand/burn_tile()
 	return 0
@@ -405,6 +407,7 @@
 /turf/simulated/floor/plating/rustsand/atom_init()
 	. = ..()
 	icon_state = "ironsand[rand(1,15)]"
+	AddComponent(/datum/component/diggable, "ironsand_dug", "ironsand_dug", /obj/item/weapon/ore/glass)
 
 /*
 /turf/simulated/floor/plating/rustsand/update_air_properties()
@@ -421,10 +424,16 @@
 	clawfootstep = FOOTSTEP_SAND
 	can_deconstruct = FALSE
 
+	has_resources = TRUE
+
 	fertility = 0.3
 
+/turf/simulated/floor/plating/snow/atom_init()
+	. = ..()
+	AddComponent(/datum/component/diggable, "snow_dug", "snow_dug", /obj/item/snowball)
+
 /turf/simulated/floor/plating/snow/ex_act(severity)
-	return
+	SEND_SIGNAL(src, COMSIG_ATOM_EX_ACT, severity)
 
 // CATWALKS
 // Space and plating, all in one buggy fucking turf!

@@ -250,6 +250,7 @@
 #include "code\datums\components\attack_self_effect.dm"
 #include "code\datums\components\bound.dm"
 #include "code\datums\components\clickplace.dm"
+#include "code\datums\components\diggable.dm"
 #include "code\datums\components\footstep.dm"
 #include "code\datums\components\forcefield.dm"
 #include "code\datums\components\mechanic_description.dm"

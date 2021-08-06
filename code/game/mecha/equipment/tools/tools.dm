@@ -127,9 +127,9 @@
 							if(get_dir(chassis,ore)&chassis.dir)
 								ore.Move(ore_box)
 			else if(istype(target, /turf/simulated/floor/plating/airless/asteroid))
-				for(var/turf/simulated/floor/plating/airless/asteroid/M in range(chassis,1))
-					if(get_dir(chassis,M)&chassis.dir)
-						M.gets_dug()
+				for(var/turf/simulated/floor/F in range(chassis,1))
+					if(get_dir(chassis, F)&chassis.dir)
+						SEND_SIGNAL(F, COMSIG_DIGGABLE_DUG)
 				log_message("Drilled through [target]")
 				if(locate(/obj/item/mecha_parts/mecha_equipment/hydraulic_clamp) in chassis.equipment)
 					var/obj/structure/ore_box/ore_box = locate(/obj/structure/ore_box) in chassis:cargo
@@ -192,8 +192,8 @@
 							if(get_dir(chassis,ore)&chassis.dir)
 								ore.Move(ore_box)
 			else if(istype(target,/turf/simulated/floor/plating/airless/asteroid))
-				for(var/turf/simulated/floor/plating/airless/asteroid/M in range(target,1))
-					M.gets_dug()
+				for(var/turf/simulated/floor/F in range(target,1))
+					SEND_SIGNAL(F, COMSIG_DIGGABLE_DUG)
 				log_message("Drilled through [target]")
 				if(locate(/obj/item/mecha_parts/mecha_equipment/hydraulic_clamp) in chassis.equipment)
 					var/obj/structure/ore_box/ore_box = locate(/obj/structure/ore_box) in chassis:cargo

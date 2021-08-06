@@ -97,6 +97,8 @@
 #define COMSIG_AREA_ENTERED "area_entered"
 ///from base of area/Exited(): (atom/movable/M)
 #define COMSIG_AREA_EXITED "area_exited"
+///from base of area/update_beauty()
+#define COMSIG_AREA_UPDATE_BEAUTY "area_update_beauty"
 
 // /atom signals
 
@@ -138,6 +140,8 @@
 	#define COMPONENT_NO_MOUSEDROP 1
 /// from base of atom/MouseDrop_T: (/atom/from, /mob/user)
 #define COMSIG_MOUSEDROPPED_ONTO "mousedropped_onto"
+/// from base of atom/ex_act: (severity)
+#define COMSIG_ATOM_EX_ACT "atom_ex_act"
 
 /// from base /atom/movable/proc/Moved() and /atom/proc/set_dir() return dir
 #define COMSIG_ATOM_CHANGE_DIR "change_dir"
@@ -307,3 +311,6 @@
 #define COMSIG_SHOW_RADIUS "show_radius"
 /// send this signal to remove /datum/component/vis_radius to a mobs: ()
 #define COMSIG_HIDE_RADIUS "hide_radius"
+
+/// send this signal to dig a datum/component/diggable object: ()
+#define COMSIG_DIGGABLE_DUG "diggable_dug"

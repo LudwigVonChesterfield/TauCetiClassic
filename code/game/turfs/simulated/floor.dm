@@ -510,6 +510,7 @@ var/list/wood_icons = list("wood","wood-broken")
 			playsound(user, 'sound/items/sledgehammer_hit.ogg', VOL_EFFECTS_MASTER)
 			shake_camera(user, 1, 1)
 			break_tile()
+			return
 
 	if(istype(C,/obj/item/weapon/light/bulb)) //only for light tiles
 		if(is_light_floor())
@@ -521,6 +522,7 @@ var/list/wood_icons = list("wood","wood-broken")
 				to_chat(user, "<span class='notice'>You replace the light bulb.</span>")
 			else
 				to_chat(user, "<span class='notice'>The lightbulb seems fine, no need to replace it.</span>")
+			return
 
 	if(iscrowbar(C) && (!(is_plating())))
 		if(broken || burnt)
@@ -622,6 +624,7 @@ var/list/wood_icons = list("wood","wood-broken")
 			coil.turf_place(src, user)
 		else
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
+		return
 
 	if(istype(C, /obj/item/weapon/shovel))
 		if(is_grass_floor())
@@ -629,8 +632,7 @@ var/list/wood_icons = list("wood","wood-broken")
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
 			to_chat(user, "<span class='notice'>You shovel the grass.</span>")
 			make_plating()
-		else
-			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
+			return
 
 	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
@@ -655,6 +657,9 @@ var/list/wood_icons = list("wood","wood-broken")
 				to_chat(user, "<span class='notice'>You remove the plating.</span>")
 				new /obj/item/stack/tile/plasteel(src)
 				ReplaceWithLattice()
+		return
+	return ..()
+
 #undef LIGHTFLOOR_ON_BIT
 
 #undef LIGHTFLOOR_STATE_OK

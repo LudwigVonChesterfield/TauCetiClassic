@@ -89,14 +89,15 @@
 	if(need_update_field)
 		get_resource_field()
 
+		var/turf/T = get_turf(src)
+
 		//Drill through the flooring, if any.
-		if(istype(get_turf(src), /turf/simulated/floor/plating/airless/asteroid))
-			var/turf/simulated/floor/plating/airless/asteroid/T = get_turf(src)
-			if(!T.dug)
-				T.gets_dug()
+		if(SEND_SIGNAL(T, COMSIG_DIGGABLE_DUG) != NONE)
+			dig_ore()
+			return
 		else if(istype(get_turf(src), /turf/simulated/floor))
-			var/turf/simulated/floor/T = get_turf(src)
-			T.ex_act(2.0)
+			var/turf/simulated/floor/F = get_turf(src)
+			F.ex_act(2.0)
 
 	dig_ore()
 

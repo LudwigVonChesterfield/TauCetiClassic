@@ -699,7 +699,7 @@
 	nitrogen = 0.01
 	temperature = TCMB
 	icon_plating = "asteroid"
-	var/dug = FALSE       //FALSE = has not yet been dug, TRUE = has already been dug
+
 	has_resources = TRUE
 	footstep = FOOTSTEP_SAND
 	barefootstep = FOOTSTEP_SAND
@@ -720,6 +720,8 @@
 	var/datum/atom_hud/mine/mine = global.huds[DATA_HUD_MINER]
 	if(src in mine.hudatoms)
 		mine.remove_from_hud(src)
+
+	AddComponent(/datum/component/diggable, "asteroid_dug", "asteroid_dug", /obj/item/weapon/ore/glass)
 
 	return INITIALIZE_HINT_LATELOAD
 
@@ -768,38 +770,10 @@
 	update_overlays()
 
 /turf/simulated/floor/plating/airless/asteroid/ex_act(severity)
-	switch(severity)
-		if(3.0)
-			return
-		if(2.0)
-			if(prob(70))
-				gets_dug()
-		if(1.0)
-			gets_dug()
-	return
+	SEND_SIGNAL(src, COMSIG_ATOM_EX_ACT, severity)
 
 /turf/simulated/floor/plating/airless/asteroid/attackby(obj/item/weapon/W, mob/user)
-
-	if(!W || !user)
-		return 0
-
-	if (istype(W, /obj/item/weapon/shovel))
-		var/turf/T = user.loc
-		if(!isturf(T))
-			return
-
-		if (dug)
-			to_chat(user, "<span class='danger'>This area has already been dug.</span>")
-			return
-		if(user.is_busy(src))
-			return
-		to_chat(user, "<span class='warning'>You start digging.</span>")
-		if(W.use_tool(src, user, 40, volume = 50))
-			if((user.loc == T && user.get_active_hand() == W))
-				to_chat(user, "<span class='notice'>You dug a hole.</span>")
-				gets_dug()
-
-	else if(istype(W,/obj/item/weapon/storage/bag/ore))
+	if(istype(W,/obj/item/weapon/storage/bag/ore))
 		var/obj/item/weapon/storage/bag/ore/S = W
 		if(S.collection_mode)
 			for(var/obj/item/weapon/ore/O in contents)
@@ -813,16 +787,7 @@
 				return
 
 	else
-		..()
-
-/turf/simulated/floor/plating/airless/asteroid/proc/gets_dug()
-	if(dug)
-		return
-	for(var/i in 1 to 5)
-		new /obj/item/weapon/ore/glass(src)
-	dug = TRUE
-	icon_plating = "asteroid_dug"
-	icon_state = "asteroid_dug"
+		return ..()
 
 /turf/simulated/floor/plating/airless/asteroid/Entered(atom/movable/M as mob|obj)
 	..()

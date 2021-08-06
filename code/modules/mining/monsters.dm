@@ -197,10 +197,8 @@
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/burrow_check()
 	if(alerted)
 		visible_message("<span class='danger'>The [src.name] buries into the ground, vanishing from sight!</span>")
-		var/turftype = get_turf(src)
-		if(istype(turftype, /turf/simulated/floor/plating/airless/asteroid))
-			var/turf/simulated/floor/plating/airless/asteroid/A = turftype
-			A.gets_dug()
+		var/turf/T = get_turf(src)
+		SEND_SIGNAL(T, COMSIG_DIGGABLE_DUG)
 		qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Reward()
@@ -435,13 +433,11 @@
 /obj/effect/goliath_tentacle/atom_init(mapload, mob_damage)
 	. = ..()
 	strength = mob_damage
-	var/turftype = get_turf(src)
-	if(istype(turftype, /turf/simulated/mineral))
-		var/turf/simulated/mineral/M = turftype
+	var/turf/T = get_turf(src)
+	if(istype(T, /turf/simulated/mineral))
+		var/turf/simulated/mineral/M = T
 		M.GetDrilled()
-	if(istype(turftype, /turf/simulated/floor/plating/airless/asteroid))
-		var/turf/simulated/floor/plating/airless/asteroid/A = turftype
-		A.gets_dug()
+	SEND_SIGNAL(T, COMSIG_DIGGABLE_DUG)
 	addtimer(CALLBACK(src, .proc/Trip), 20)
 
 /obj/effect/goliath_tentacle/original
