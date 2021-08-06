@@ -11,6 +11,8 @@
 	var/list/blood_DNA      //forensic reasons
 	var/datum/dirt_cover/dirt_overlay  //style reasons
 
+	var/uncleanable = 0
+
 	var/last_bumped = 0
 	var/pass_flags = NONE
 	var/throwpass = 0
@@ -509,6 +511,8 @@
 	add_dirt_cover(M.species.blood_datum)
 
 /atom/proc/add_dirt_cover(dirt_datum)
+	SHOULD_CALL_PARENT(TRUE)
+
 	if(flags & NOBLOODY)
 		return FALSE
 	if(!dirt_datum)
@@ -517,9 +521,15 @@
 		dirt_overlay = new/datum/dirt_cover(dirt_datum)
 	else
 		dirt_overlay.add_dirt(dirt_datum)
+	SEND_SIGNAL(src, COMSIG_ATOM_ADD_DIRT, dirt_datum)
 	return TRUE
 
 /atom/proc/clean_blood()
+	SHOULD_CALL_PARENT(TRUE)
+
+	if(uncleanable)
+		return 0
+	SEND_SIGNAL(src, COMSIG_ATOM_CLEAN_BLOOD)
 	src.germ_level = 0
 	if(dirt_overlay)
 		dirt_overlay = null

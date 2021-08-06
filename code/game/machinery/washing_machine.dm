@@ -82,6 +82,9 @@
 			var/new_softcap_icon_state = ""
 			var/new_softcap_name = ""
 			var/new_desc = "The colors are a bit dodgy."
+			/*
+				ADD /proc/machine_wash TO CLOTHING AND REMOVE THIS SPAGHETTI HELL WE HAVE BEEN DOOMED TO.
+			*/
 			for(var/T in typesof(/obj/item/clothing/under))
 				var/obj/item/clothing/under/J = new T
 				//world << "DEBUG: [color] == [J.color]"
@@ -149,6 +152,7 @@
 					J.item_color = wash_color
 					J.name = new_jumpsuit_name
 					J.desc = new_desc
+					J.fresh_laundered_until = world.time + 5 MINUTES
 			if(new_glove_name && new_glove_item_state && new_glove_icon_state||new_glove_fingerless_name && new_glove_fingerless_item_state && new_glove_fingerless_icon_state)
 				for(var/obj/item/clothing/gloves/G in contents)
 					if(istype(G, /obj/item/clothing/gloves/fingerless))
