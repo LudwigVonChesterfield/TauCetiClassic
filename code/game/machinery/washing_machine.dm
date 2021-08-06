@@ -152,7 +152,6 @@
 					J.item_color = wash_color
 					J.name = new_jumpsuit_name
 					J.desc = new_desc
-					J.fresh_laundered_until = world.time + 5 MINUTES
 			if(new_glove_name && new_glove_item_state && new_glove_icon_state||new_glove_fingerless_name && new_glove_fingerless_item_state && new_glove_fingerless_icon_state)
 				for(var/obj/item/clothing/gloves/G in contents)
 					if(istype(G, /obj/item/clothing/gloves/fingerless))
@@ -203,6 +202,8 @@
 		qdel(crayon)
 		crayon = null
 
+	for(var/obj/item/clothing/under/U in contents)
+		U.fresh_laundered_until = world.time + 5 MINUTES
 
 	if( locate(/mob,contents) )
 		state = 7
