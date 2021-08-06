@@ -93,7 +93,7 @@
 			var/datum/mood_event/event = m_events[i]
 			if(shown > 4)
 				break
-			if(abs(event.mood_change) < abs(most_important.mood_change * 0.5))
+			if(abs(event.mood_change) < abs(most_important.mood_change * 0.25))
 				continue
 			shown += 1
 			msg += event.description
