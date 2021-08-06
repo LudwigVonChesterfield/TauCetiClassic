@@ -53,3 +53,8 @@
 
 /datum/mood_event/refreshing_clothes/add_effects(_mood_change)
 	mood_change = _mood_change
+
+/datum/mood_event/naked
+	description = "<span class='warning'>I am naked... And the worst part, people are noticing it!</span>\n"
+	mood_change = -10
+	timeout = 1 MINUTE
