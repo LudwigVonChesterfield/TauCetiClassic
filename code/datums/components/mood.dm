@@ -21,7 +21,7 @@
 	RegisterSignal(parent, COMSIG_ADD_MOOD_EVENT, .proc/add_event)
 	RegisterSignal(parent, COMSIG_CLEAR_MOOD_EVENT, .proc/clear_event)
 	RegisterSignal(parent, COMSIG_ENTER_AREA, .proc/check_area_mood)
-	RegisterSignal(get_area(parent), COMSIG_AREA_UPDATE_BEAUTY, .proc/update_beauty)
+	RegisterSignal(get_area(parent), COMSIG_AREA_UPDATE_BEAUTY, /datum/component/mood.proc/update_beauty)
 	RegisterSignal(parent, COMSIG_LIVING_REJUVENATE, .proc/on_revive)
 	RegisterSignal(parent, COMSIG_MOB_HUD_CREATED, .proc/modify_hud)
 	RegisterSignal(parent, COMSIG_JOB_RECEIVED, .proc/register_job_signals)
@@ -84,8 +84,18 @@
 
 	msg += "<span class='notice'>Moodlets:</span>\n"//All moodlets
 	if(mood_events.len)
-		for(var/i in mood_events)
-			var/datum/mood_event/event = mood_events[i]
+		var/list/m_events = sortTim(mood_events, cmp=/proc/cmp_abs_mood_dsc, associative=TRUE)
+		var/datum/mood_event/most_important = m_events[m_events[1]]
+
+		var/shown = 0
+
+		for(var/i in m_events)
+			var/datum/mood_event/event = m_events[i]
+			if(shown > 4)
+				break
+			if(abs(event.mood_change) < abs(most_important.mood_change * 0.5))
+				continue
+			shown += 1
 			msg += event.description
 	else
 		msg += "<span class='nicegreen'>I don't have much of a reaction to anything right now.</span>\n"
@@ -387,7 +397,7 @@
 	SIGNAL_HANDLER
 
 	UnregisterSignal(get_area(parent), list(COMSIG_AREA_UPDATE_BEAUTY))
-	RegisterSignal(A, list(COMSIG_AREA_UPDATE_BEAUTY))
+	RegisterSignal(A, list(COMSIG_AREA_UPDATE_BEAUTY), /datum/component/mood.proc/update_beauty)
 
 	update_beauty(A)
 	if(A.mood_bonus && (!A.mood_trait || HAS_TRAIT(source, A.mood_trait)))
