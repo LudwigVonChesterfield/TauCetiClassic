@@ -22,11 +22,11 @@
 //pain
 /datum/mood_event/mild_pain
 	description = "<span class='warning'>I'm in pain.</span>\n"
-	mood_change = -1
+	mood_change = -2
 
 /datum/mood_event/moderate_pain
 	description = "<span class='warning'>It hurts so much!</span>\n"
-	mood_change = -3
+	mood_change = -4
 
 /datum/mood_event/intense_pain
 	description = "<span class='warning'>The pain is excrutiating!</span>\n"
