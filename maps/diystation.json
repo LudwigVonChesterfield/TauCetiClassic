@@ -6,7 +6,7 @@
 	"station_name": "Аванпост \"Красная Площадь\"",
 	"station_name_ru": "Аванпост \"Красная Площадь\"",
 
-	"traits": [{"Linkage": "Cross"}, {"Station": true}, {"Mining": true}],
+	"traits": [{"Linkage": "Cross", "Station": true, "Mining": true}],
 
 	"forced_items": [
 		"/obj/item/clothing/head/ushanka",
