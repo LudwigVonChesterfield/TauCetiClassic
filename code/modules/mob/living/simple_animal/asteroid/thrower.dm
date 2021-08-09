@@ -110,6 +110,9 @@
 	bag.add_fingerprint(src)
 
 /mob/living/simple_animal/hostile/asteroid/thrower/proc/fill_bag()
+	if(!bag)
+		return
+
 	// A list of things that are either interesting to throw
 	// or make general sense to have in your bag.
 	var/list/throwables = list(
