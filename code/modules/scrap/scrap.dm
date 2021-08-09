@@ -44,6 +44,7 @@ ADD_TO_GLOBAL_LIST(/obj/structure/scrap, scrap_list)
 /obj/structure/scrap/atom_init()
 	. = ..()
 	update_icon(1)
+	AddElement(/datum/element/beauty, -300)
 
 
 /obj/effect/scrapshot
