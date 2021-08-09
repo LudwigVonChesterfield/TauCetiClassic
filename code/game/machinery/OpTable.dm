@@ -15,12 +15,20 @@
 
 /obj/machinery/optable/atom_init()
 	. = ..()
+	find_computer()
+	AddComponent(/datum/component/clickplace)
+
+/obj/machinery/optable/Destroy()
+	computer = null
+	victim = null
+	return ..()
+
+/obj/machinery/optable/proc/find_computer()
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
 		computer = locate(/obj/machinery/computer/operating, get_step(src, dir))
 		if(computer)
 			computer.table = src
 			break
-	AddComponent(/datum/component/clickplace)
 
 /obj/machinery/optable/ex_act(severity)
 
@@ -84,15 +92,15 @@
 	return ..()
 
 /obj/machinery/optable/proc/check_victim()
-	if(locate(/mob/living/carbon/human, src.loc))
-		var/mob/living/carbon/human/M = locate(/mob/living/carbon/human, src.loc)
-		if(M.resting)
-			src.victim = M
-			icon_state = M.pulse ? "table2-active" : "table2-idle"
-			return 1
-	src.victim = null
+	var/mob/living/carbon/human/M = locate(/mob/living/carbon/human, loc)
+	if(M && M.resting)
+		victim = M
+		icon_state = M.pulse ? "table2-active" : "table2-idle"
+		return TRUE
+
+	victim = null
 	icon_state = "table2-idle"
-	return 0
+	return FALSE
 
 /obj/machinery/optable/process()
 	check_victim()
@@ -141,6 +149,29 @@
 			take_victim(G.affecting, usr)
 			user.SetNextMove(CLICK_CD_MELEE)
 			qdel(G)
+			return
+
+	if(default_unfasten_wrench(user, W))
+		if(anchored)
+			find_computer()
+		else
+			computer = null
+			victim = null
+		return
+
+	if(iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.use(0, user))
+			user.visible_message("[user] begins unwelding [src]'s shutters with [WT].",
+			                     "<span class='notice'>You begin to remove welding from [src]'s shutters with [WT]...</span>")
+			if(WT.use_tool(src, user, 30, volume = 100))
+				user.visible_message("[user] unwelds [src]'s shutters with [WT].",
+				                     "<span class='notice'>You remove welding from [src]'s shutters with [WT].</span>")
+				var/obj/item/stack/sheet/plasteel/P = new(loc)
+				P.amount = 10
+				qdel(src)
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
 
 	return ..()
