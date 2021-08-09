@@ -1,6 +1,8 @@
 var/const/AUTOLATHE_WIRE_HACK    = 1
 var/const/AUTOLATHE_WIRE_SHOCK   = 2
 var/const/AUTOLATHE_WIRE_DISABLE = 4
+var/const/AUTOLATHE_WIRE_ACTIVATE = 8
+var/const/AUTOLATHE_WIRE_AFTER_ACTIVATE = 16
 
 /datum/wires/autolathe
 	holder_type = /obj/machinery/autolathe
@@ -31,6 +33,12 @@ var/const/AUTOLATHE_WIRE_DISABLE = 4
 		if(AUTOLATHE_WIRE_DISABLE)
 			A.disabled = !mended
 
+		if(AUTOLATHE_WIRE_ACTIVATE)
+			A.activate()
+
+		if(AUTOLATHE_WIRE_AFTER_ACTIVATE)
+			A.after_activate()
+
 /datum/wires/autolathe/update_pulsed(index)
 	var/obj/machinery/autolathe/A = holder
 
@@ -47,6 +55,12 @@ var/const/AUTOLATHE_WIRE_DISABLE = 4
 		if(AUTOLATHE_WIRE_DISABLE)
 			A.disabled = !A.disabled
 			addtimer(CALLBACK(src, .proc/pulse_reaction, index), 50)
+
+		if(AUTOLATHE_WIRE_ACTIVATE)
+			A.activate()
+
+		if(AUTOLATHE_WIRE_AFTER_ACTIVATE)
+			A.after_activate()
 
 /datum/wires/autolathe/proc/pulse_reaction(index)
 	var/obj/machinery/autolathe/A = holder

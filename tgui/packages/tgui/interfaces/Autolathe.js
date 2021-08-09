@@ -14,6 +14,7 @@ export const Autolathe = (props, context) => {
     recipes,
     busy,
     materials,
+    remembered_recipe,
     categories,
     coeff,
   } = data;
@@ -77,6 +78,11 @@ export const Autolathe = (props, context) => {
                   disabled={!canBeMade(recipe, materials)}
                   onClick={() => act("make", { make: recipe.ref })}>
                   {toTitleCase(recipe.name)}
+                </Button>
+                <Button
+                  color={recipe.name === remembered_recipe ? "green" : null}
+                  onClick={() => act("remember", { remember: recipe.ref })}>
+                  R
                 </Button>
                 {recipe.max_mult > 1 && (
                   <Box as="span">

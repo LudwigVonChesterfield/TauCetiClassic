@@ -92,6 +92,7 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes = list(
 	R(/obj/item/device/radio/off,            CATEGORY_DEVICES),
 	R(/obj/item/device/assembly/infra,       CATEGORY_DEVICES),
 	R(/obj/item/device/assembly/timer,       CATEGORY_DEVICES),
+	R(/obj/item/device/assembly/timer/repeater, CATEGORY_DEVICES),
 	R(/obj/item/device/assembly/prox_sensor, CATEGORY_DEVICES),
 	R(/obj/item/device/flashlight,           CATEGORY_DEVICES),
 	R(/obj/item/device/destTagger,           CATEGORY_DEVICES),
@@ -149,6 +150,8 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 	var/list/stored_material  = list(MAT_METAL = 0, MAT_GLASS = 0)
 	var/list/storage_capacity = list(MAT_METAL = 0, MAT_GLASS = 0)
 
+	var/datum/autolathe_recipe/remembered_recipe
+
 	var/hacked = FALSE
 	var/disabled = FALSE
 	var/shocked = FALSE
@@ -171,8 +174,25 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 	wires = new(src)
 
 /obj/machinery/autolathe/Destroy()
+	remembered_recipe = null
 	QDEL_NULL(wires)
 	return ..()
+
+/obj/machinery/autolathe/proc/activate()
+	if(!remembered_recipe)
+		return
+	if(busy)
+		return
+	print_recipe(remembered_recipe, 1.0)
+
+	after_activate()
+
+/obj/machinery/autolathe/proc/after_activate()
+	var/obj/item/device/assembly/signaler/S = wires.get_attached_signaler(
+		wires.get_color_by_index(AUTOLATHE_WIRE_AFTER_ACTIVATE)
+	)
+	if(S)
+		S.signal()
 
 /obj/machinery/autolathe/RefreshParts()
 	..()
@@ -214,6 +234,10 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 		material_data += list(material_info)
 	data["busy"] = busy
 	data["materials"] = material_data
+	if(remembered_recipe)
+		data["remembered_recipe"] = remembered_recipe.name
+	else
+		data["remembered_recipe"] = null
 	return data
 
 /obj/machinery/autolathe/tgui_static_data(mob/user)
@@ -345,6 +369,33 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 		usr.remove_from_mob(I)
 		I.loc = src
 
+/obj/machinery/autolathe/proc/print_recipe(datum/autolathe_recipe/recipe, multiplier)
+	var/coeff = 2 ** man_rating
+	var/turf/T = get_turf(src)
+
+	var/power = max(2000, (recipe.resources[MAT_METAL] + recipe.resources[MAT_GLASS]) * multiplier / 5)
+	if(stored_material[MAT_METAL] >= recipe.resources[MAT_METAL] * multiplier / coeff && stored_material[MAT_GLASS] >= recipe.resources[MAT_GLASS] * multiplier / coeff)
+		busy = TRUE
+		use_power(power)
+		icon_state = "autolathe"
+		flick("autolathe_n",src)
+		spawn(32/coeff)
+			if(istype(recipe, /datum/autolathe_recipe/stack))
+				stored_material[MAT_METAL] -= recipe.resources[MAT_METAL] * multiplier
+				stored_material[MAT_GLASS] -= recipe.resources[MAT_GLASS] * multiplier
+				new recipe.result_type(T, multiplier)
+			else
+				stored_material[MAT_METAL] -= recipe.resources[MAT_METAL] / coeff
+				stored_material[MAT_GLASS] -= recipe.resources[MAT_GLASS] / coeff
+				var/obj/new_item = new recipe.result_type(T)
+				new_item.m_amt /= coeff
+				new_item.g_amt /= coeff
+			if(stored_material[MAT_METAL] < 0)
+				stored_material[MAT_METAL] = 0
+			if(stored_material[MAT_GLASS] < 0)
+				stored_material[MAT_GLASS] = 0
+			busy = FALSE
+
 /obj/machinery/autolathe/tgui_act(action, list/params, datum/tgui/ui, datum/tgui_state/state)
 	. = ..()
 	if (.)
@@ -358,9 +409,25 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 		to_chat(usr, "<span class='warning'>The autolathe is busy. Please wait for completion of previous operation.</span>")
 		return FALSE
 
+	if(action == "remember")
+		var/datum/autolathe_recipe/recipe = locate(params["remember"])
+
+		if(!istype(recipe))
+			return FALSE
+
+		var/list/datum/autolathe_recipe/recipes
+
+		if(hacked)
+			recipes = autolathe_recipes_all
+		else
+			recipes = autolathe_recipes
+
+		if(!locate(recipe, recipes))
+			return FALSE
+
+		remembered_recipe = recipe
+
 	if(action == "make")
-		var/coeff = 2 ** man_rating
-		var/turf/T = get_turf(src)
 		// critical exploit fix start -walter0o
 		var/datum/autolathe_recipe/recipe = locate(params["make"])
 
@@ -397,27 +464,7 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 			log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe with multiplier set to [multiplier] on [recipe]  !")
 			return FALSE
 
-		var/power = max(2000, (recipe.resources[MAT_METAL] + recipe.resources[MAT_GLASS]) * multiplier / 5)
-		if(stored_material[MAT_METAL] >= recipe.resources[MAT_METAL] * multiplier / coeff && stored_material[MAT_GLASS] >= recipe.resources[MAT_GLASS] * multiplier / coeff)
-			busy = TRUE
-			use_power(power)
-			icon_state = "autolathe"
-			flick("autolathe_n",src)
-			spawn(32/coeff)
-				if(istype(recipe, /datum/autolathe_recipe/stack))
-					stored_material[MAT_METAL] -= recipe.resources[MAT_METAL] * multiplier
-					stored_material[MAT_GLASS] -= recipe.resources[MAT_GLASS] * multiplier
-					new recipe.result_type(T, multiplier)
-				else
-					stored_material[MAT_METAL] -= recipe.resources[MAT_METAL] / coeff
-					stored_material[MAT_GLASS] -= recipe.resources[MAT_GLASS] / coeff
-					var/obj/new_item = new recipe.result_type(T)
-					new_item.m_amt /= coeff
-					new_item.g_amt /= coeff
-				if(stored_material[MAT_METAL] < 0)
-					stored_material[MAT_METAL] = 0
-				if(stored_material[MAT_GLASS] < 0)
-					stored_material[MAT_GLASS] = 0
-				busy = FALSE
+		print_recipe(recipe, multiplier)
+
 	updateUsrDialog()
 #undef PATH2CSS

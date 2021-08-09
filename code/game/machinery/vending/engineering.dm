@@ -9,6 +9,7 @@
 	contraband = list(
 		/obj/item/device/flashlight = 5,
 		/obj/item/device/assembly/timer = 2,
+		/obj/item/device/assembly/timer/repeater = 2,
 	)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 	refill_canister = /obj/item/weapon/vending_refill/assist

@@ -101,6 +101,7 @@ var/global/list/common_loot = list(
 		/obj/item/device/assembly/mousetrap = 1,
 		/obj/item/device/assembly/prox_sensor = 1,
 		/obj/item/device/assembly/timer = 1,
+		/obj/item/device/assembly/timer/repeater = 1,
 		/obj/item/device/assembly/igniter = 1,
 		/obj/item/weapon/packageWrap = 1,
 		) = 1,

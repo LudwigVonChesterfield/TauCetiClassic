@@ -12,6 +12,10 @@
 
 	var/timing = 0
 	var/time = 10
+	var/saved_time = 10
+
+	// Whether timer repeats counting down after time runs out.
+	var/repeating = FALSE
 
 /obj/item/device/assembly/timer/activate()
 	if(!..())	return 0//Cooldown check
@@ -45,26 +49,30 @@
 	pulse(0)
 	if(!holder)
 		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
-	cooldown = 2
-	spawn(10)
-		process_cooldown()
 
+	if(!repeating)
+		cooldown = 2
 
 	var/time_pulse = time2text(world.realtime,"hh:mm:ss")
 	var/turf/T = get_turf(src)
 	lastsignalers.Add("[time_pulse] <B>:</B> [src] activated  @ location [COORD(T)]")
 	message_admins("[src] activated  @ location [COORD(T)] [ADMIN_JMP(T)]")
 	log_game("[src] activated  @ location [COORD(T)]")
-	return
 
+	if(repeating)
+		return
+
+	spawn(10)
+		process_cooldown()
 
 /obj/item/device/assembly/timer/process()
 	if(timing && (time > 0))
 		time--
 	if(timing && time <= 0)
-		timing = 0
+		if(!repeating)
+			timing = 0
 		timer_end()
-		time = 10
+		time = saved_time
 	return
 
 
@@ -117,8 +125,9 @@
 
 	if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])
-		time += tp
-		time = min(max(round(time), 0), 600)
+		saved_time += tp
+		saved_time = min(max(round(time), 0), 600)
+		time = saved_time
 
 	if(usr)
 		attack_self(usr)
