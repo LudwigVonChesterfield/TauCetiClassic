@@ -78,7 +78,10 @@
 		if(area_type in areas_by_type)
 			continue
 		var/area/A = area_type
-		pos_rooms += lowertext(initial(A.name))
+		var/name = lowertext(initial(A.name))
+		if(name == "space")
+			continue
+		pos_rooms += name
 
 	return pick(pos_rooms)
 
