@@ -1373,15 +1373,22 @@
 	else if(drunkenness >= drunkenness_slur)
 		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/drunk)
 
+	if(drowsyness)
+		AdjustDrunkenness(-1)
+
 	if(drunkenness >= drunkenness_pass_out)
-		paralysis = max(paralysis, drunkenness)
-		drowsyness = max(drowsyness, drunkenness)
+		paralysis = max(paralysis, 3)
+		drowsyness = max(drowsyness, 3)
 		return
 
 	if(drunkenness >= drunkenness_blur)
+		if(drowsyness)
+			drowsyness = max(drowsyness, 3)
 		eye_blurry = max(eye_blurry, 2)
 
 	if(drunkenness >= drunkenness_slur)
+		if(drowsyness)
+			drowsyness = max(drowsyness, 3)
 		slurring = max(slurring, 3)
 
 	if(drunkenness >= drunkenness_confused)

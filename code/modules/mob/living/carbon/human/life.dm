@@ -1081,6 +1081,8 @@
 			Paralyse(5)
 
 	AdjustConfused(-1)
+	AdjustDrunkenness(-1)
+
 	// decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 15)
