@@ -76,18 +76,22 @@
 		return
 
 	to_chat(user, "<span class='notice'>You dug a hole.</span>")
-	gets_dug()
+	gets_dug(user)
 
-/datum/component/diggable/proc/gets_dug()
+/datum/component/diggable/proc/gets_dug(mob/living/user=null)
 	if(dug && dug_grave)
 		return
 
+	var/turf/simulated/floor/T = parent
+
 	if(dug)
 		dug_grave = TRUE
-		new /obj/structure/pit(parent)
+		if(user)
+			T.visible_message("<span class='notice'>\The [user] shovels a new grave.</span>")
+		else
+			T.visible_message("<span class='notice'>A new grave is shoveled at [T].</span>")
+		new /obj/structure/pit(T)
 		return
-
-	var/turf/simulated/floor/T = parent
 
 	for(var/i in 1 to 5)
 		new resource_type(T)
