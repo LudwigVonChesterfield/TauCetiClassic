@@ -68,7 +68,7 @@
 		to_chat(user, "<span class='danger'>This area has already been dug.</span>")
 		return
 
-	if(user.is_busy(src))
+	if(user.is_busy(T))
 		return
 
 	to_chat(user, "<span class='warning'>You start digging.</span>")
@@ -84,13 +84,13 @@
 
 	if(dug)
 		dug_grave = TRUE
-		new /obj/structure/pit(src)
+		new /obj/structure/pit(parent)
 		return
 
 	var/turf/simulated/floor/T = parent
 
 	for(var/i in 1 to 5)
-		new resource_type(src)
+		new resource_type(T)
 
 	dug = TRUE
 	T.icon_plating = dug_icon_plating
