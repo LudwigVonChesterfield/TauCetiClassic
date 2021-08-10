@@ -151,8 +151,6 @@
 	if(!user || target && QDELING(target))
 		return FALSE
 
-	to_chat(world, "CALLED DO AFTER WITH [user] [delay] [target]")
-
 	delay *= (1.0 + user.mood_actionspeed_modifier)
 
 	var/busy_hand = user.hand
