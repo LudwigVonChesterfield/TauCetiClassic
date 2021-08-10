@@ -190,17 +190,14 @@
 			progbar.update(world.time - starttime)
 
 		if(QDELETED(user) || !target_null && QDELETED(target))
-			to_chat(world, "MOB IS NO MORE, ABORT")
 			. = FALSE
 			break
 
 		if(user.stat || user.weakened || user.stunned)
-			to_chat(world, "MOB IS WEAK, ABORT")
 			. = FALSE
 			break
 
 		if(Uloc && (user.loc != Uloc) || Tloc && (Tloc != target.loc))
-			to_chat(world, "MOB HAS MOVED, ABORT")
 			. = FALSE
 			break
 		if(extra_checks && !extra_checks.Invoke(user, target))
@@ -211,28 +208,23 @@
 			//This might seem like an odd check, but you can still need a hand even when it's empty
 			//i.e the hand is used to pull some item/tool out of the construction
 			if(!holdingnull && QDELETED(holding))
-				to_chat(world, "HAND CHANGED")
 				. = FALSE
 				break
 
 			if(HAS_TRAIT(user, TRAIT_MULTITASKING))
 				if(user.hand != busy_hand)
 					if(user.get_inactive_hand() != holding)
-						to_chat(world, "HAND CHANGED")
 						. = FALSE
 						break
 				else
 					if(user.get_active_hand() != holding)
-						to_chat(world, "HAND CHANGED")
 						. = FALSE
 						break
 			else
 				if(user.hand != busy_hand)
-					to_chat(world, "HAND CHANGED")
 					. = FALSE
 					break
 				if(user.get_active_hand() != holding)
-					to_chat(world, "HAND CHANGED")
 					. = FALSE
 					break
 
