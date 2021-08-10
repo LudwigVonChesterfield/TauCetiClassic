@@ -72,7 +72,7 @@
 		return
 
 	to_chat(user, "<span class='warning'>You start digging.</span>")
-	if(!I.use_tool(src, user, 40, volume = 50))
+	if(!I.use_tool(T, user, 40, volume = 50))
 		return
 
 	to_chat(user, "<span class='notice'>You dug a hole.</span>")
