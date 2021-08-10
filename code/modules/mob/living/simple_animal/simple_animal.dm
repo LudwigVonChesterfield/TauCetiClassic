@@ -168,15 +168,11 @@
 	if(isturf(A))
 		var/turf/T = A
 		var/areatemp = T.temperature
-		if( abs(areatemp - bodytemperature) > 40 )
-			var/diff = areatemp - bodytemperature
-			diff = diff / 5
-			//world << "changed from [bodytemperature] by [diff] to [bodytemperature + diff]"
-			bodytemperature += diff
 
 		if(istype(T,/turf/simulated))
 			var/turf/simulated/ST = T
 			if(ST.air)
+				areatemp = ST.air.temperature
 				var/tox = ST.air.gas["phoron"]
 				var/oxy = ST.air.gas["oxygen"]
 				var/n2  = ST.air.gas["nitrogen"]
@@ -206,6 +202,12 @@
 				if(max_co2)
 					if(co2 > max_co2)
 						atmos_suitable = 0
+
+		if( abs(areatemp - bodytemperature) > 40 )
+			var/diff = areatemp - bodytemperature
+			diff = diff / 5
+			//world << "changed from [bodytemperature] by [diff] to [bodytemperature + diff]"
+			bodytemperature += diff
 
 	//Atmos effect
 	if(bodytemperature < minbodytemp)
