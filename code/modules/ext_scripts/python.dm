@@ -5,7 +5,7 @@
 
 	if(scriptsprefix) script = "scripts/" + script
 
-	var/command = "sh [config.python_path] [script] [args]"
+	var/command = "[config.python_path] [script] [args]"
 
 	var/output = world.shelleo(command)
 
