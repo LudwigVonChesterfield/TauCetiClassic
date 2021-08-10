@@ -33,22 +33,24 @@
 	value = (base_value * base_multiplier + base_additive) * multiple + additive
 	SEND_SIGNAL(src, COMSIG_MODVAL_UPDATE, old_value)
 
-/datum/modval/proc/AddModifier(category, base_multiplier=0.0, base_additive=0.0, multiple=0.0, additive=0.0)
-	var/datum/modval_modifier/MM = new(base_multiplier, base_additive, multiple, additive)
-	base_multiplier += MM.base_multiplier
-	base_additive += MM.base_multiplier
-	multiple += MM.multiple
-	additive += MM.additive
-
-	Update()
-
+/datum/modval/proc/AddModifier(category, base_multiplier=0.0, base_additive=0.0, multiple=0.0, additive=0.0, update=TRUE)
+	if(modifiers && modifiers[category])
+		RemoveModifier(category, update=FALSE)
 	if(!modifiers)
 		modifiers = list()
-	if(modifiers[category])
-		qdel(modifiers[category])
+
+	var/datum/modval_modifier/MM = new(base_multiplier, base_additive, multiple, additive)
+	src.base_multiplier += MM.base_multiplier
+	src.base_additive += MM.base_multiplier
+	src.multiple += MM.multiple
+	src.additive += MM.additive
+
+	if(update)
+		Update()
+
 	modifiers[category] = MM
 
-/datum/modval/proc/RemoveModifier(category)
+/datum/modval/proc/RemoveModifier(category, update=TRUE)
 	var/datum/modval_modifier/MM = modifiers[category]
 
 	base_multiplier -= MM.base_multiplier
@@ -56,7 +58,10 @@
 	multiple -= MM.multiple
 	additive -= MM.additive
 
-	Update()
+	qdel(MM)
+
+	if(update)
+		Update()
 
 	modifiers -= category
 	if(modifiers.len == 0)
