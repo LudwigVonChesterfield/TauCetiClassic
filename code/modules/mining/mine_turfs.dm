@@ -36,6 +36,9 @@
 	var/side_icon_state = "rock"
 	var/mineral_icon_state = "rock"
 
+	// Some stuff is just harder to break. How many hits till another hit destroys this wall.
+	var/hits_to_break = 0
+
 	has_resources = TRUE
 
 /turf/simulated/mineral/atom_init()
@@ -382,6 +385,10 @@
 
 
 /turf/simulated/mineral/proc/GetDrilled(artifact_fail = 0)
+	if(hits_to_break > 0)
+		hits_to_break -= 1
+		return
+
 	playsound(src, 'sound/effects/rockfall.ogg', VOL_EFFECTS_MASTER)
 	// var/destroyed = 0 //used for breaking strange rocks
 	if (mineral && ore_amount)

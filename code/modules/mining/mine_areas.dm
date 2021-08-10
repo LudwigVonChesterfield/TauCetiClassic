@@ -96,6 +96,7 @@
 	var/rock_icon_state = "rock"
 	var/side_icon_state = "rock"
 	var/mineral_icon_state = "rock"
+	var/rock_hits_to_break
 
 	var/enforce_air = FALSE
 
@@ -165,6 +166,27 @@
 
 	return TRUE
 
+/area/asteroid/mine/biome/proc/change_wall(turf/simulated/mineral/W)
+	W.oxygen = oxygen
+	W.nitrogen = nitrogen
+
+	W.rock_name = rock_name
+	W.rock_icon_state = rock_icon_state
+	W.side_icon_state = side_icon_state
+	W.mineral_icon_state = mineral_icon_state
+
+	W.hits_to_break = rock_hits_to_break
+
+	W.basetype = basetype_turf
+
+/area/asteroid/mine/biome/proc/change_floor(turf/simulated/floor/F)
+	F.oxygen = oxygen
+	F.nitrogen = nitrogen
+
+	F.fertility = fertility
+
+	F.basetype = basetype_turf
+
 /area/asteroid/mine/biome/breathable
 	enforce_air = TRUE
 
@@ -177,25 +199,6 @@
 
 	basetype_turf = /turf/simulated/floor/plating/rustsand
 	cave_turf = /turf/simulated/floor/plating/airless/asteroid/cave/rustsand
-
-/area/asteroid/mine/biome/proc/change_wall(turf/simulated/mineral/W)
-	W.oxygen = oxygen
-	W.nitrogen = nitrogen
-
-	W.rock_name = rock_name
-	W.rock_icon_state = rock_icon_state
-	W.side_icon_state = side_icon_state
-	W.mineral_icon_state = mineral_icon_state
-
-	W.basetype = basetype_turf
-
-/area/asteroid/mine/biome/proc/change_floor(turf/simulated/floor/F)
-	F.oxygen = oxygen
-	F.nitrogen = nitrogen
-
-	F.fertility = fertility
-
-	F.basetype = basetype_turf
 
 /turf/simulated/floor/plating/airless/asteroid/cave/rustsand
 	basetype = /turf/simulated/floor/plating/rustsand
@@ -240,6 +243,8 @@
 	icon_state = "ast-dark_horror-biome"
 
 	rock_icon_state = "rock-dark"
+
+	rock_hits_to_break = 4
 
 	fertility = 0.1
 
@@ -293,6 +298,10 @@
 
 	fertility = 1.0
 
+/area/asteroid/mine/biome/asteroids/dark
+	rock_icon_state = "rock-dark"
+	rock_hits_to_break = 4
+
 /area/asteroid/mine/biome/breathable/asteroids
 	name = "Asteroids (breathable)"
 	icon_state = "ast-asteroids-biome"
@@ -329,6 +338,8 @@
 	icon_state = "ast-boney_hills-biome"
 
 	rock_icon_state = "rock-dark"
+
+	rock_hits_to_break = 4
 
 	fertility = 2.0
 
