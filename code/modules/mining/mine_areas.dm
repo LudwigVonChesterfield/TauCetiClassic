@@ -111,12 +111,49 @@
 
 	var/fertility = 0.0
 
+/area/asteroid/mine/biome/atom_init()
+	. = ..()
+	setup_spawn_area()
+
+/area/asteroid/mine/biome/proc/setup_spawn_area()
+	// 8 is one more than viewing distance.
+	AddComponent(
+		/datum/component/spawn_area,
+		CALLBACK(src, .proc/SpawnMonsters),
+		CALLBACK(src, .proc/CheckSpawn),
+		CALLBACK(src, .proc/DespawnMonster),
+		8,
+		8,
+		3 MINUTES,
+		2 MINUTES
+	)
+
 /area/asteroid/mine/biome/proc/SpawnEverything(turf/T)
-	SpawnMonsters(T)
 	SpawnResources(T)
 
+/area/asteroid/mine/biome/proc/DespawnMonster(atom/movable/monster)
+	qdel(monster)
+
+/area/asteroid/mine/biome/proc/CheckSpawn(turf/T)
+	if(istype(T.loc, /area/asteroid/mine/biome/asteroids/explored))
+		return FALSE
+
+	return T.is_mob_placeable(null)
+
 /area/asteroid/mine/biome/proc/SpawnMonsters(turf/T)
-	return
+	var/static/list/mob_spawn_list = list("Goliath" = 5, "Basilisk" = 4, "Hivelord" = 3, "Goldgrub" = 2, "Drone" = 1)
+	var/randumb = pickweight(mob_spawn_list)
+	switch(randumb)
+		if("Goliath")
+			new /mob/living/simple_animal/hostile/asteroid/goliath(T)
+		if("Goldgrub")
+			new /mob/living/simple_animal/hostile/asteroid/goldgrub(T)
+		if("Basilisk")
+			new /mob/living/simple_animal/hostile/asteroid/basilisk(T)
+		if("Hivelord")
+			new /mob/living/simple_animal/hostile/asteroid/hivelord(T)
+		if("Drone")
+			new /mob/living/simple_animal/hostile/retaliate/malf_drone/mining(T)
 
 /area/asteroid/mine/biome/proc/SpawnTraps(turf/T)
 	return
@@ -210,6 +247,13 @@
 	name = "Normal"
 	icon_state = "ast-normal-biome"
 
+	resources_to_spawn = list(
+		list(
+			"chance"=6,
+			/obj/machinery/artifact/bluespace_crystal=100
+		)
+	)
+
 /area/asteroid/mine/biome/breathable/fungal
 	name = "Fungal"
 	icon_state = "ast-fungal-biome"
@@ -276,6 +320,13 @@
 	name = "Lots of Resources"
 	icon_state = "ast-resources-biome"
 
+	resources_to_spawn = list(
+		list(
+			"chance"=6,
+			/obj/machinery/artifact/bluespace_crystal=100
+		)
+	)
+
 /area/asteroid/mine/biome/breathable/hollow_horror
 	name = "Hollow Horror"
 	icon_state = "ast-hollow_horror-biome"
@@ -297,6 +348,13 @@
 	rock_icon_state = "rock-dark"
 
 	fertility = 1.0
+
+	resources_to_spawn = list(
+		list(
+			"chance"=6,
+			/obj/machinery/artifact/bluespace_crystal=100
+		)
+	)
 
 /area/asteroid/mine/biome/asteroids/dark
 	rock_icon_state = "rock-dark"

@@ -665,8 +665,8 @@
 	if(istype(biome))
 		biome.SpawnEverything(T)
 
-	if(prob(30))
-		SpawnMonster(T)
+	//if(prob(30))
+	//	SpawnMonster(T)
 
 	var/turf/t
 	if(SSticker.current_state > GAME_STATE_SETTING_UP)
