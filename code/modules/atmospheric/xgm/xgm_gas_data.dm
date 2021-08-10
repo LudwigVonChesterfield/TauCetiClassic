@@ -51,7 +51,17 @@
 		gas_data.specific_heat[gas.id] = gas.specific_heat
 		gas_data.molar_mass[gas.id] = gas.molar_mass
 		if(gas.tile_overlay)
-			gas_data.tile_overlay[gas.id] = image('icons/effects/tile_effects.dmi', gas.tile_overlay, FLY_LAYER)
+			var/atom/movable/AM = new(null)
+			AM.simulated = FALSE
+
+			var/image/I = image('icons/effects/tile_effects.dmi', gas.tile_overlay)
+			I.layer = FLY_LAYER
+			I.plane = GAME_PLANE
+			I.appearance_flags |= KEEP_APART
+			I.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+
+			AM.appearance = I
+			gas_data.tile_overlay[gas.id] = AM
 		if(gas.overlay_limit)
 			gas_data.overlay_limit[gas.id] = gas.overlay_limit
 		gas_data.flags[gas.id] = gas.flags
