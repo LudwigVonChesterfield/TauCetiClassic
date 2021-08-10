@@ -1038,6 +1038,10 @@
 
 /client/var/list/image/outlined_item = list()
 /obj/item/proc/apply_outline(color)
+	if(!usr)
+		return
+	if(!usr.client)
+		return
 	if(anchored || !usr.client.prefs.outline_enabled)
 		return
 	if(!color)
@@ -1058,5 +1062,7 @@
 
 
 /obj/item/proc/remove_outline()
+	if(!usr || !usr.client)
+		return
 	usr.client.images -= usr.client.outlined_item[src]
 	usr.client.outlined_item -= src

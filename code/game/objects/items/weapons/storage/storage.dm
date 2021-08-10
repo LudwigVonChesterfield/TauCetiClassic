@@ -251,9 +251,11 @@
 	if(!istype(W))
 		return FALSE
 	if(usr)
-		usr.remove_from_mob(W)
-		usr.update_icons()	//update our overlays
-	W.loc = src
+		var/slot = W.slot_equipped
+		usr.remove_from_mob(W, src)
+		usr.update_inv_slot(slot)
+	else
+		W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
 		if (usr.client && usr.s_active != src)

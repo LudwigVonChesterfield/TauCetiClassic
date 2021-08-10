@@ -11,13 +11,13 @@
 		return
 	next_click = world.time + 1
 
-	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
+	if(client && client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
 		return
 
 	var/list/modifiers = params2list(params)
 
-	if(client.cob.in_building_mode)
+	if(client && client.cob && client.cob.in_building_mode)
 		cob_click(client, modifiers)
 		return
 

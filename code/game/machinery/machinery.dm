@@ -384,6 +384,8 @@ Class Procs:
 	if(!(ishuman(user) || issilicon(user) || ismonkey(user) || isxenoqueen(user) || IsAdminGhost(user)))
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return TRUE
+	if(!user.client)
+		return
 	if(!can_interact_with(user))
 		return TRUE
 
