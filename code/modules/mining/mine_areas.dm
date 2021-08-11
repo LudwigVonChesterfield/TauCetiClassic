@@ -117,15 +117,17 @@
 
 /area/asteroid/mine/biome/proc/setup_spawn_area()
 	// 8 is one more than viewing distance.
+	// 15
 	AddComponent(
 		/datum/component/spawn_area,
+		"biome",
 		CALLBACK(src, .proc/SpawnMonsters),
-		CALLBACK(src, .proc/CheckSpawn),
 		CALLBACK(src, .proc/DespawnMonster),
+		CALLBACK(src, .proc/CheckSpawn),
 		8,
-		8,
-		3 MINUTES,
-		2 MINUTES
+		15,
+		2 MINUTES,
+		1.5 MINUTE
 	)
 
 /area/asteroid/mine/biome/proc/SpawnEverything(turf/T)
@@ -249,7 +251,7 @@
 
 	resources_to_spawn = list(
 		list(
-			"chance"=6,
+			"chance"=2,
 			/obj/machinery/artifact/bluespace_crystal=100
 		)
 	)
@@ -322,7 +324,7 @@
 
 	resources_to_spawn = list(
 		list(
-			"chance"=6,
+			"chance"=2,
 			/obj/machinery/artifact/bluespace_crystal=100
 		)
 	)
@@ -351,7 +353,7 @@
 
 	resources_to_spawn = list(
 		list(
-			"chance"=6,
+			"chance"=2,
 			/obj/machinery/artifact/bluespace_crystal=100
 		)
 	)
