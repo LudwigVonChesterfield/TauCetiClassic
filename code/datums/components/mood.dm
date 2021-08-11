@@ -1,15 +1,11 @@
-#define MINOR_INSANITY_PEN 5
-#define MAJOR_INSANITY_PEN 10
-
 /datum/component/mood
 	var/mood //Real happiness
-	var/sanity = SANITY_NEUTRAL //Current sanity
+	var/spirit = SPIRIT_NEUTRAL //Current spirit
 	var/shown_mood //Shown happiness, this is what others can see when they try to examine you, prevents antag checking by noticing traitors are always very happy.
 	var/mood_level = 5 //To track what stage of moodies they're on
-	var/sanity_level = 2 //To track what stage of sanity they're on
+	var/spirit_level = 2 //To track what stage of spirit they're on
 	var/mood_modifier = 1 //Modifier to allow certain mobs to be less affected by moodlets
 	var/list/datum/mood_event/mood_events = list()
-	var/insanity_effect = 0 //is the owner being punished for low mood? If so, how much?
 	var/atom/movable/screen/mood/screen_obj
 
 /datum/component/mood/Initialize()
@@ -21,10 +17,11 @@
 	RegisterSignal(parent, COMSIG_ADD_MOOD_EVENT, .proc/add_event)
 	RegisterSignal(parent, COMSIG_CLEAR_MOOD_EVENT, .proc/clear_event)
 	RegisterSignal(parent, COMSIG_ENTER_AREA, .proc/check_area_mood)
+
 	RegisterSignal(get_area(parent), COMSIG_AREA_UPDATE_BEAUTY, /datum/component/mood.proc/update_beauty)
 	RegisterSignal(parent, COMSIG_LIVING_REJUVENATE, .proc/on_revive)
 	RegisterSignal(parent, COMSIG_MOB_HUD_CREATED, .proc/modify_hud)
-	RegisterSignal(parent, COMSIG_JOB_RECEIVED, .proc/register_job_signals)
+
 	RegisterSignal(parent, COMSIG_MOB_SLIP, .proc/on_slip)
 
 	var/mob/living/owner = parent
@@ -39,34 +36,31 @@
 	REMOVE_TRAIT(parent, TRAIT_AREA_SENSITIVE, MOOD_COMPONENT_TRAIT)
 	var/area/A = get_area(parent)
 	if(A)
-		UnregisterSignal(get_area(parent), list(COMSIG_AREA_UPDATE_BEAUTY))
+		UnregisterSignal(A, list(COMSIG_AREA_UPDATE_BEAUTY))
 	unmodify_hud()
 	return ..()
 
-/datum/component/mood/proc/register_job_signals(datum/source, job)
-	SIGNAL_HANDLER
-
 /datum/component/mood/proc/print_mood(mob/user)
 	var/msg = "<span class='info'>*---------*\n<EM>My current mental status:</EM></span>\n"
-	msg += "<span class='notice'>My current sanity: </span>" //Long term
-	switch(sanity)
-		if(SANITY_GREAT to INFINITY)
+	msg += "<span class='notice'>My current spirit: </span>" //Long term
+	switch(spirit)
+		if(SPIRIT_HIGH to INFINITY)
 			msg += "<span class='nicegreen'>My mind feels like a temple!</span>\n"
-		if(SANITY_NEUTRAL to SANITY_GREAT)
-			msg += "<span class='nicegreen'>I have been feeling great lately!\n"
-		if(SANITY_DISTURBED to SANITY_NEUTRAL)
-			msg += "<span class='nicegreen'>I have felt quite decent lately.\n"
-		if(SANITY_UNSTABLE to SANITY_DISTURBED)
-			msg += "<span class='warning'>I'm feeling a little bit unhinged...</span>\n"
-		if(SANITY_CRAZY to SANITY_UNSTABLE)
-			msg += "<span class='boldwarning'>I'm freaking out!!</span>\n"
-		if(SANITY_INSANE to SANITY_CRAZY)
-			msg += "<span class='boldwarning'>AHAHAHAHAHAHAHAHAHAH!!</span>\n"
+		if(SPIRIT_NEUTRAL to SPIRIT_HIGH)
+			msg += "<span class='nicegreen'>I have been feeling great lately!</span>\n"
+		if(SPIRIT_DISTURBED to SPIRIT_NEUTRAL)
+			msg += "<span class='nicegreen'>I have felt quite decent lately.</span>\n"
+		if(SPIRIT_POOR to SPIRIT_DISTURBED)
+			msg += "<span class='warning'>I haven't felt good in a while.</span>\n"
+		if(SPIRIT_LOW to SPIRIT_POOR)
+			msg += "<span class='boldwarning'>I'm feeling a bit down.</span>\n"
+		if(SPIRIT_BAD to SPIRIT_LOW)
+			msg += "<span class='boldwarning'>My mind feels like a wasteland of sadness.</span>\n"
 
 	msg += "<span class='notice'>My current mood: </span>" //Short term
 	switch(mood_level)
 		if(1)
-			msg += "<span class='boldwarning'>I wish I was dead!</span>\n"
+			msg += "<span class='boldwarning'>I feel terribly bad and not okay at all...</span>\n"
 		if(2)
 			msg += "<span class='boldwarning'>I feel terrible...</span>\n"
 		if(3)
@@ -84,23 +78,24 @@
 		if(9)
 			msg += "<span class='nicegreen'>I love life!</span>\n"
 
-	msg += "<span class='notice'>Moodlets:</span>\n"//All moodlets
+	msg += "<span class='notice'>Moodlets:</span>\n"
 	if(mood_events.len)
-		var/list/m_events = sortTim(mood_events, cmp=/proc/cmp_abs_mood_dsc, associative=TRUE)
-		var/datum/mood_event/most_important = m_events[m_events[1]]
+		var/datum/mood_event/most_important = mood_events[mood_events[1]]
 
 		var/shown = 0
 
-		for(var/i in m_events)
-			var/datum/mood_event/event = m_events[i]
+		for(var/i in mood_events)
+			var/datum/mood_event/event = mood_events[i]
 			if(shown > 4)
 				break
 			if(abs(event.mood_change) < abs(most_important.mood_change * 0.25))
 				continue
 			shown += 1
 			msg += event.description
+
 	else
-		msg += "<span class='nicegreen'>I don't have much of a reaction to anything right now.</span>\n"
+		msg += "<span class='notice'>I don't have much of a reaction to anything right now.\n</span>"
+
 	to_chat(user, msg)
 
 ///Called after moodevent/s have been added/removed.
@@ -136,7 +131,6 @@
 			mood_level = 9
 	update_mood_icon()
 
-
 /datum/component/mood/proc/update_mood_icon()
 	if(!screen_obj)
 		return
@@ -164,7 +158,7 @@
 			if(absmood > highest_absolute_mood)
 				highest_absolute_mood = absmood
 
-	switch(sanity_level)
+	switch(spirit_level)
 		if(1)
 			screen_obj.color = "#2eeb9a"
 		if(2)
@@ -192,85 +186,71 @@
 /datum/component/mood/process(delta_time)
 	var/mob/living/moody_fellow = parent
 	if(moody_fellow.stat == DEAD)
-		return //updating sanity during death leads to people getting revived and being completely insane for simply being dead for a long time
+		return //updating spirit during death leads to people getting revived and being completely insane for simply being dead for a long time
 
 	switch(mood_level)
 		if(1)
-			setSanity(sanity - 0.3 * delta_time, SANITY_INSANE)
+			setSpirit(spirit - 0.3 * delta_time, SPIRIT_BAD)
 		if(2)
-			setSanity(sanity - 0.15 * delta_time, SANITY_INSANE)
+			setSpirit(spirit - 0.15 * delta_time, SPIRIT_BAD)
 		if(3)
-			setSanity(sanity - 0.1 * delta_time, SANITY_CRAZY)
+			setSpirit(spirit - 0.1 * delta_time, SPIRIT_LOW)
 		if(4)
-			setSanity(sanity - 0.05 * delta_time, SANITY_UNSTABLE)
+			setSpirit(spirit - 0.05 * delta_time, SPIRIT_POOR)
 		if(5)
-			setSanity(sanity, SANITY_UNSTABLE) //This makes sure that mood gets increased should you be below the minimum.
+			setSpirit(spirit, SPIRIT_POOR) //This makes sure that mood gets increased should you be below the minimum.
 		if(6)
-			setSanity(sanity + 0.2 * delta_time, SANITY_UNSTABLE)
+			setSpirit(spirit + 0.2 * delta_time, SPIRIT_POOR)
 		if(7)
-			setSanity(sanity  +0.3 * delta_time, SANITY_UNSTABLE)
+			setSpirit(spirit  +0.3 * delta_time, SPIRIT_POOR)
 		if(8)
-			setSanity(sanity + 0.4 * delta_time, SANITY_NEUTRAL, SANITY_MAXIMUM)
+			setSpirit(spirit + 0.4 * delta_time, SPIRIT_NEUTRAL, SPIRIT_MAXIMUM)
 		if(9)
-			setSanity(sanity + 0.6*  delta_time, SANITY_NEUTRAL, SANITY_MAXIMUM)
+			setSpirit(spirit + 0.6*  delta_time, SPIRIT_NEUTRAL, SPIRIT_MAXIMUM)
 
 	HandleNutrition()
 	HandleShock()
 
-///Sets sanity to the specified amount and applies effects.
-/datum/component/mood/proc/setSanity(amount, minimum=SANITY_INSANE, maximum=SANITY_GREAT)
+///Sets spirit to the specified amount and applies effects.
+/datum/component/mood/proc/setSpirit(amount, minimum=SPIRIT_BAD, maximum=SPIRIT_HIGH)
 	// If we're out of the acceptable minimum-maximum range move back towards it in steps of 0.7
 	// If the new amount would move towards the acceptable range faster then use it instead
 	if(amount < minimum)
 		amount += clamp(minimum - amount, 0, 0.7)
 	if(amount > maximum)
-		amount = min(sanity, amount)
+		amount = min(spirit, amount)
 
-	if(amount == sanity) //Prevents stuff from flicking around.
+	if(amount == spirit) //Prevents stuff from flicking around.
 		return
-	sanity = amount
+	spirit = amount
 
 	var/mob/living/master = parent
-	switch(sanity)
-		if(SANITY_INSANE to SANITY_CRAZY)
-			setInsanityEffect(MAJOR_INSANITY_PEN)
-			master.mood_speed_modifier = 1.0
-			master.mood_actionspeed_modifier = 0.25
-			sanity_level = 6
-		if(SANITY_CRAZY to SANITY_UNSTABLE)
-			setInsanityEffect(MINOR_INSANITY_PEN)
-			master.mood_speed_modifier = 0.5
-			master.mood_actionspeed_modifier = 0.25
-			sanity_level = 5
-		if(SANITY_UNSTABLE to SANITY_DISTURBED)
-			setInsanityEffect(0)
-			master.mood_speed_modifier = 0.25
-			master.mood_actionspeed_modifier = 0.25
-			sanity_level = 4
-		if(SANITY_DISTURBED to SANITY_NEUTRAL)
-			setInsanityEffect(0)
-			master.mood_speed_modifier = 0.0
-			master.mood_actionspeed_modifier = 0.0
-			sanity_level = 3
-		if(SANITY_NEUTRAL + 1 to SANITY_GREAT + 1) //shitty hack but +1 to prevent it from responding to super small differences
-			setInsanityEffect(0)
-			master.mood_speed_modifier = 0.0
-			master.mood_actionspeed_modifier = -0.1
-			sanity_level = 2
-		if(SANITY_GREAT + 1 to INFINITY)
-			setInsanityEffect(0)
-			master.mood_speed_modifier = 0.0
-			master.mood_actionspeed_modifier = -0.1
-			sanity_level = 1
+	switch(spirit)
+		if(SPIRIT_BAD to SPIRIT_LOW)
+			master.mood_additive_speed_modifier = 1.0
+			master.mood_multiplicative_actionspeed_modifier = 0.25
+			spirit_level = 6
+		if(SPIRIT_LOW to SPIRIT_POOR)
+			master.mood_additive_speed_modifier = 0.5
+			master.mood_multiplicative_actionspeed_modifier = 0.25
+			spirit_level = 5
+		if(SPIRIT_POOR to SPIRIT_DISTURBED)
+			master.mood_additive_speed_modifier = 0.25
+			master.mood_multiplicative_actionspeed_modifier = 0.25
+			spirit_level = 4
+		if(SPIRIT_DISTURBED to SPIRIT_NEUTRAL)
+			master.mood_additive_speed_modifier = 0.0
+			master.mood_multiplicative_actionspeed_modifier = 0.0
+			spirit_level = 3
+		if(SPIRIT_NEUTRAL + 1 to SPIRIT_HIGH + 1) //shitty hack but +1 to prevent it from responding to super small differences
+			master.mood_additive_speed_modifier = 0.0
+			master.mood_multiplicative_actionspeed_modifier = -0.1
+			spirit_level = 2
+		if(SPIRIT_HIGH + 1 to INFINITY)
+			master.mood_additive_speed_modifier = 0.0
+			master.mood_multiplicative_actionspeed_modifier = -0.1
+			spirit_level = 1
 	update_mood_icon()
-
-/datum/component/mood/proc/setInsanityEffect(newval)
-	if(newval == insanity_effect)
-		return
-
-	// var/mob/living/master = parent
-	// master.crit_threshold = (master.crit_threshold - insanity_effect) + newval
-	insanity_effect = newval
 
 // Category will override any events in the same category, should be unique unless the event is based on the same thing like hunger.
 /datum/component/mood/proc/add_event(datum/source, category, type, ...)
@@ -296,6 +276,8 @@
 
 	if(the_event.timeout)
 		addtimer(CALLBACK(src, .proc/clear_event, null, category), the_event.timeout, TIMER_UNIQUE|TIMER_OVERRIDE)
+
+	mood_events = sortTim(mood_events, cmp=/proc/cmp_abs_mood_dsc, associative=TRUE)
 
 /datum/component/mood/proc/clear_event(datum/source, category)
 	SIGNAL_HANDLER
@@ -350,6 +332,28 @@
 		return
 	print_mood(user)
 
+/datum/component/mood/proc/HandleNutrition()
+	var/mob/living/L = parent
+
+	switch(L.nutrition)
+		if(NUTRITION_LEVEL_FULL to INFINITY)
+			add_event(null, "nutrition", /datum/mood_event/fat)
+
+		if(NUTRITION_LEVEL_WELL_FED to NUTRITION_LEVEL_FULL)
+			add_event(null, "nutrition", /datum/mood_event/wellfed)
+
+		if( NUTRITION_LEVEL_FED to NUTRITION_LEVEL_WELL_FED)
+			add_event(null, "nutrition", /datum/mood_event/fed)
+
+		if(NUTRITION_LEVEL_HUNGRY to NUTRITION_LEVEL_FED)
+			clear_event(null, "nutrition")
+
+		if(NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_HUNGRY)
+			add_event(null, "nutrition", /datum/mood_event/hungry)
+
+		if(0 to NUTRITION_LEVEL_STARVING)
+			add_event(null, "nutrition", /datum/mood_event/starving)
+
 /datum/component/mood/proc/HandleShock()
 	if(!iscarbon(parent))
 		return
@@ -372,28 +376,6 @@
 			add_event(null, "pain", /datum/mood_event/unspeakable_pain)
 		if(120 to INFINITY)
 			add_event(null, "pain", /datum/mood_event/agony)
-
-/datum/component/mood/proc/HandleNutrition()
-	var/mob/living/L = parent
-
-	switch(L.nutrition)
-		if(NUTRITION_LEVEL_FULL to INFINITY)
-			add_event(null, "nutrition", /datum/mood_event/fat)
-
-		if(NUTRITION_LEVEL_WELL_FED to NUTRITION_LEVEL_FULL)
-			add_event(null, "nutrition", /datum/mood_event/wellfed)
-
-		if( NUTRITION_LEVEL_FED to NUTRITION_LEVEL_WELL_FED)
-			add_event(null, "nutrition", /datum/mood_event/fed)
-
-		if(NUTRITION_LEVEL_HUNGRY to NUTRITION_LEVEL_FED)
-			clear_event(null, "nutrition")
-
-		if(NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_HUNGRY)
-			add_event(null, "nutrition", /datum/mood_event/hungry)
-
-		if(0 to NUTRITION_LEVEL_STARVING)
-			add_event(null, "nutrition", /datum/mood_event/starving)
 
 /datum/component/mood/proc/check_area_mood(datum/source, area/A)
 	SIGNAL_HANDLER
@@ -434,19 +416,16 @@
 	SIGNAL_HANDLER
 
 	remove_temp_moods()
-	setSanity(initial(sanity))
+	setSpirit(initial(spirit))
 
-///Causes direct drain of someone's sanity, call it with a numerical value corresponding how badly you want to hurt their sanity
-/datum/component/mood/proc/direct_sanity_drain(datum/source, amount)
+///Causes direct drain of someone's spirit, call it with a numerical value corresponding how badly you want to hurt their spirit
+/datum/component/mood/proc/direct_spirit_drain(datum/source, amount)
 	SIGNAL_HANDLER
 
-	setSanity(sanity + amount)
+	setSpirit(spirit + amount)
 
 ///Called when parent slips.
 /datum/component/mood/proc/on_slip(datum/source)
 	SIGNAL_HANDLER
 
 	add_event(null, "slipped", /datum/mood_event/slipped)
-
-#undef MINOR_INSANITY_PEN
-#undef MAJOR_INSANITY_PEN

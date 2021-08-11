@@ -538,6 +538,7 @@
 		msg += "[print_flavor_text()]\n"
 
 	msg += "*---------*</span><br>"
+
 	if(applying_pressure)
 		msg += applying_pressure
 	else if(busy_with_action)
@@ -561,7 +562,7 @@
 		if(O.started_as_observer)
 			msg += "<span class='notice'>[t_He] has these traits: [get_trait_string()].</span>"
 
-	if(!check_covered(src, LOWER_TORSO))
+	if(!check_covered_bodypart(src, LOWER_TORSO))
 		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "naked", /datum/mood_event/naked)
 
 	to_chat(user, msg)

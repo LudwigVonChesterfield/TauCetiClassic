@@ -2141,6 +2141,9 @@
 
 	return TRUE
 
+#undef MASSAGE_RHYTM_RIGHT
+#undef MASSAGE_ALLOWED_ERROR
+
 /mob/living/carbon/human/proc/AdjustWetClothes(amount)
 	wet_clothes += amount
 	if(wet_clothes <= 0)
@@ -2241,6 +2244,3 @@
 
 	RegisterSignal(I, list(COMSIG_ITEM_MAKE_WET), .proc/mood_item_make_wet)
 	UnregisterSignal(I, list(COMSIG_ITEM_MAKE_DRY))
-
-#undef MASSAGE_RHYTM_RIGHT
-#undef MASSAGE_ALLOWED_ERROR

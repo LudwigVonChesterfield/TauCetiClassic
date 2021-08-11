@@ -5,6 +5,8 @@
 	layer = TURF_LAYER + 0.2
 	anchored = TRUE
 
+	beauty = -50
+
 	var/amount = 1 //Basically moles.
 
 	beauty = -50

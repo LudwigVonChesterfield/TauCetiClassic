@@ -6,6 +6,11 @@
 	mood_change = _mood_change
 	description = _description
 
+/datum/mood_event/fresh_laundry
+	description = "<span class='nicegreen'>There's nothing like the feeling of a freshly laundered jumpsuit.</span>\n"
+	mood_change = 2
+	timeout = 10 MINUTES
+
 /datum/mood_event/chit_chat
 	mood_change = 2
 	timeout = 10 SECONDS
@@ -35,9 +40,4 @@
 /datum/mood_event/catharsis
 	mood_change = 50
 	description = "<span class='bold nicegreen'>I simply do not care any longer.</span>\n"
-	timeout = 10 MINUTES
-
-/datum/mood_event/fresh_laundry
-	description = "<span class='nicegreen'>There's nothing like the feeling of a freshly laundered jumpsuit.</span>\n"
-	mood_change = 2
 	timeout = 10 MINUTES

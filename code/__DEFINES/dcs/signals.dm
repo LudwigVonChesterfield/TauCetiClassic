@@ -23,7 +23,6 @@
 #define COMSIG_PARENT_QDELETING "parent_qdeleting"
 
 // /datum/element signals
-
 /// fires on the target datum when an element is attached to it (/datum/element)
 #define COMSIG_ELEMENT_ATTACH "element_attach"
 /// fires on the target datum when an element is attached to it  (/datum/element)
@@ -77,7 +76,6 @@
 #define COMSIG_REAGENT_REACTION_TURF "reagent_reaction_turf"
 
 // /datum/species signals
-
 ///from datum/species/on_species_gain(): (datum/species/new_species, datum/species/old_species)
 #define COMSIG_SPECIES_GAIN "species_gain"
 ///from datum/species/on_species_loss(): (datum/species/lost_species)
@@ -101,7 +99,6 @@
 #define COMSIG_AREA_UPDATE_BEAUTY "area_update_beauty"
 
 // /atom signals
-
 ///from base of atom/Click(): (location, control, params, mob/user)
 #define COMSIG_CLICK "atom_click"
 /// emp_act() : severity
@@ -231,8 +228,7 @@
 /// from mob/living/silicon/robot/get_active_hand(): (mob/user)
 #define COMSIG_HAND_GET_ITEM "hand_get_item"
 
-//Mood
-
+//Mood (/datum/component/mood) signals
 ///called when you send a mood event from anywhere in the code.
 #define COMSIG_ADD_MOOD_EVENT "add_mood"
 ///called when you clear a mood event from anywhere in the code.

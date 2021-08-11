@@ -29,7 +29,9 @@ var/global/list/datum/area_group/observer_groups
 		delay,
 		TIMER_UNIQUE|TIMER_OVERRIDE|TIMER_STOPPABLE
 	)
+
 	to_chat(world, "ADDED A CALLBACK FOR [L]")
+
 	LAZYSET(observers, L, spawn_timer)
 
 /datum/area_group/proc/add_observer(mob/living/L, delay)

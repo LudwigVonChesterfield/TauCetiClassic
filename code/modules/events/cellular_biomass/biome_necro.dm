@@ -38,6 +38,8 @@
 	icon_state = "xeno_1"
 	random_icon_states = list("xeno_1", "xeno_2","xeno_3","xeno_4","xeno_5","xeno_6","xeno_7","xeno_8","xeno_9","xeno_10","xeno_11","xeno_12","xeno_13")
 
+	beauty = -250
+
 /obj/structure/cellular_biomass/wall/necro/atom_init()
 	. = ..()
 	icon_state = "wall"
