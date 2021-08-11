@@ -302,12 +302,6 @@
 #define COMSIG_MOB_HOSTILE_SHOOT "mob_hostile_shoot"
 
 // Component specific signals.
-
-/// send this signal from one area to force another one to tryspawn. returns TRUE if there is such an area: (mob/living/awaiting_spawn, area_group)
-#define COMSIG_SPAWN_AREA_TRYSPAWN "comsig_spawn_area_tryspawn"
-/// send this signal to check whether there is a spawn area in the area player moved to. An area that is a SPAWN_AREA will return itself.
-#define COMSIG_SPAWN_AREA_CHECKAREA "comsig_spawn_area_checkarea"
-
 /// send this signal to remove a list of tip ids(use tip_names as tip ids): (/list/tip_ids_to_remove)
 #define COMSIG_TIPS_REMOVE "comsig_tip_remove"
 

@@ -68,19 +68,40 @@ var/global/list/datum/area_group/observer_groups
 
 
 
+/*
+ * Spawns atoms nearby sentient players, despawns mobs if player is gone for too long.
+ *
+ * Instances are spawned on an empty square surrounding an observer with half length of square's side = spawn_range.
+ * Instances despawn when no observer is in spawn_range near them.
+ */
 /datum/component/spawn_area
+	/// Callback to a spawn function. Receives: (turf/spawn_turf), should return: list of spawned instances.
 	var/datum/callback/spawn_callback
+	/// Callback to a despawn function. Receives: (atom/movable/instance).
 	var/datum/callback/despawn_callback
+	/// Callback to a check spawn function. Receives: (turf/spawn_turf), should return: whether an instance can be spawned on this turf.
 	var/datum/callback/check_spawn_callback
 
+	/// Associative list of instance = despawn_timer. Use refresh_instance to renew the timer.
 	var/list/atom/movable/despawn_timers
 
+	/*
+		Group to which this spawn area belongs to.
+
+		Groups keep track of observers, and hold spawn cooldown timers inside.
+
+		Use register_observer and unregister_observer to add an observer to a group.
+	*/
 	var/group
 
+	/// Instances will spawn anywhere at this range from an observer.
 	var/spawn_range
+	/// Minimal distance between two instances.
 	var/instance_distance
 
+	/// How often instances spawn.
 	var/spawn_frequency
+	/// How often instances try to despawn.
 	var/despawn_frequency
 
 /datum/component/spawn_area/Initialize(
