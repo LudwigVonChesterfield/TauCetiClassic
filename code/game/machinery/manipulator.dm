@@ -22,6 +22,7 @@
  */
 
 #define MANIPULATOR_STATE_IDLE "idle"
+#define MANIPULATOR_STATE_FAIL "fail"
 #define MANIPULATOR_STATE_INTERACTING_FROM "interacting_from"
 #define MANIPULATOR_STATE_INTERACTING_TO "interacting_to"
 
@@ -29,8 +30,8 @@
 	name = "manipulator"
 	desc = "Manipulates stuff. I think we'll put this thing right here..."
 
-	icon = 'icons/mob/human.dmi'
-	icon_state = "abductor_s"
+	icon = 'icons/obj/machines/logistic.dmi'
+	icon_state = "base"
 
 	var/turf/from_turf
 	var/turf/to_turf
@@ -41,19 +42,155 @@
 
 	var/state = MANIPULATOR_STATE_IDLE
 
+	var/mirrored
+	var/fail_angle = 90
+
+	var/image/decal
+	var/atom/movable/hand
+	var/atom/movable/item
+	var/item_x = 0
+	var/item_y = 15
+	var/item_scale = 0.75
+
+	var/busy_moving
+
+	// This is here solely for the coolness of manipulators opening crates.
+	// If something enters the tile even when manipulator is working, it will remember it,
+	// and activate whenver it stops being busy.
+	var/remember_trigger = FALSE
+
 /obj/machinery/manipulator/atom_init()
 	. = ..()
+
+	var/image/I = image(icon, src, "manipulator", layer + 0.1, dir)
+
+	hand = new(null)
+	hand.simulated = FALSE
+	hand.anchored = TRUE
+	hand.appearance = I
+
+	vis_contents += hand
+
+	decal = image(icon, src, "manip_decor", layer, dir)
+
+
+	add_overlay(decal)
+
 	set_dir(dir)
 	create_clicker()
 
 /obj/machinery/manipulator/Destroy()
 	QDEL_NULL(clicker)
 
+	vis_contents -= hand
+	if(item)
+		hand.vis_contents -= item
+	cut_overlay(decal)
+
+	QDEL_NULL(hand)
+	QDEL_NULL(item)
+	QDEL_NULL(decal)
+
 	from_turf = null
 	to_turf = null
 	fail_turf = null
 
 	return ..()
+
+/obj/machinery/manipulator/proc/do_sleep(delay)
+	busy_moving = TRUE
+
+	var/endtime = world.time + delay
+
+	. = TRUE
+
+	while(world.time < endtime)
+		stoplag()
+		if(QDELETED(src))
+			. = FALSE
+			break
+
+		/*
+			CHECK POWER IF NOT FORCED MOVEMENT
+		*/
+
+	busy_moving = FALSE
+
+/obj/machinery/manipulator/proc/set_mirrored(mirrored)
+	src.mirrored = mirrored
+
+	if(mirrored)
+		fail_angle = -90
+
+	decal.icon_state = "manip_decor[mirrored ? "-mirrored" : ""]"
+	//cut_overlay(decal)
+	//add_overlay(decal)
+
+/obj/machinery/manipulator/update_icon()
+	if(!clicker)
+		return
+
+	var/obj/item/I = clicker.get_active_hand()
+	if(!I)
+		if(item)
+			to_chat(world, "REMOVING ITEM OVERLAY")
+			hand.vis_contents -= item
+			item = null
+		return
+
+	var/image/IM = image(I.icon, src, I.icon_state, layer + 0.11, SOUTH)
+
+	var/matrix/M = matrix()
+	M.Scale(item_scale, item_scale)
+
+	IM.transform = M
+
+	if(item)
+		return
+
+	item = new(null)
+	item.simulated = FALSE
+	item.anchored = TRUE
+
+	item.pixel_x = item_x
+	item.pixel_y = item_y
+
+	item.appearance = IM
+	item.appearance_flags |= KEEP_TOGETHER
+
+	hand.vis_contents += item
+
+/obj/machinery/manipulator/proc/set_state(new_state)
+	to_chat(world, "CUR STATE [state] NEW [new_state]")
+	if(state == new_state)
+		return
+
+	state = new_state
+
+	var/hand_angle = 0
+	switch(new_state)
+		if(MANIPULATOR_STATE_IDLE)
+			hand_angle = 0 // -fail_angle if you want this state to be visible too.
+		if(MANIPULATOR_STATE_FAIL)
+			hand_angle = fail_angle
+		if(MANIPULATOR_STATE_INTERACTING_FROM)
+			hand_angle = 0
+		if(MANIPULATOR_STATE_INTERACTING_TO)
+			hand_angle = 180
+
+	var/matrix/M = matrix()
+	M.Turn(hand_angle)
+
+	update_icon()
+
+	animate(hand, time=3, transform=M)
+	if(item)
+		var/matrix/MI = matrix()
+		MI.Turn(hand_angle)
+		MI.Scale(item_scale, item_scale)
+		var/x = item_x * cos(hand_angle) + item_y * sin(hand_angle)
+		var/y = -item_x * sin(hand_angle) +  item_y * cos(hand_angle)
+		animate(item, time=3, pixel_x=x, pixel_y=y, transform=MI)
 
 /obj/machinery/manipulator/set_dir(new_dir)
 	. = ..()
@@ -64,7 +201,7 @@
 
 	var/opposite_dir = turn(dir, 180)
 
-	var/fail_dir = turn(dir, 90)
+	var/fail_dir = turn(dir, fail_angle)
 
 	to_turf = get_step(src, dir)
 	from_turf = get_step(src, opposite_dir)
@@ -72,13 +209,21 @@
 
 	RegisterSignal(from_turf, list(COMSIG_ATOM_ENTERED), .proc/on_from_entered)
 
+	hand.dir = dir
+	decal.dir = dir
+
 /obj/machinery/manipulator/proc/on_from_entered(datum/source, atom/movable/entering, atom/oldLoc)
 	SIGNAL_HANDLER
 
 	if(state != MANIPULATOR_STATE_IDLE)
+		remember_trigger = TRUE
 		return
 
-	try_interact_from(entering)
+	if(busy_moving)
+		remember_trigger = TRUE
+		return
+
+	INVOKE_ASYNC(src, .proc/try_interact_from, entering)
 
 /obj/machinery/manipulator/default_change_direction_wrench(mob/user, obj/item/weapon/wrench/W)
 	if(istype(W))
@@ -107,11 +252,9 @@
 
 /obj/machinery/manipulator/proc/before_click()
 	clicker.forceMove(loc)
-	to_chat(world, "TAKING CLICKER OUT")
 
 /obj/machinery/manipulator/proc/after_click()
 	clicker.forceMove(src)
-	to_chat(world, "HIDING CLICKER BACK IN")
 
 /obj/machinery/manipulator/proc/clickability_from(atom/movable/A)
 	return !A.anchored
@@ -121,77 +264,40 @@
 
 /obj/machinery/manipulator/proc/find_clickable(turf/T, datum/callback/clickability)
 	if(!T.contents.len)
-		to_chat(world, "There. Is. Nothing.")
 		return null
 
 	var/atom/most_clickable
 
-	to_chat(world, "[T.contents.len] is len of possible")
-
 	for(var/C in T.contents)
 		var/atom/movable/A = C
-		to_chat(world, "CONSIDERING [A.name]([A.type])")
 
 		if(A.name == "")
-			to_chat(world, "FAIL, HAS NO NAME")
 			continue
 
 		if(!A.simulated)
-			to_chat(world, "FAIL, TOO ABSTRACT")
 			continue
 
 		if(A.invisibility > clicker.see_invisible)
-			to_chat(world, "FAIL, TOO INVISIBLE")
 			continue
 
 		if(clickability && !clickability.Invoke(A))
 			continue
 
 		if(!most_clickable)
-			to_chat(world, "SUCCESS, SAVING [A]")
 			most_clickable = A
 			continue
 
 		if(A.plane > most_clickable.plane)
-			to_chat(world, "OVERRIDING [A]")
 			most_clickable = A
 
 		else if(A.plane == most_clickable.plane && A.layer > most_clickable.layer)
-			to_chat(world, "OVERRIDING [A]")
 			most_clickable = A
-
-	if(most_clickable)
-		to_chat(world, "MOST CLICKABLE IS [most_clickable.name]([most_clickable.type])")
 
 	return most_clickable
 
 /obj/machinery/manipulator/proc/DoClick(atom/A, list/params)
-	// clicker.ClickOn(A, params)
-
 	usr = clicker
-
-	var/obj/item/W = clicker.get_active_hand()
-	if(W == A)
-		W.attack_self(clicker)
-		W.update_inv_mob()
-		return
-
-	if(isturf(A) || isturf(A.loc))
-		if(A.Adjacent(clicker)) // see adjacent.dm
-			if(W)
-				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
-				var/resolved = A.attackby(W, clicker, params)
-				to_chat(world, "AFTER ATTACKBY ([resolved]) with [W]")
-				if(!resolved && A && W)
-					W.afterattack(A, clicker, TRUE, params) // 1: clicking something Adjacent
-					to_chat(world, "AFTER AFTERATTACK WITH [W]")
-			else
-				clicker.UnarmedAttack(A)
-		else // non-adjacent click
-			if(W)
-				W.afterattack(A, clicker, FALSE, params) // 0: not Adjacent
-			else
-				clicker.RangedAttack(A, params)
+	clicker.ClickOn(A, params)
 
 /obj/machinery/manipulator/proc/ClickAndCallBack(atom/A, list/params, list/datum/callback/callbacks)
 	DoClick(A, params)
@@ -211,59 +317,82 @@
 /obj/machinery/manipulator/proc/after_interact_from()
 	var/obj/item/I = clicker.get_active_hand()
 	if(!I)
-		to_chat(world, "CAN'T MANIPULATE, NO ITEM IN HAND.")
-		state = MANIPULATOR_STATE_IDLE
+		if(remember_trigger)
+			remember_trigger = FALSE
+			set_state(MANIPULATOR_STATE_IDLE)
+			do_sleep(3)
+			try_interact_from()
+			return
+		set_state(MANIPULATOR_STATE_IDLE)
+		do_sleep(3)
 		return
 
-	sleep(1)
 	try_interact_to()
 
 /obj/machinery/manipulator/proc/try_interact_from(atom/target=null)
-	to_chat(world, "TRYING TO INTERACT FROM [target]")
-
 	if(!target)
 		target = find_clickable(from_turf)
-		to_chat(world, "FOUND OTHER TARGET [target]")
 
 	if(!target)
-		to_chat(world, "NO TARGET FOUND, IDLE.")
-		state = MANIPULATOR_STATE_IDLE
+		set_state(MANIPULATOR_STATE_IDLE)
+		do_sleep(3)
 		return
 
-	state = MANIPULATOR_STATE_INTERACTING_FROM
+	set_state(MANIPULATOR_STATE_INTERACTING_FROM)
+	if(!do_sleep(3))
+		set_state(MANIPULATOR_STATE_IDLE)
+		do_sleep(3)
+		return
 
 	simulate_click(target, list(CALLBACK(src, .proc/after_interact_from)))
 
 /obj/machinery/manipulator/proc/after_interact_to()
 	var/obj/item/I = clicker.get_active_hand()
 	if(I)
+		set_state(MANIPULATOR_STATE_FAIL)
+		do_sleep(3)
+
 		clicker.drop_from_inventory(I, fail_turf)
 
-	sleep(1)
+		set_state(MANIPULATOR_STATE_INTERACTING_TO)
+		do_sleep(3)
+
+	set_state(MANIPULATOR_STATE_IDLE)
+	do_sleep(3)
 	try_interact_from()
 
 /obj/machinery/manipulator/proc/try_interact_to(atom/target=null)
-	to_chat(world, "TRYING TO INTERACT TO [target]")
-
 	if(!target)
 		target = find_clickable(to_turf)
-
-		to_chat(world, "FOUND OTHER TARGET [target]")
 
 	if(!target)
 		var/obj/item/I = clicker.get_active_hand()
 		if(I)
-			clicker.drop_from_inventory(I, to_turf)
+			set_state(MANIPULATOR_STATE_INTERACTING_TO)
+			if(!do_sleep(3))
+				set_state(MANIPULATOR_STATE_IDLE)
+				do_sleep(3)
+				return
 
-		to_chat(world, "NO TARGET FOUND, DROPPING.")
+			if(QDELETED(I))
+				set_state(MANIPULATOR_STATE_IDLE)
+				do_sleep(3)
+				return
+
+			clicker.drop_from_inventory(I, to_turf)
 
 		INVOKE_ASYNC(src, .proc/after_interact_to)
 		return
 
-	state = MANIPULATOR_STATE_INTERACTING_TO
+	set_state(MANIPULATOR_STATE_INTERACTING_TO)
+	if(!do_sleep(3))
+		set_state(MANIPULATOR_STATE_IDLE)
+		do_sleep(3)
+		return
 
 	simulate_click(target, list(CALLBACK(src, .proc/after_interact_to)))
 
 #undef MANIPULATOR_STATE_IDLE
+#undef MANIPULATOR_STATE_FAIL
 #undef MANIPULATOR_STATE_INTERACTING_FROM
 #undef MANIPULATOR_STATE_INTERACTING_TO
