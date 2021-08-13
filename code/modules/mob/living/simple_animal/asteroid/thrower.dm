@@ -23,8 +23,8 @@
 	desc = "A bag that is very big."
 	icon_state = "giftbag0"
 	item_state = "giftbag"
-	w_class = ITEM_SIZE_HUGE
-	max_w_class = ITEM_SIZE_LARGE
+	w_class = SIZE_LARGE
+	max_w_class = SIZE_BIG
 	max_storage_space = 40
 
 /mob/living/simple_animal/hostile/asteroid/thrower
@@ -292,17 +292,7 @@
 	return remembered_thing
 
 /mob/living/simple_animal/hostile/asteroid/thrower/proc/assess_stamina_waste(atom/movable/thing)
-	if(istype(thing, /mob/living))
-		return 2 ** ITEM_SIZE_GARGANTUAN
-
-	if(istype(thing, /obj/structure))
-		return 2 ** ITEM_SIZE_HUGE
-
-	if(istype(thing, /obj/item))
-		var/obj/item/I = thing
-		return 2 ** I.w_class
-
-	return 0
+	return 2 ** w_class
 
 /mob/living/simple_animal/hostile/asteroid/thrower/proc/take_thing_out()
 	if(!bag)
@@ -406,13 +396,7 @@
 	SEND_SIGNAL(src, COMSIG_MOB_HOSTILE_SHOOT, target)
 
 	visible_message("<span class='rose'>[src] has thrown [AM].</span>")
-
-	if(isitem(AM))
-		var/obj/item/O = AM
-		if(O.w_class >= ITEM_SIZE_NORMAL)
-			playsound(loc, 'sound/weapons/punchmiss.ogg', VOL_EFFECTS_MASTER)
-
-	else
+	if(AM.w_class >= SIZE_SMALL)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', VOL_EFFECTS_MASTER)
 
 	AM.add_fingerprint(src)

@@ -442,10 +442,8 @@
 	if (item)
 		visible_message("<span class='rose'>[src] has thrown [item].</span>")
 
-		if(isitem(item))
-			var/obj/item/O = item
-			if(O.w_class >= SIZE_SMALL)
-				playsound(loc, 'sound/weapons/punchmiss.ogg', VOL_EFFECTS_MASTER)
+		if(item.w_class >= SIZE_SMALL)
+			playsound(loc, 'sound/weapons/punchmiss.ogg', VOL_EFFECTS_MASTER)
 
 		do_attack_animation(target, has_effect = FALSE)
 

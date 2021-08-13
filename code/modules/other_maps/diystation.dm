@@ -102,7 +102,7 @@
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "theredcrate"
 
-	w_class = ITEM_SIZE_TINY
+	w_class = SIZE_MINUSCULE
 
 /obj/item/comrade_package/attack_self(mob/user)
 	user.drop_from_inventory(src, null)
