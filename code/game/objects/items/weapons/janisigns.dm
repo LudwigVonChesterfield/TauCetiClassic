@@ -5,7 +5,7 @@
 	icon_state = "signmaker"
 	item_state = "electronic"
 	force = 5
-	w_class = ITEM_SIZE_SMALL
+	w_class = SIZE_TINY
 	throwforce = 0
 	throw_speed = 3
 	throw_range = 7
@@ -64,7 +64,7 @@
 	throwforce = 3
 	throw_speed = 2
 	throw_range = 5
-	w_class = ITEM_SIZE_SMALL
+	w_class = SIZE_TINY
 	attack_verb = list("warned", "cautioned", "smashed")
 
 /obj/item/weapon/caution/examine(mob/user)

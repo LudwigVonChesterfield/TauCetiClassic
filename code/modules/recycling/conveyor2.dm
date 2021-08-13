@@ -24,9 +24,7 @@
 	. = ..()
 	AddComponent(/datum/component/clickplace)
 
-
 // Auto conveyour is always on unless unpowered
-
 /obj/machinery/conveyor/auto/atom_init(mapload, newdir)
 	. = ..(mapload, newdir)
 	operating = 1
@@ -307,7 +305,7 @@
 	icon_state = "conveyor0"
 	name = "conveyor belt assembly"
 	desc = "A conveyor belt assembly."
-	w_class = ITEM_SIZE_LARGE
+	w_class = SIZE_NORMAL
 	var/id = "" //inherited by the belt
 
 /obj/item/conveyor_construct/attackby(obj/item/I, mob/user, params)
@@ -336,7 +334,7 @@
 	desc = "A conveyor control switch assembly."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "switch-off"
-	w_class = ITEM_SIZE_LARGE
+	w_class = SIZE_NORMAL
 	var/id = "" //inherited by the switch
 
 /obj/item/conveyor_switch_construct/atom_init()
