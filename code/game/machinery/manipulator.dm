@@ -46,6 +46,8 @@
 	icon = 'icons/obj/machines/logistic.dmi'
 	icon_state = "base"
 
+	anchored = TRUE
+
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
 	active_power_usage = 100
@@ -190,6 +192,12 @@
 
 	if(mirrored)
 		fail_angle = -90
+	else
+		fail_angle = 90
+
+	var/fail_dir = turn(dir, fail_angle)
+
+	fail_turf = get_step(src, fail_dir)
 
 	decal.icon_state = "manip_decor[mirrored ? "-mirrored" : ""]"
 	cut_overlay(decal)
@@ -277,10 +285,7 @@
 		var/y = -p_x * sin(item_angle) + p_y * cos(item_angle)
 		animate(item, time=delay, pixel_x=x, pixel_y=y, transform=MI)
 
-	if(new_state == MANIPULATOR_STATE_IDLE)
-		addtimer(CALLBACK(src, .proc/after_activate, delay))
-	else
-		use_power(active_power_usage)
+	use_power(active_power_usage)
 
 /obj/machinery/manipulator/set_dir(new_dir)
 	. = ..()
@@ -299,16 +304,14 @@
 
 	RegisterSignal(from_turf, list(COMSIG_ATOM_ENTERED), .proc/on_from_entered)
 
-	//hand.dir = dir
 	var/string_dir = "[dir]"
 	hand.pixel_x = hand_offset[string_dir][1]
 	hand.pixel_y = hand_offset[string_dir][2]
 	var/matrix/M = matrix()
 	M.Turn(get_hand_angle())
 	hand.transform = M
-	decal.dir = dir
-	to_chat(world, "DECAL DIR [decal.dir]")
 
+	decal.dir = dir
 	cut_overlay(decal)
 	add_overlay(decal)
 
@@ -511,6 +514,7 @@
 			return
 		set_state(MANIPULATOR_STATE_IDLE)
 		do_sleep(delay)
+		addtimer(CALLBACK(src, .proc/after_activate, delay))
 		return
 
 	try_interact_to()
@@ -522,12 +526,14 @@
 	if(!target)
 		set_state(MANIPULATOR_STATE_IDLE)
 		do_sleep(delay)
+		addtimer(CALLBACK(src, .proc/after_activate, delay))
 		return
 
 	set_state(MANIPULATOR_STATE_INTERACTING_FROM)
 	if(!do_sleep(delay, CALLBACK(src, /obj/machinery.proc/is_operational)))
 		set_state(MANIPULATOR_STATE_IDLE)
 		do_sleep(delay)
+		addtimer(CALLBACK(src, .proc/after_activate, delay))
 		return
 
 	simulate_click(target, list(CALLBACK(src, .proc/after_interact_from)))
@@ -558,11 +564,13 @@
 			if(!do_sleep(delay, CALLBACK(src, /obj/machinery.proc/is_operational)))
 				set_state(MANIPULATOR_STATE_IDLE)
 				do_sleep(delay)
+				addtimer(CALLBACK(src, .proc/after_activate, delay))
 				return
 
 			if(QDELETED(I))
 				set_state(MANIPULATOR_STATE_IDLE)
 				do_sleep(delay)
+				addtimer(CALLBACK(src, .proc/after_activate, delay))
 				return
 
 			clicker.drop_from_inventory(I, to_turf)
@@ -574,6 +582,7 @@
 	if(!do_sleep(delay, CALLBACK(src, /obj/machinery.proc/is_operational)))
 		set_state(MANIPULATOR_STATE_IDLE)
 		do_sleep(delay)
+		addtimer(CALLBACK(src, .proc/after_activate, delay))
 		return
 
 	simulate_click(target, list(CALLBACK(src, .proc/after_interact_to)))

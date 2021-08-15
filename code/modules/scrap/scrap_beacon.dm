@@ -10,17 +10,61 @@
 	var/impact_speed = 3
 	var/impact_prob = 100
 	var/impact_range = 2
-	var/last_summon = -3000
+	var/next_summon = -3000
 	var/active = 0
 
+	var/panel_open = FALSE
+
+	var/datum/wires/scrap_beacon/wires
+
+/obj/structure/scrap_beacon/atom_init()
+	. = ..()
+
+	wires = new(src)
+
+/obj/structure/scrap_beacon/proc/can_activate()
+	if(next_summon >= world.time)
+		return FALSE
+
+	if(active)
+		return FALSE
+
+	return TRUE
+
+/obj/structure/scrap_beacon/proc/activate()
+	next_summon = world.time + summon_cooldown
+	start_scrap_summon()
+
 /obj/structure/scrap_beacon/attack_hand(mob/user)
-	user.SetNextMove(CLICK_CD_INTERACT)
-	if((last_summon + summon_cooldown) >= world.time)
-		to_chat(user, "<span class='notice'>[src.name] not charged yet.</span>")
+	if(wires.interact(user))
 		return
-	last_summon = world.time
-	if(!active)
-		start_scrap_summon()
+
+	user.SetNextMove(CLICK_CD_INTERACT)
+	if(!can_activate())
+		to_chat(user, "<span class='notice'>[src.name] is not charged yet, or already active.</span>")
+		return
+
+	activate()
+
+/obj/structure/scrap_beacon/attackby(obj/item/I, mob/user, params)
+	if(isscrewdriver(I))
+		panel_open = !panel_open
+		to_chat(user, "<span class='notice'>You [panel_open ? "open" : "close"] the maintenance panel on [src].</span>")
+		return
+
+	else if(iswirecutter(I))
+		wires.interact(user)
+		return
+
+	else if(ismultitool(I))
+		wires.interact(user)
+		return
+
+	else if(istype(I, /obj/item/device/assembly/signaler))
+		wires.interact(user)
+		return
+
+	return ..()
 
 /obj/structure/scrap_beacon/update_icon()
 	icon_state = "beacon[active]"
