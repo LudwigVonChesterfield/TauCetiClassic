@@ -27,12 +27,30 @@
 #define MANIPULATOR_STATE_INTERACTING_FROM "interacting_from"
 #define MANIPULATOR_STATE_INTERACTING_TO "interacting_to"
 
+/obj/item/weapon/circuitboard/manipulator
+	name = "Circuit board (Manipulator)"
+	build_path = /obj/machinery/manipulator
+	origin_tech = "programming=3;materials=3;engineering=3"
+	board_type = "machine"
+
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1,
+		/obj/item/weapon/stock_parts/micro_laser = 1,
+	)
+
 /obj/machinery/manipulator
 	name = "manipulator"
 	desc = "Manipulates stuff. I think we'll put this thing right here..."
 
 	icon = 'icons/obj/machines/logistic.dmi'
 	icon_state = "base"
+
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 10
+	active_power_usage = 100
+
+	var/delay = 0
 
 	var/turf/from_turf
 	var/turf/to_turf
@@ -47,11 +65,17 @@
 	var/fail_angle = 90
 
 	var/image/decal
+	var/image/panel
+	var/image/status
 	var/atom/movable/hand
 	var/atom/movable/item
+
 	var/item_x = 0
 	var/item_y = 15
 	var/item_scale = 0.75
+
+	// Initialized in atom_init because BYOND is weird with int assoc lists like that.
+	var/list/hand_offset
 
 	var/busy_moving
 
@@ -60,8 +84,19 @@
 	// and activate whenver it stops being busy.
 	var/remember_trigger = FALSE
 
+	var/datum/wires/manipulator/wires
+
 /obj/machinery/manipulator/atom_init()
 	. = ..()
+
+	hand_offset = list(
+		"[NORTH]" = list(-1, 4),
+		"[SOUTH]" = list(0, 0),
+		"[WEST]" = list(-2, 2),
+		"[EAST]" = list(2, 3),
+	)
+
+	wires = new(src)
 
 	var/image/I = image(icon, src, "manipulator", layer + 0.1, dir)
 
@@ -73,11 +108,40 @@
 	vis_contents += hand
 
 	decal = image(icon, src, "manip_decor", layer, dir)
+	panel = image(icon, src, "base-wires", layer, dir)
+	status = image(icon, src, "power_on", layer, dir)
 
 	add_overlay(decal)
 
-	set_dir(dir)
 	create_clicker()
+
+	component_parts = list()
+	component_parts += new /obj/item/weapon/circuitboard/manipulator(null)
+	component_parts += new /obj/item/weapon/stock_parts/manipulator(null)
+	component_parts += new /obj/item/weapon/stock_parts/capacitor(null)
+	component_parts += new /obj/item/weapon/stock_parts/micro_laser(null)
+
+	RefreshParts()
+
+	set_dir(dir)
+
+	if(is_operational() && !panel_open)
+		add_overlay(status)
+
+/obj/machinery/manipulator/RefreshParts()
+	delay = 5
+
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		delay -= M.rating
+
+	delay = max(delay, 1)
+
+	var/laser_rating = 1
+
+	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+		laser_rating += M.rating
+
+	clicker.multiplicative_actionspeed_modifier = max(-1.0 / (15.0 - laser_rating), -0.9)
 
 /obj/machinery/manipulator/Destroy()
 	QDEL_NULL(clicker)
@@ -87,9 +151,14 @@
 		hand.vis_contents -= item
 	cut_overlay(decal)
 
+	cut_overlay(panel)
+	cut_overlay(status)
+
 	QDEL_NULL(hand)
 	QDEL_NULL(item)
 	QDEL_NULL(decal)
+	QDEL_NULL(panel)
+	QDEL_NULL(status)
 
 	from_turf = null
 	to_turf = null
@@ -97,10 +166,10 @@
 
 	return ..()
 
-/obj/machinery/manipulator/proc/do_sleep(delay, datum/callback/extra_checks=null)
+/obj/machinery/manipulator/proc/do_sleep(_delay, datum/callback/extra_checks=null)
 	busy_moving = TRUE
 
-	var/endtime = world.time + delay
+	var/endtime = world.time + _delay
 
 	. = TRUE
 
@@ -114,10 +183,6 @@
 			. = FALSE
 			break
 
-		/*
-			CHECK POWER IF NOT FORCED MOVEMENT
-		*/
-
 	busy_moving = FALSE
 
 /obj/machinery/manipulator/proc/set_mirrored(mirrored)
@@ -127,8 +192,13 @@
 		fail_angle = -90
 
 	decal.icon_state = "manip_decor[mirrored ? "-mirrored" : ""]"
-	//cut_overlay(decal)
-	//add_overlay(decal)
+	cut_overlay(decal)
+	add_overlay(decal)
+
+/obj/machinery/manipulator/power_change()
+	..()
+	if(is_operational() && !panel_open)
+		add_overlay(status)
 
 /obj/machinery/manipulator/update_icon()
 	if(!clicker)
@@ -137,7 +207,6 @@
 	var/obj/item/I = clicker.get_active_hand()
 	if(!I)
 		if(item)
-			to_chat(world, "REMOVING ITEM OVERLAY")
 			hand.vis_contents -= item
 			item = null
 		return
@@ -164,15 +233,9 @@
 
 	hand.vis_contents += item
 
-/obj/machinery/manipulator/proc/set_state(new_state)
-	to_chat(world, "CUR STATE [state] NEW [new_state]")
-	if(state == new_state)
-		return
-
-	state = new_state
-
+/obj/machinery/manipulator/proc/get_hand_angle()
 	var/hand_angle = 0
-	switch(new_state)
+	switch(state)
 		if(MANIPULATOR_STATE_IDLE)
 			hand_angle = 0 // -fail_angle if you want this state to be visible too.
 		if(MANIPULATOR_STATE_FAIL)
@@ -182,19 +245,42 @@
 		if(MANIPULATOR_STATE_INTERACTING_TO)
 			hand_angle = 180
 
+	// -180 because manipulator is on the opposite side of where the base is facing.
+	return dir2angle(dir) - 180 + hand_angle
+
+/obj/machinery/manipulator/proc/set_state(new_state)
+	if(state == new_state)
+		return
+
+	state = new_state
+
+	var/hand_angle = get_hand_angle()
+
 	var/matrix/M = matrix()
 	M.Turn(hand_angle)
 
 	update_icon()
 
-	animate(hand, time=3, transform=M)
+	animate(hand, time=delay, transform=M)
 	if(item)
+		var/item_angle = hand_angle
+
 		var/matrix/MI = matrix()
-		MI.Turn(hand_angle)
+
+		MI.Turn(item_angle)
 		MI.Scale(item_scale, item_scale)
-		var/x = item_x * cos(hand_angle) + item_y * sin(hand_angle)
-		var/y = -item_x * sin(hand_angle) +  item_y * cos(hand_angle)
-		animate(item, time=3, pixel_x=x, pixel_y=y, transform=MI)
+
+		var/p_x = item_x + hand.pixel_x
+		var/p_y = item_y + hand.pixel_y
+
+		var/x = p_x * cos(item_angle) + p_y * sin(item_angle)
+		var/y = -p_x * sin(item_angle) + p_y * cos(item_angle)
+		animate(item, time=delay, pixel_x=x, pixel_y=y, transform=MI)
+
+	if(new_state == MANIPULATOR_STATE_IDLE)
+		addtimer(CALLBACK(src, .proc/after_activate, delay))
+	else
+		use_power(active_power_usage)
 
 /obj/machinery/manipulator/set_dir(new_dir)
 	. = ..()
@@ -213,26 +299,66 @@
 
 	RegisterSignal(from_turf, list(COMSIG_ATOM_ENTERED), .proc/on_from_entered)
 
-	hand.dir = dir
+	//hand.dir = dir
+	var/string_dir = "[dir]"
+	hand.pixel_x = hand_offset[string_dir][1]
+	hand.pixel_y = hand_offset[string_dir][2]
+	var/matrix/M = matrix()
+	M.Turn(get_hand_angle())
+	hand.transform = M
 	decal.dir = dir
+	to_chat(world, "DECAL DIR [decal.dir]")
+
+	cut_overlay(decal)
+	add_overlay(decal)
+
+/obj/machinery/manipulator/is_operational()
+	return ..() && anchored
 
 /obj/machinery/manipulator/proc/on_from_entered(datum/source, atom/movable/entering, atom/oldLoc)
 	SIGNAL_HANDLER
 
-	if(state != MANIPULATOR_STATE_IDLE)
+	if(!can_activate(entering))
 		remember_trigger = TRUE
 		return
+
+	activate(entering)
+
+/obj/machinery/manipulator/proc/can_activate(atom/target=null)
+	if(!is_operational())
+		return FALSE
+
+	if(state != MANIPULATOR_STATE_IDLE)
+		return FALSE
 
 	if(busy_moving)
-		remember_trigger = TRUE
-		return
+		return FALSE
 
-	INVOKE_ASYNC(src, .proc/try_interact_from, entering)
+	return TRUE
+
+/obj/machinery/manipulator/proc/activate(atom/target=null)
+	INVOKE_ASYNC(src, .proc/try_interact_from, target)
+
+/obj/machinery/manipulator/proc/after_activate()
+	var/obj/item/device/assembly/signaler/S = wires.get_attached_signaler(
+		wires.get_color_by_index(MANIPULATOR_WIRE_AFTER_ACTIVATE)
+	)
+	if(S)
+		S.signal()
 
 /obj/machinery/manipulator/verb/rotate()
 	set category = "Object"
 	set name = "Rotate"
 	set desc = "Rotate the manipulator."
+	set src in oview(1)
+
+	if(state != MANIPULATOR_STATE_IDLE)
+		to_chat(usr, "<span class='warning'>You cannot rotate [src] while it's working.")
+		return
+
+	if(busy_moving)
+		to_chat(usr, "<span class='warning'>You cannot rotate [src] while it's working.")
+		return
 
 	playsound(src, 'sound/items/Ratchet.ogg', VOL_EFFECTS_MASTER)
 	set_dir(turn(dir,-90))
@@ -242,12 +368,61 @@
 	set category = "Object"
 	set name = "Mirror"
 	set desc = "Mirror the manipulator."
+	set src in oview(1)
+
+	if(state != MANIPULATOR_STATE_IDLE)
+		to_chat(usr, "<span class='warning'>You cannot mirror [src] while it's working.")
+		return
+
+	if(busy_moving)
+		to_chat(usr, "<span class='warning'>You cannot mirror [src] while it's working.")
+		return
 
 	playsound(src, 'sound/items/Ratchet.ogg', VOL_EFFECTS_MASTER)
 	set_mirrored(!mirrored)
 	to_chat(usr, "<span class='notice'>You mirror [src].</span>")
 
+/obj/machinery/manipulator/attack_hand(mob/user)
+	if(wires.interact(user))
+		return
+
+	return ..()
+
 /obj/machinery/manipulator/attackby(obj/item/I, mob/user, params)
+	if(isscrewdriver(I))
+		panel_open = !panel_open
+		if(panel_open)
+			if(is_operational())
+				cut_overlay(status)
+			add_overlay(panel)
+		else
+			if(is_operational())
+				add_overlay(status)
+			cut_overlay(panel)
+
+	else if(iswirecutter(I))
+		wires.interact(user)
+		return
+
+	else if(ismultitool(I))
+		wires.interact(user)
+		return
+
+	else if(istype(I, /obj/item/device/assembly/signaler))
+		wires.interact(user)
+		return
+
+	else if(default_unfasten_wrench(user, I))
+		if(!panel_open)
+			if(anchored)
+				add_overlay(stat)
+			else
+				cut_overlay(stat)
+		return
+
+	else if(default_deconstruction_crowbar(I))
+		return
+
 	return ..()
 
 /obj/machinery/manipulator/proc/create_clicker()
@@ -331,11 +506,11 @@
 		if(remember_trigger)
 			remember_trigger = FALSE
 			set_state(MANIPULATOR_STATE_IDLE)
-			do_sleep(3)
+			do_sleep(delay)
 			try_interact_from()
 			return
 		set_state(MANIPULATOR_STATE_IDLE)
-		do_sleep(3)
+		do_sleep(delay)
 		return
 
 	try_interact_to()
@@ -346,13 +521,13 @@
 
 	if(!target)
 		set_state(MANIPULATOR_STATE_IDLE)
-		do_sleep(3)
+		do_sleep(delay)
 		return
 
 	set_state(MANIPULATOR_STATE_INTERACTING_FROM)
-	if(!do_sleep(3, CALLBACK(src, /obj/machinery.proc/is_operational)))
+	if(!do_sleep(delay, CALLBACK(src, /obj/machinery.proc/is_operational)))
 		set_state(MANIPULATOR_STATE_IDLE)
-		do_sleep(3)
+		do_sleep(delay)
 		return
 
 	simulate_click(target, list(CALLBACK(src, .proc/after_interact_from)))
@@ -361,15 +536,15 @@
 	var/obj/item/I = clicker.get_active_hand()
 	if(I)
 		set_state(MANIPULATOR_STATE_FAIL)
-		do_sleep(3)
+		do_sleep(delay)
 
 		clicker.drop_from_inventory(I, fail_turf)
 
 		set_state(MANIPULATOR_STATE_INTERACTING_TO)
-		do_sleep(3)
+		do_sleep(delay)
 
 	set_state(MANIPULATOR_STATE_IDLE)
-	do_sleep(3)
+	do_sleep(delay)
 	try_interact_from()
 
 /obj/machinery/manipulator/proc/try_interact_to(atom/target=null)
@@ -380,14 +555,14 @@
 		var/obj/item/I = clicker.get_active_hand()
 		if(I)
 			set_state(MANIPULATOR_STATE_INTERACTING_TO)
-			if(!do_sleep(3, CALLBACK(src, /obj/machinery.proc/is_operational)))
+			if(!do_sleep(delay, CALLBACK(src, /obj/machinery.proc/is_operational)))
 				set_state(MANIPULATOR_STATE_IDLE)
-				do_sleep(3)
+				do_sleep(delay)
 				return
 
 			if(QDELETED(I))
 				set_state(MANIPULATOR_STATE_IDLE)
-				do_sleep(3)
+				do_sleep(delay)
 				return
 
 			clicker.drop_from_inventory(I, to_turf)
@@ -396,9 +571,9 @@
 		return
 
 	set_state(MANIPULATOR_STATE_INTERACTING_TO)
-	if(!do_sleep(3, CALLBACK(src, /obj/machinery.proc/is_operational)))
+	if(!do_sleep(delay, CALLBACK(src, /obj/machinery.proc/is_operational)))
 		set_state(MANIPULATOR_STATE_IDLE)
-		do_sleep(3)
+		do_sleep(delay)
 		return
 
 	simulate_click(target, list(CALLBACK(src, .proc/after_interact_to)))

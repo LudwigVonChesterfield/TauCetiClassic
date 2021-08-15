@@ -80,7 +80,7 @@
 	if(!user || !target)
 		return FALSE
 
-	time *= (1.0 + user.mood_multiplicative_actionspeed_modifier)
+	time *= (1.0 + user.mood_multiplicative_actionspeed_modifier + user.multiplicative_actionspeed_modifier)
 
 	var/busy_hand = user.hand
 	user.become_busy(_hand = busy_hand)
@@ -149,7 +149,7 @@
 	if(!user || target && QDELING(target))
 		return FALSE
 
-	delay *= (1.0 + user.mood_multiplicative_actionspeed_modifier)
+	delay *= (1.0 + user.mood_multiplicative_actionspeed_modifier + user.multiplicative_actionspeed_modifier)
 
 	var/busy_hand = user.hand
 	user.become_busy(_hand = busy_hand)

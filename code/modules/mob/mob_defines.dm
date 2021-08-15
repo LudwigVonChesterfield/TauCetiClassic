@@ -177,6 +177,7 @@
 	// port /datum/actionspeed_modifier system from /tg.
 	// The value is multiplicative.
 	var/mood_multiplicative_actionspeed_modifier = 0.0
+	var/multiplicative_actionspeed_modifier = 0.0
 	// Determines how mood affects movespeed.
 	// used only in humans, because mood only is.
 	// If ever used by anything else but mood, please
