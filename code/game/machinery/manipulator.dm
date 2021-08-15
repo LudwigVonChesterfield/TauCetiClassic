@@ -21,6 +21,7 @@
 	Which is I might say. Sinful.
  */
 
+#define MANIPULATOR_STATE_OFF "off"
 #define MANIPULATOR_STATE_IDLE "idle"
 #define MANIPULATOR_STATE_FAIL "fail"
 #define MANIPULATOR_STATE_INTERACTING_FROM "interacting_from"
@@ -42,7 +43,7 @@
 
 	var/state = MANIPULATOR_STATE_IDLE
 
-	var/mirrored
+	var/mirrored = FALSE
 	var/fail_angle = 90
 
 	var/image/decal
@@ -73,7 +74,6 @@
 
 	decal = image(icon, src, "manip_decor", layer, dir)
 
-
 	add_overlay(decal)
 
 	set_dir(dir)
@@ -97,7 +97,7 @@
 
 	return ..()
 
-/obj/machinery/manipulator/proc/do_sleep(delay)
+/obj/machinery/manipulator/proc/do_sleep(delay, datum/callback/extra_checks=null)
 	busy_moving = TRUE
 
 	var/endtime = world.time + delay
@@ -107,6 +107,10 @@
 	while(world.time < endtime)
 		stoplag()
 		if(QDELETED(src))
+			. = FALSE
+			break
+
+		if(extra_checks && !extra_checks.Invoke())
 			. = FALSE
 			break
 
@@ -225,18 +229,25 @@
 
 	INVOKE_ASYNC(src, .proc/try_interact_from, entering)
 
-/obj/machinery/manipulator/default_change_direction_wrench(mob/user, obj/item/weapon/wrench/W)
-	if(istype(W))
-		playsound(src, 'sound/items/Ratchet.ogg', VOL_EFFECTS_MASTER)
-		set_dir(turn(dir,-90))
-		to_chat(user, "<span class='notice'>You rotate [src].</span>")
-		return 1
-	return 0
+/obj/machinery/manipulator/verb/rotate()
+	set category = "Object"
+	set name = "Rotate"
+	set desc = "Rotate the manipulator."
+
+	playsound(src, 'sound/items/Ratchet.ogg', VOL_EFFECTS_MASTER)
+	set_dir(turn(dir,-90))
+	to_chat(usr, "<span class='notice'>You rotate [src].</span>")
+
+/obj/machinery/manipulator/verb/mirror()
+	set category = "Object"
+	set name = "Mirror"
+	set desc = "Mirror the manipulator."
+
+	playsound(src, 'sound/items/Ratchet.ogg', VOL_EFFECTS_MASTER)
+	set_mirrored(!mirrored)
+	to_chat(usr, "<span class='notice'>You mirror [src].</span>")
 
 /obj/machinery/manipulator/attackby(obj/item/I, mob/user, params)
-	if(default_change_direction_wrench(user, I))
-		return
-
 	return ..()
 
 /obj/machinery/manipulator/proc/create_clicker()
@@ -339,7 +350,7 @@
 		return
 
 	set_state(MANIPULATOR_STATE_INTERACTING_FROM)
-	if(!do_sleep(3))
+	if(!do_sleep(3, CALLBACK(src, /obj/machinery.proc/is_operational)))
 		set_state(MANIPULATOR_STATE_IDLE)
 		do_sleep(3)
 		return
@@ -369,7 +380,7 @@
 		var/obj/item/I = clicker.get_active_hand()
 		if(I)
 			set_state(MANIPULATOR_STATE_INTERACTING_TO)
-			if(!do_sleep(3))
+			if(!do_sleep(3, CALLBACK(src, /obj/machinery.proc/is_operational)))
 				set_state(MANIPULATOR_STATE_IDLE)
 				do_sleep(3)
 				return
@@ -385,7 +396,7 @@
 		return
 
 	set_state(MANIPULATOR_STATE_INTERACTING_TO)
-	if(!do_sleep(3))
+	if(!do_sleep(3, CALLBACK(src, /obj/machinery.proc/is_operational)))
 		set_state(MANIPULATOR_STATE_IDLE)
 		do_sleep(3)
 		return
