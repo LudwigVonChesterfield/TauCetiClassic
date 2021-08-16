@@ -140,6 +140,10 @@
 	if(istype(T.loc, /area/asteroid/mine/biome/asteroids/explored))
 		return FALSE
 
+	var/area/A = get_area(T)
+	if(!istype(A, /area/asteroid/mine/biome))
+		return FALSE
+
 	return T.is_mob_placeable(null)
 
 /area/asteroid/mine/biome/proc/SpawnMonsters(turf/T)
