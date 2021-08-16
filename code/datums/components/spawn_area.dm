@@ -35,6 +35,9 @@ var/global/list/datum/area_group/observer_groups
 	LAZYSET(observers, L, spawn_timer)
 
 /datum/area_group/proc/add_observer(mob/living/L, delay)
+	if(LAZYACCESS(observers, L))
+		return
+
 	refresh_observer(L, delay)
 
 	RegisterSignal(L, list(COMSIG_PARENT_QDELETING), .proc/on_observer_qdel)
