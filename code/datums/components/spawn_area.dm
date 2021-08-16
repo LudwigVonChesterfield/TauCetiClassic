@@ -30,8 +30,6 @@ var/global/list/datum/area_group/observer_groups
 		TIMER_UNIQUE|TIMER_OVERRIDE|TIMER_STOPPABLE
 	)
 
-	to_chat(world, "ADDED A CALLBACK FOR [L]")
-
 	LAZYSET(observers, L, spawn_timer)
 
 /datum/area_group/proc/add_observer(mob/living/L, delay)
@@ -46,8 +44,6 @@ var/global/list/datum/area_group/observer_groups
 	deltimer(observers[L])
 	LAZYREMOVE(observers, L)
 	UnregisterSignal(L, list(COMSIG_PARENT_QDELETING))
-
-	to_chat(world, "REMOVING A CALLBACK FOR [L]")
 
 	if(!observers)
 		qdel(src)
@@ -262,8 +258,6 @@ var/global/list/datum/area_group/observer_groups
 
 		pos_turfs += t
 
-	to_chat(world, "IN TRYSPAWN")
-
 	if(!pos_turfs.len)
 		to_chat(world, "NO SPAWN TURFS FOUND")
 		return
@@ -292,7 +286,6 @@ var/global/list/datum/area_group/observer_groups
 	return AG.observers
 
 /datum/component/spawn_area/proc/Spawn(turf/T)
-	to_chat(world, "SPAWNING AT [T.x] [T.y]")
 	var/list/atom/movable/instances = spawn_callback.Invoke(T)
 
 	for(var/instance in instances)
@@ -300,7 +293,6 @@ var/global/list/datum/area_group/observer_groups
 		register_instance(instance)
 
 /datum/component/spawn_area/proc/Despawn(atom/movable/instance)
-	to_chat(world, "DESPAWNING [instance] [instance.x] [instance.y]")
 	return despawn_callback.Invoke(instance)
 
 /datum/component/spawn_area/proc/CheckSpawn(turf/T)
