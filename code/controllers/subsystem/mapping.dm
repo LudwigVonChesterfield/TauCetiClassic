@@ -50,8 +50,36 @@ SUBSYSTEM_DEF(mapping)
 	..()
 
 /datum/controller/subsystem/mapping/proc/make_mining_asteroid_secrets()
+	var/list/turf/turfs = get_area_turfs(/area/asteroid/mine/biome/asteroids/unexplored)
 	for(var/i in 1 to MAX_MINING_SECRET_ROOM)
-		make_mining_asteroid_secret(3)
+		make_mining_asteroid_secret(
+			turfs,
+			space_surprises,
+		)
+
+	var/list/turf/biome_turfs = get_area_turfs(/area/asteroid/mine/biome) - get_area_turfs(/area/asteroid/mine/biome/asteroids/unexplored)
+	for(var/i in 1 to MAX_MINING_SECRET_ROOM)
+		make_mining_asteroid_secret(
+			biome_turfs,
+			space_surprises,
+		)
+
+	var/static/list/collectibles = list(
+		/mob/living/carbon/ian,
+		/mob/living/simple_animal/corgi/borgi,
+		/mob/living/simple_animal/parrot/Poly,
+		/mob/living/simple_animal/walle,
+		/mob/living/simple_animal/det5,
+		/mob/living/simple_animal/cat/dusty,
+		/mob/living/simple_animal/fox/Renault,
+		/mob/living/simple_animal/mouse/brown/Tom,
+	)
+
+	for(var/c in collectibles)
+		make_mining_asteroid_secret(
+			biome_turfs,
+			list(c),
+		)
 
 /datum/controller/subsystem/mapping/proc/populate_distribution_map()
 	for(var/z in SSmapping.levels_by_trait(ZTRAIT_MINING))
