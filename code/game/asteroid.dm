@@ -84,15 +84,13 @@ var/global/list/spawned_surprises = list()
 
 //////////////
 
-/proc/make_mining_asteroid_secret(size = 5)
+/proc/make_mining_asteroid_secret(list/turfs, list/surprises, size = 5)
 	var/valid = 0
 	var/turf/T = null
 	var/sanity = 0
 	var/list/room = null
-	var/list/turfs = null
 
-
-	turfs = get_area_turfs(/area/asteroid/mine/biome/asteroids/unexplored)
+	turfs = list() + turfs
 
 	if(!turfs.len)
 		return 0
@@ -141,7 +139,7 @@ var/global/list/spawned_surprises = list()
 			var/surprise = null
 			valid = 0
 			while(!valid)
-				surprise = pickweight(space_surprises)
+				surprise = pickweight(surprises)
 				if(surprise in spawned_surprises)
 					if(prob(20))
 						valid++

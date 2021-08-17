@@ -1075,6 +1075,91 @@
 /datum/species/shadowling/call_digest_proc(mob/living/M, datum/reagent/R)
 	return R.on_shadowling_digest(M)
 
+/datum/species/bluespace
+	name = BLUESPACE
+
+	icobase = 'icons/mob/human_races/r_golem.dmi'
+	deform = 'icons/mob/human_races/r_golem.dmi'
+	dietflags = 0
+
+	brute_mod = 0.0
+	burn_mod = 0.0
+	oxy_mod = 0.0
+	tox_mod = 0.0
+	clone_mod = 0.0
+	brain_mod = 0.0
+
+	blood_datum_path = /datum/dirt_cover/oil
+	flesh_color = "#575757"
+
+	butcher_drops = list(/obj/item/stack/sheet/plasteel = 3)
+
+	flags = list(
+		NO_BLOOD = TRUE,
+		NO_DNA = TRUE,
+		NO_BREATHE = TRUE,
+		NO_SCAN = TRUE,
+		NO_PAIN = TRUE,
+		NO_EMBED = TRUE,
+		RAD_IMMUNE = TRUE,
+		VIRUS_IMMUNE = TRUE,
+		BIOHAZZARD_IMMUNE = TRUE,
+		NO_VOMIT = TRUE,
+		NO_FINGERPRINT = TRUE,
+		NO_MINORCUTS = TRUE,
+		NO_EMOTION = TRUE,
+		NO_MUTATION = TRUE,
+		NO_FAT = TRUE,
+	)
+
+	has_organ = list(
+	)
+
+	has_gendered_icons = FALSE
+
+	min_age = 1
+	max_age = 1000
+
+/datum/species/bluespace/on_gain(mob/living/carbon/human/H)
+	..()
+	// Clothing on the Bluepsace Debug Creature is created before the hud_list is generated in the atom
+	H.prepare_huds()
+
+	H.status_flags &= ~(CANSTUN | CANWEAKEN | CANPARALYSE)
+
+	for(var/x in list(H.w_uniform, H.head, H.wear_suit, H.shoes, H.wear_mask, H.gloves))
+		if(x)
+			H.remove_from_mob(x)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/golem, SLOT_W_UNIFORM)
+	H.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/golem, SLOT_HEAD)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/space/golem, SLOT_WEAR_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/golem, SLOT_SHOES)
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/golem, SLOT_WEAR_MASK)
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/golem, SLOT_GLOVES)
+
+/datum/species/bluespace/on_loose(mob/living/carbon/human/H)
+	H.status_flags |= MOB_STATUS_FLAGS_DEFAULT
+
+	for(var/x in list(H.w_uniform, H.head, H.wear_suit, H.shoes, H.wear_mask, H.gloves))
+		if(x)
+			var/static/list/golem_items = list(
+				/obj/item/clothing/under/golem,
+				/obj/item/clothing/head/helmet/space/golem,
+				/obj/item/clothing/suit/space/golem,
+				/obj/item/clothing/shoes/golem,
+				/obj/item/clothing/mask/gas/golem,
+				/obj/item/clothing/gloves/golem
+				)
+
+			if(is_type_in_list(x, golem_items))
+				qdel(x)
+
+	..()
+
+/datum/species/bluespace/call_digest_proc(mob/living/M, datum/reagent/R)
+	return FALSE
+
 /datum/species/golem
 	name = GOLEM
 
@@ -1148,7 +1233,7 @@
 
 	for(var/x in list(H.w_uniform, H.head, H.wear_suit, H.shoes, H.wear_mask, H.gloves))
 		if(x)
-			var/list/golem_items = list(
+			var/static/list/golem_items = list(
 				/obj/item/clothing/under/golem,
 				/obj/item/clothing/head/helmet/space/golem,
 				/obj/item/clothing/suit/space/golem,

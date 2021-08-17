@@ -81,6 +81,7 @@
 #define SHADOWLING     "Shadowling"
 #define MONKEY         "Monkey"
 #define GOLEM          "Adamantine Golem"
+#define BLUESPACE      "Bluespace Being"
 #define ZOMBIE         "Zombie"
 #define ZOMBIE_TAJARAN "Zombie Tajaran"
 #define ZOMBIE_SKRELL  "Zombie Skrell"

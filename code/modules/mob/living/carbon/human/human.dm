@@ -115,6 +115,9 @@
 /mob/living/carbon/human/golem/atom_init(mapload)
 	. = ..(mapload, GOLEM)
 
+/mob/living/carbon/human/bluespace/atom_init(mapload)
+	. = ..(mapload, BLUESPACE)
+
 /mob/living/carbon/human/shadowling/atom_init(mapload)
 	. = ..(mapload, SHADOWLING)
 	var/newNameId = pick(possibleShadowlingNames)
@@ -2143,9 +2146,9 @@
 	return TRUE
 
 /mob/living/carbon/human/update_size_class()
-	
+
 	var/new_w_class = initial(w_class)
-	
+
 	if(SMALLSIZE in mutations)
 		new_w_class -= 1
 

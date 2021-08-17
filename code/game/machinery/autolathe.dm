@@ -412,7 +412,7 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 		var/datum/autolathe_recipe/recipe = locate(params["remember"])
 
 		if(!istype(recipe))
-			return FALSE
+			return
 
 		var/list/datum/autolathe_recipe/recipes
 
@@ -423,6 +423,10 @@ var/global/list/datum/autolathe_recipe/autolathe_recipes_all = autolathe_recipes
 
 		if(!locate(recipe, recipes))
 			return FALSE
+
+		if(remembered_recipe == recipe)
+			remembered_recipe = null
+			return
 
 		remembered_recipe = recipe
 

@@ -16,7 +16,7 @@
 	Аминь.
 	                                          — Мф. 6:9—13
 
-	Manipulator is machinery that simulates clicking stuff on stuff.
+	Manipulator is a machinery that simulates clicking stuff on stuff.
 	Currently it creates it's own mob to click stuff with.
 	Which is I might say. Sinful.
  */
@@ -429,7 +429,7 @@
 	return ..()
 
 /obj/machinery/manipulator/proc/create_clicker()
-	clicker = new(src)
+	clicker = new /mob/living/carbon/human/bluespace(src)
 	clicker.simulated = FALSE
 	clicker.name = "manipulator"
 	clicker.real_name = "manipulator"
@@ -438,8 +438,11 @@
 	clicker.invisibility = INVISIBILITY_ABSTRACT
 	clicker.anchored = TRUE
 	clicker.density = FALSE
+	clicker.layer = BELOW_TURF_LAYER
+	clicker.plane = CLICKCATCHER_PLANE
 
 /obj/machinery/manipulator/proc/before_click()
+	clicker.rejuvenate()
 	clicker.forceMove(loc)
 
 /obj/machinery/manipulator/proc/after_click()
