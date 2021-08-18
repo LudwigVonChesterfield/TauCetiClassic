@@ -376,10 +376,10 @@
 		if(120 to INFINITY)
 			add_event(null, "pain", /datum/mood_event/agony)
 
-/datum/component/mood/proc/check_area_mood(datum/source, area/A)
+/datum/component/mood/proc/check_area_mood(datum/source, area/A, atom/OldLoc)
 	SIGNAL_HANDLER
 
-	UnregisterSignal(get_area(parent), list(COMSIG_AREA_UPDATE_BEAUTY))
+	UnregisterSignal(get_area(OldLoc), list(COMSIG_AREA_UPDATE_BEAUTY))
 	RegisterSignal(A, list(COMSIG_AREA_UPDATE_BEAUTY), /datum/component/mood.proc/update_beauty)
 
 	update_beauty(A)
