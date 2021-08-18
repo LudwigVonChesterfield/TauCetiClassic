@@ -212,6 +212,8 @@
 			global.faith_reactions_by_aspects[aspect_type] = list()
 		global.faith_reactions_by_aspects[aspect_type] += id
 
+	populate_computer_commands()
+
 	populate_gear_list()
 
 /proc/init_joblist() // Moved here because we need to load map config to edit jobs, called from SSjobs

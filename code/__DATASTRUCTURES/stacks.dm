@@ -10,6 +10,19 @@
 	if(max)
 		max_elements = max
 
+/datum/stack/proc/Reverse()
+	var/datum/stack/temp = new()
+
+	while(!is_empty())
+		temp.Push(Pop())
+
+	stack = temp.stack
+
+/datum/stack/proc/Size()
+	if(is_empty())
+		return 0
+	return stack.len
+
 /datum/stack/proc/Pop()
 	if(is_empty())
 		return null

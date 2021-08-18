@@ -192,6 +192,8 @@ var/global/datum/controller/radio/radio_controller
 //	var/N_f=0
 //	var/N_nf=0
 //	var/Nt=0
+	signal.frequency = frequency
+
 	var/turf/start_point
 	if(range)
 		start_point = get_turf(source)

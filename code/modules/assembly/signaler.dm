@@ -120,10 +120,6 @@ Code:
 		lastsignalers.Add("[time] <B>:</B> [usr.key] used [src] @ location [COORD(T)] <B>:</B> [format_frequency(frequency)]/[code]")
 		message_admins("[key_name_admin(usr)] used [src], location [COORD(T)] <B>:</B> [format_frequency(frequency)]/[code] [ADMIN_JMP(usr)]")
 		log_game("[usr.ckey]([usr]) used [src], location [COORD(T)],frequency: [format_frequency(frequency)], code:[code]")
-	else
-		lastsignalers.Add("[time] <B>:</B> (<span class='warning'>NO USER FOUND</span>) used [src] @ location [COORD(T)] <B>:</B> [format_frequency(frequency)]/[code]")
-		message_admins("(<span class='warning'>NO USER FOUND</span>) used [src], location [COORD(T)] <B>:</B> [format_frequency(frequency)]/[code]")
-		log_game("(NO USER FOUND) used [src], location [COORD(T)],frequency: [format_frequency(frequency)], code:[code]")
 
 	return
 
