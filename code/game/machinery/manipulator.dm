@@ -79,7 +79,7 @@
 	// Initialized in atom_init because BYOND is weird with int assoc lists like that.
 	var/list/hand_offset
 
-	var/busy_moving
+	var/busy_moving = FALSE
 
 	// This is here solely for the coolness of manipulators opening crates.
 	// If something enters the tile even when manipulator is working, it will remember it,
@@ -415,10 +415,12 @@
 		wires.interact(user)
 		return
 
-	else if(default_unfasten_wrench(user, I))
+	else if(default_unfasten_wrench(user, I) && !busy_moving && state == MANIPULATOR_STATE_IDLE)
+		to_chat(world, "UNFASTENING MANIPULATOR")
 		if(!panel_open)
 			if(anchored)
 				add_overlay(stat)
+				set_dir(dir)
 			else
 				cut_overlay(stat)
 		return
@@ -431,8 +433,8 @@
 /obj/machinery/manipulator/proc/create_clicker()
 	clicker = new /mob/living/carbon/human/bluespace(src)
 	clicker.simulated = FALSE
-	clicker.name = "manipulator"
-	clicker.real_name = "manipulator"
+	clicker.real_name = "manipulator ([rand(0, 999)])"
+	clicker.name = clicker.real_name
 	clicker.status_flags |= GODMODE
 	clicker.canmove = FALSE
 	clicker.invisibility = INVISIBILITY_ABSTRACT
