@@ -241,3 +241,17 @@
 				prob(12);/obj/item/weapon/storage/backpack/santabag,\
 			)
 
+/obj/random/cloth/ushanka
+	name = "random ushanka"
+	desc = "This is a random ushanka."
+	icon = 'icons/obj/clothing/hats.dmi'
+	icon_state = "ushanka_black_brown-down"
+
+/obj/random/cloth/ushanka/item_to_spawn()
+	return pickweight(
+		/obj/item/clothing/head/ushanka = 3,
+		/obj/item/clothing/head/ushanka/black = 1,
+		/obj/item/clothing/head/ushanka/brown = 2,
+		/obj/item/clothing/head/ushanka/black_white = 2,
+		/obj/item/clothing/head/ushanka/brown_white = 2,
+	)
