@@ -204,8 +204,8 @@
 /obj/machinery/sleeper/container_resist()
 	open_machine()
 
-/obj/machinery/sleeper/relaymove(mob/user)
-	..()
+/obj/machinery/sleeper/relaymove(mob/M, direction)
+	. = ..()
 	open_machine()
 
 /obj/machinery/sleeper/Destroy()

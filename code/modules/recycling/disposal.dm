@@ -652,12 +652,12 @@
 
 
 // called when player tries to move while in a pipe
-/obj/structure/disposalholder/relaymove(mob/user)
-
-	if(!istype(user,/mob/living))
+/obj/structure/disposalholder/relaymove(mob/M, direction)
+	. = ..()
+	if(!istype(M,/mob/living))
 		return
 
-	var/mob/living/U = user
+	var/mob/living/U = M
 
 	if (U.stat || U.last_special <= world.time)
 		return
@@ -665,8 +665,8 @@
 	U.last_special = world.time+100
 
 	if (src.loc)
-		for (var/mob/M in hearers(src.loc.loc))
-			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
+		for (var/mob/hearer in hearers(src.loc.loc))
+			to_chat(hearer, "<FONT size=[max(0, 5 - get_dist(src, hearer))]>CLONG, clong!</FONT>")
 
 	playsound(src, 'sound/effects/clang.ogg', VOL_EFFECTS_MASTER, null, FALSE)
 

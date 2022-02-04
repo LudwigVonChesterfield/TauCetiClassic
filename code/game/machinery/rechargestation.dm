@@ -94,8 +94,9 @@
 /obj/machinery/recharge_station/proc/chargepercentage()
 	return ((current_internal_charge / max_internal_charge) * 100)
 
-/obj/machinery/recharge_station/relaymove(mob/user)
-	if(user.incapacitated())
+/obj/machinery/recharge_station/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated())
 		return
 	open_machine()
 

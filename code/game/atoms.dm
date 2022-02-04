@@ -314,8 +314,10 @@
 	if(.)
 		SEND_SIGNAL(src, COMSIG_ATOM_CHANGE_DIR, dir)
 
-/atom/proc/relaymove()
-	return
+/atom/proc/relaymove(mob/M, dir)
+	SHOULD_CALL_PARENT(TRUE)
+
+	SEND_SIGNAL(src, COMSIG_ATOM_RELAYMOVE, M, dir)
 
 /atom/proc/ex_act()
 	return

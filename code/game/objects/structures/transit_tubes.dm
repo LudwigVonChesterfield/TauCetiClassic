@@ -378,12 +378,13 @@
 //  if it is, check the direction. If the direction matches the direction of
 //  the station, try to exit. If the direction matches one of the station's
 //  tube directions, launch the pod in that direction.
-/obj/structure/transit_tube_pod/relaymove(mob/mob, direction)
-	if(istype(mob, /mob) && mob.client)
+/obj/structure/transit_tube_pod/relaymove(mob/M, direction)
+	. = ..()
+	if(istype(M, /mob) && M.client)
 		// If the pod is not in a tube at all, you can get out at any time.
 		if(!(locate(/obj/structure/transit_tube) in loc))
 			move_out_content()
-			mob.client.Move(get_step(loc, direction), direction)
+			M.client.Move(get_step(loc, direction), direction)
 
 			//if(moving && istype(loc, /turf/space))
 				// Todo: If you get out of a moving pod in space, you should move as well.
@@ -396,7 +397,7 @@
 						if(direction == station.dir)
 							if(station.icon_state == "open")
 								move_out_content()
-								mob.client.Move(get_step(loc, direction), direction)
+								M.client.Move(get_step(loc, direction), direction)
 
 							else
 								station.open_animation()

@@ -131,10 +131,11 @@
 	var/image/indicator
 	var/modifier_delay = 2
 
-/obj/effect/dummy/spell_jaunt/relaymove(mob/user, direction)
+/obj/effect/dummy/spell_jaunt/relaymove(mob/M, direction)
+	. = ..()
 	if(last_move + modifier_delay > world.time)
 		return
-	if(user != master)
+	if(M != master)
 		return
 	var/turf/newLoc = get_step(src,direction)
 	for(var/obj/effect/proc_holder/spell/targeted/ethereal_jaunt/J in master.spell_list)
@@ -142,7 +143,7 @@
 			if(canmove)
 				loc = newLoc
 		else
-			to_chat(user, "<span class='warning'>Some strange aura is blocking the way!</span>")
+			to_chat(M, "<span class='warning'>Some strange aura is blocking the way!</span>")
 	dir = direction
 	last_move = world.time
 	if(indicator)

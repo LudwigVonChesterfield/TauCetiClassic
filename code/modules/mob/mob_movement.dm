@@ -52,6 +52,21 @@
 			mob.control_object.loc = get_step(mob.control_object,direct)
 	return
 
+/client/proc/UpdateMoveDelay(mob/M)
+	var/add_delay
+	move_delay = world.time//set move delay
+	M.last_move_intent = world.time + 10
+	switch(mob.m_intent)
+		if("run")
+			if(mob.drowsyness > 0)
+				add_delay += 6
+			add_delay += 1 + config.run_speed
+		if("walk")
+			add_delay += 2.5 + config.walk_speed
+	add_delay += mob.movement_delay()
+	move_delay += add_delay
+	return add_delay
+
 /client/Move(n, direct, forced = FALSE)
 	if(!mob)
 		return // Moved here to avoid nullrefs below
@@ -137,18 +152,7 @@
 			return 0
 
 		//We are now going to move
-		var/add_delay
-		move_delay = world.time//set move delay
-		mob.last_move_intent = world.time + 10
-		switch(mob.m_intent)
-			if("run")
-				if(mob.drowsyness > 0)
-					add_delay += 6
-				add_delay += 1+config.run_speed
-			if("walk")
-				add_delay += 2.5+config.walk_speed
-		add_delay += mob.movement_delay()
-		move_delay += add_delay
+		var/add_delay = UpdateMoveDelay(mob)
 
 		if(mob.pulledby || mob.buckled) // Wheelchair driving!
 			if(istype(mob.loc, /turf/space))
@@ -245,7 +249,7 @@
 	var/obj/machinery/computer/security/console = machine
 	var/turf/T = get_turf(console.active_camera)
 	var/list/cameras = list()
-	
+
 	for(var/cam_tag in console.camera_cache)
 		var/obj/C = console.camera_cache[cam_tag]
 		if(C == console.active_camera)

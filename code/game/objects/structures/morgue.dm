@@ -185,8 +185,9 @@
 	update_icon()
 	return TRUE
 
-/obj/structure/morgue/relaymove(mob/user)
-	if (user.incapacitated())
+/obj/structure/morgue/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated())
 		return
 	connected = new /obj/structure/m_tray( loc )
 	step(connected, dir)
@@ -365,8 +366,9 @@
 	else
 		..()
 
-/obj/structure/crematorium/relaymove(mob/user)
-	if (user.incapacitated() || locked)
+/obj/structure/crematorium/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated() || locked)
 		return
 	src.connected = new /obj/structure/c_tray( src.loc )
 	step(src.connected, SOUTH)

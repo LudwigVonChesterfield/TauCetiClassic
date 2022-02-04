@@ -46,32 +46,33 @@
 	else
 		to_chat(usr, "<span class='notice'>You turn the brake off.</span>")
 
-/obj/structure/stool/bed/chair/wheelchair/relaymove(mob/user, direction)
+/obj/structure/stool/bed/chair/wheelchair/relaymove(mob/M, direction)
+	. = ..()
 	if(brake)
-		to_chat(user, "<span class='red'>You cannot drive while brake is on.</span>")
+		to_chat(M, "<span class='red'>You cannot drive while brake is on.</span>")
 		return
-	if(user.incapacitated())
-		if(user==pulling)
+	if(M.incapacitated())
+		if(M==pulling)
 			pulling = null
-			user.pulledby = null
-			to_chat(user, "<span class='red'>You lost your grip!</span>")
+			M.pulledby = null
+			to_chat(M, "<span class='red'>You lost your grip!</span>")
 		return
-	if(user.pulling && (user == pulling))
+	if(M.pulling && (M == pulling))
 		pulling = null
-		user.pulledby = null
+		M.pulledby = null
 		return
 	if(propelled)
 		return
 	if(pulling && (get_dist(src, pulling) > 1))
 		pulling = null
-		user.pulledby = null
-		if(user==pulling)
+		M.pulledby = null
+		if(M==pulling)
 			return
 	if(pulling && (get_dir(src.loc, pulling.loc) == direction))
-		to_chat(user, "<span class='red'>You cannot go there.</span>")
+		to_chat(M, "<span class='red'>You cannot go there.</span>")
 		return
-	if(pulling && buckled_mob && (buckled_mob == user))
-		to_chat(user, "<span class='red'>You cannot drive while being pushed.</span>")
+	if(pulling && buckled_mob && (buckled_mob == M))
+		to_chat(M, "<span class='red'>You cannot drive while being pushed.</span>")
 		return
 
 	// Let's roll
@@ -100,7 +101,7 @@
 			spawn(0)
 			if(get_dist(src, pulling) > 1) // We are too far away? Losing control.
 				pulling = null
-				user.pulledby = null
+				M.pulledby = null
 			pulling.set_dir(get_dir(pulling, src)) // When everything is right, face the wheelchair
 	if(bloodiness)
 		create_track()

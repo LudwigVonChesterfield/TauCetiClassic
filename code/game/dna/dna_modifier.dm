@@ -177,11 +177,11 @@
 				occupant = null
 			icon_state = "[initial(icon_state)]_open"
 
-/obj/machinery/dna_scannernew/relaymove(mob/user)
-	if(user.incapacitated())
+/obj/machinery/dna_scannernew/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated())
 		return
-	open(user)
-	return
+	open(M)
 
 /obj/machinery/dna_scannernew/attackby(obj/item/I, mob/user)
 	if(!occupant && default_deconstruction_screwdriver(user, "[initial(icon_state)]_open", "[initial(icon_state)]", I))

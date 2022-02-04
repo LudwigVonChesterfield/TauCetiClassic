@@ -39,12 +39,13 @@
 
 		handle_rig_move(NewLoc, Dir)
 
-/mob/living/carbon/relaymove(mob/user, direction)
-	if(isessence(user))
-		user.setMoveCooldown(1)
-		var/mob/living/parasite/essence/essence = user
+/mob/living/carbon/relaymove(mob/M, direction)
+	. = ..()
+	if(isessence(M))
+		M.setMoveCooldown(1)
+		var/mob/living/parasite/essence/essence = M
 		if(!(essence.flags_allowed & ESSENCE_PHANTOM))
-			to_chat(user, "<span class='userdanger'>Your host forbrade you to own phantom</span>")
+			to_chat(M, "<span class='userdanger'>Your host forbrade you to own phantom</span>")
 			return
 
 		if(!essence.phantom.showed)
@@ -943,7 +944,7 @@
 		sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 		see_in_dark = 8
 		if(!druggy)
-			see_invisible = SEE_INVISIBLE_LEVEL_TWO	
+			see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice/space_ninja))
 		var/obj/item/clothing/mask/gas/voice/space_ninja/O = wear_mask

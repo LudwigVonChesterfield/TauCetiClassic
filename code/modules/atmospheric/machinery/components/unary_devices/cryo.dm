@@ -135,8 +135,9 @@
 /obj/machinery/atmospherics/components/unary/cryo_cell/allow_drop()
 	return 0
 
-/obj/machinery/atmospherics/components/unary/cryo_cell/relaymove(mob/user)
-	container_resist(user)
+/obj/machinery/atmospherics/components/unary/cryo_cell/relaymove(mob/M, direction)
+	. = ..()
+	container_resist(M)
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/container_resist(mob/user)
 	if(user.is_busy(null, FALSE)) // prevents spam too.

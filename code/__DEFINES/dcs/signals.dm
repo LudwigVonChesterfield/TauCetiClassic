@@ -132,6 +132,8 @@
 	#define COMPONENT_NO_MOUSEDROP 1
 /// from base of atom/MouseDrop_T: (/atom/from, /mob/user)
 #define COMSIG_MOUSEDROPPED_ONTO "mousedropped_onto"
+/// from base of atom/MouseDrop_T: (/atom/from, /atom/with, list/params)
+#define COMSIG_MOUSEDROP_BY "mousedrop_by"
 /// from base of atom/add_dirt_cover: (datum/dirt_cover/dirt_datum)
 #define COMSIG_ATOM_ADD_DIRT "atom_add_dirt"
 /// from base of atom/clean_blood (WHICH APPERANTLY CLEANS ALL DIRT OVERLAYS ?? ??? ?)
@@ -139,6 +141,9 @@
 
 /// from base /atom/movable/proc/Moved() and /atom/proc/set_dir() return dir
 #define COMSIG_ATOM_CHANGE_DIR "change_dir"
+
+/// from base /atom/proc/relaymove(mob/M, direction)
+#define COMSIG_ATOM_RELAYMOVE "relaymove"
 
 // /atom/movable signals
 /// from base of atom/movable/Move(): (/atom/newLoc)
@@ -260,6 +265,9 @@
 #define COMSIG_LIVING_CLICK_CTRL "living_click_ctrl"
 /// from base of mob/CtrlShiftClickOn(): (atom/target)
 #define COMSIG_LIVING_CLICK_CTRL_SHIFT "living_click_ctrl_shift"
+/// from base of mob/resist()
+#define COMSIG_LIVING_RESIST "living_resist"
+	#define COMPONENT_NO_RESIST 1
 /// from slime CtrlClickOn(): (/mob)
 #define COMSIG_XENO_SLIME_CLICK_CTRL "xeno_slime_click_ctrl"
 /// from slime ShiftClickOn(): (/mob)

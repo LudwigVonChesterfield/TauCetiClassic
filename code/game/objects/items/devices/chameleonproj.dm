@@ -171,15 +171,15 @@
 /obj/effect/dummy/chameleon/bullet_act()
 	master.disrupt()
 
-/obj/effect/dummy/chameleon/relaymove(mob/user, direction)
-
+/obj/effect/dummy/chameleon/relaymove(mob/M, direction)
+	. = ..()
 	// We can't move when we are in space or inside of an object.
 	if(istype(loc, /turf/space) || !isturf(loc))
 		return
 
 	if(can_move)
 		can_move = FALSE
-		switch(user.bodytemperature)
+		switch(M.bodytemperature)
 			if(300 to INFINITY)
 				spawn(10) can_move = TRUE
 			if(295 to 300)

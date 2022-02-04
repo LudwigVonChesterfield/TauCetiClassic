@@ -171,6 +171,9 @@ Please contact me on #coderbus IRC. ~Carn x
 
 	var/image/I = image(icon = icon_path, icon_state = "[t_state][icon_state_appendix]", layer = layer)
 	I.color = color
+	// is there a way to copy filters?
+	if(dionified)
+		add_diona_filter(I)
 
 	if(dirt_overlay && bloodied_icon_state)
 		var/image/bloodsies = image(icon = 'icons/effects/blood.dmi', icon_state = bloodied_icon_state)

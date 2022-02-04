@@ -79,10 +79,11 @@
 
 /********Moving camera Eye********/
 
-/obj/structure/droppod/relaymove(mob/user, direction)
-	if(eyeobj && user == intruder)
+/obj/structure/droppod/relaymove(mob/M, direction)
+	. = ..()
+	if(eyeobj && M == intruder)
 		eyeobj.setLoc(get_turf(get_step(eyeobj, direction)))
-	else if(user == second_intruder)
+	else if(M == second_intruder)
 		Eject_second()
 
 /mob/camera/Eye/drop

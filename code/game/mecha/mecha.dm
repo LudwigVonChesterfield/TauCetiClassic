@@ -251,10 +251,11 @@
 		return occupant.Process_Spacemove(movement_dir) //We'll just say you used the clamp to grab the wall
 	return ..()
 
-/obj/mecha/relaymove(mob/user,direction)
-	if(user != src.occupant) //While not "realistic", this piece is player friendly.
-		user.forceMove(get_turf(src))
-		to_chat(user, "You climb out from [src]")
+/obj/mecha/relaymove(mob/M, direction)
+	. = ..()
+	if(M != src.occupant) //While not "realistic", this piece is player friendly.
+		M.forceMove(get_turf(src))
+		to_chat(M, "You climb out from [src]")
 		return 0
 	if(connected_port)
 		if(world.time - last_message > 20)

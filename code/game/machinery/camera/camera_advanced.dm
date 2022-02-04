@@ -156,7 +156,9 @@
 	master = null
 	return ..()
 
-/mob/camera/Eye/remote/relaymove(mob/user,direct)
+/mob/camera/Eye/remote/relaymove(mob/M, direction)
+	. = ..()
+
 	var/initial = initial(sprint)
 	var/max_sprint = 50
 
@@ -164,7 +166,7 @@
 		sprint = initial
 
 	for(var/i = 0; i < max(sprint, initial); i += 20)
-		var/turf/movement = get_step(src, direct)
+		var/turf/movement = get_step(src, direction)
 		if(movement)
 			setLoc(movement)
 

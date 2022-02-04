@@ -400,8 +400,8 @@
 			src.occupant = null
 	return
 
-/obj/machinery/clonepod/relaymove(mob/user)
-	if (user.incapacitated())
+/obj/machinery/clonepod/relaymove(mob/M, direction)
+	if (M.incapacitated())
 		return
 	go_out()
 	return

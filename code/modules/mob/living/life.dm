@@ -59,10 +59,6 @@
 			return H.is_vision_obstructed()
 		else
 			return TRUE
-	if(istype(src, /mob/living/carbon/monkey/diona) && ishuman(loc))
-		var/mob/living/H = loc
-		if(H.get_species() == DIONA)
-			return FALSE
 	return loc && !isturf(loc) && !is_type_in_list(loc, ignore_vision_inside)
 
 /mob/living/proc/handle_vision()

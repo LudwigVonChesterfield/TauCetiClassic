@@ -18,8 +18,9 @@
 	else
 		set_light(0)
 
-/obj/machinery/bodyscanner/relaymove(mob/user)
-	if(!user.incapacitated())
+/obj/machinery/bodyscanner/relaymove(mob/M, direction)
+	. = ..()
+	if(!M.incapacitated())
 		open_machine()
 
 /obj/machinery/bodyscanner/verb/eject()

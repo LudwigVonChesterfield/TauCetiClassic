@@ -700,10 +700,11 @@
 	bloodiness += 4
 
 // player on mulebot attempted to move
-/obj/machinery/bot/mulebot/relaymove(mob/user)
-	if(user.incapacitated())
+/obj/machinery/bot/mulebot/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated())
 		return
-	if(load == user)
+	if(load == M)
 		unload(0)
 
 // receive a radio signal

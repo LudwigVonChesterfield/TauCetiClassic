@@ -18,6 +18,8 @@
 /atom/MouseDrop(atom/over, src_location, over_location, src_control, over_control, params)
 	if(!usr || !over)
 		return
+	if(SEND_SIGNAL(usr, COMSIG_MOUSEDROP_BY, over, src, params) & COMPONENT_NO_MOUSEDROP)
+		return
 	var/obj/item/I = usr.get_active_hand()
 	if(I && (SEND_SIGNAL(I, COMSIG_ITEM_MOUSEDROP_ONTO, over, src, usr) & COMPONENT_NO_MOUSEDROP))
 		return

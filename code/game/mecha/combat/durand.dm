@@ -39,7 +39,8 @@
 	selected_weapon = weapons[1]
 */
 
-/obj/mecha/combat/durand/relaymove(mob/user,direction)
+/obj/mecha/combat/durand/relaymove(mob/M, direction)
+	. = ..()
 	if(defence)
 		if(world.time - last_message > 20)
 			occupant_message("<font color='red'>Unable to move while in defence mode</font>")

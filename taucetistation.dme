@@ -1762,6 +1762,8 @@
 #include "code\modules\mob\living\carbon\monkey\powers.dm"
 #include "code\modules\mob\living\carbon\monkey\punpun.dm"
 #include "code\modules\mob\living\carbon\monkey\update_icons.dm"
+#include "code\modules\mob\living\carbon\species\diona\dionificator.dm"
+#include "code\modules\mob\living\carbon\species\diona\morphing.dm"
 #include "code\modules\mob\living\carbon\xenomorph\death.dm"
 #include "code\modules\mob\living\carbon\xenomorph\human_attackxeno.dm"
 #include "code\modules\mob\living\carbon\xenomorph\life.dm"

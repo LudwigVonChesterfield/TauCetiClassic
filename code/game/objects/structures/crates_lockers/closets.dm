@@ -225,16 +225,17 @@
 	if(isrobot(user) && Adjacent(user)) //Robots can open/close it, but not the AI
 		attack_hand(user)
 
-/obj/structure/closet/relaymove(mob/user)
-	if(user.incapacitated() || !isturf(src.loc))
+/obj/structure/closet/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated() || !isturf(src.loc))
 		return
 
 	if(!open())
-		to_chat(user, "<span class='notice'>It won't budge!</span>")
+		to_chat(M, "<span class='notice'>It won't budge!</span>")
 		if(!lastbang)
 			lastbang = 1
-			for (var/mob/M in hearers(src, null))
-				to_chat(M, text("<FONT size=[]>BANG, bang!</FONT>", max(0, 5 - get_dist(src, M))))
+			for (var/mob/hearer in hearers(src, null))
+				to_chat(hearer, text("<FONT size=[]>BANG, bang!</FONT>", max(0, 5 - get_dist(src, hearer))))
 			spawn(30)
 				lastbang = 0
 

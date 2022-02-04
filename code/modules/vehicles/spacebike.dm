@@ -142,7 +142,8 @@
 			L.apply_damage(0.5*damage, BRUTE, BP_R_ARM)
 	..()
 
-/obj/vehicle/space/spacebike/relaymove(mob/user, direction)
+/obj/vehicle/space/spacebike/relaymove(mob/M, direction)
+	. = ..()
 	return Move(get_step(src, direction))
 
 

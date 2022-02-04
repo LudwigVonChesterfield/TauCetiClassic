@@ -107,3 +107,11 @@
 #define SLIME_COLOR_BLUE SLIME_COLOR(0.2, 0.2, 0.5)
 #define SLIME_COLOR_YELLOW SLIME_COLOR(0.5, 0.5, 0.2)
 #define SLIME_COLOR_CYAN SLIME_COLOR(0.2, 0.5, 0.5)
+
+#define INTENSITY_COLOR(r, g, b) list( \
+	r,   0.0, 0.0, 0.0, \
+	0.0, g,   0.0, 0.0, \
+	0.0, 0.0, b,   0.0, \
+	0.0, 0.0, 0.0, 1.0, \
+	0.0, 0.0, 0.0, 0.0, \
+)

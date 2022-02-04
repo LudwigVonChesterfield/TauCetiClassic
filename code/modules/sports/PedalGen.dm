@@ -87,15 +87,16 @@
 				to_chat(user, "You are too exausted to pedal that thing.")
 		return 1
 
-/obj/structure/stool/bed/chair/pedalgen/relaymove(mob/user, direction)
-	if(!ishuman(user))
+/obj/structure/stool/bed/chair/pedalgen/relaymove(mob/M, direction)
+	. = ..()
+	if(!ishuman(M))
 		unbuckle_mob()
-	var/mob/living/carbon/human/pedaler = user
+	var/mob/living/carbon/human/pedaler = M
 	if(!pedaler.handcuffed)
 		unbuckle_mob()
 	else
 		if(!pedaled)
-			pedal(user)
+			pedal(M)
 
 
 /obj/structure/stool/bed/chair/pedalgen/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)

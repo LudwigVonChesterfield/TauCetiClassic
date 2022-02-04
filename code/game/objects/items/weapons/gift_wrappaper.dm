@@ -41,10 +41,11 @@
 	qdel(src)
 	return
 
-/obj/effect/spresent/relaymove(mob/user)
-	if (user.incapacitated())
+/obj/effect/spresent/relaymove(mob/M, direction)
+	. = ..()
+	if(M.incapacitated())
 		return
-	to_chat(user, "<span class='notice'>You cant move.</span>")
+	to_chat(M, "<span class='notice'>You cant move.</span>")
 
 /obj/effect/spresent/attackby(obj/item/weapon/W, mob/user)
 	..()

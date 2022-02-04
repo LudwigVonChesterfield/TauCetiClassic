@@ -19,10 +19,11 @@
 		A.ex_act(severity)
 	. = ..()
 
-/obj/machinery/atmospherics/relaymove(mob/living/user, direction)
-	if(user.loc != src || !user.canmove || !(direction in global.cardinal)) //can't go in a way we aren't connecting to
+/obj/machinery/atmospherics/relaymove(mob/M, direction)
+	. = ..()
+	if(M.loc != src || !M.canmove || !(direction in global.cardinal)) //can't go in a way we aren't connecting to
 		return
-	ventcrawl_to(user, findConnecting(direction), direction)
+	ventcrawl_to(M, findConnecting(direction), direction)
 
 /obj/machinery/atmospherics/proc/ventcrawl_to(mob/living/user, obj/machinery/atmospherics/target_move, direction)
 	if(target_move)

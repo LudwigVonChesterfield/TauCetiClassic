@@ -832,6 +832,9 @@
 
 	var/mob/living/L = usr
 
+	if(SEND_SIGNAL(src, COMSIG_LIVING_RESIST) & COMPONENT_NO_RESIST)
+		return
+
 	//Getting out of someone's inventory.
 
 	if(istype(src.loc,/obj/item/weapon/holder))
