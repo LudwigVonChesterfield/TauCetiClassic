@@ -181,5 +181,65 @@
 	// Perhaps add an abilities to resolve this situation with a callback? ~Luduk
 	qdel(src)
 
+
+/datum/component/bounded/rope
+	var/drops_rope = FALSE
+
+	var/image/rope_overlay
+
+/datum/component/bounded/rope/Initialize(atom/_bound_to, _min_dist, _max_dist, datum/callback/_resolve_callback, tips = TRUE, _vis_radius = TRUE, drops_rope=FALSE)
+	. = ..()
+	src.drops_rope = drops_rope
+
+	var/atom/A = parent
+	rope_overlay = image(icon = 'icons/obj/power_cond_white.dmi', icon_state = "0-1")
+	rope_overlay.layer = A.layer
+	rope_overlay.plane = A.plane
+	A.add_overlay(rope_overlay)
+
+/datum/component/bounded/rope/Destroy()
+	var/atom/A = parent
+	A.cut_overlay(rope_overlay)
+	new /obj/item/rope(A.loc)
+	QDEL_NULL(rope_overlay)
+	return ..()
+
+/datum/component/bounded/rope/resolve_stranded()
+	if(resolve_callback && resolve_callback.Invoke(src))
+		return
+
+	var/atom/movable/AM = parent
+	var/turf/parent_turf = get_turf(AM)
+	var/turf/T = get_turf(bound_to)
+
+	if(bound_to in AM)
+		jump_out_of(AM, bound_to)
+	else if(AM.loc != parent_turf)
+		jump_out_of(AM.loc, AM)
+
+	if(AM.loc != parent_turf)
+		return
+
+	step_to(AM, T)
+
+	rope_overlay.icon_state = "0-[get_dir(AM, bound_to)]"
+	rope_overlay.layer = AM.layer
+	rope_overlay.plane = AM.plane
+
+// This proc is called when the bounds move.
+/datum/component/bounded/rope/check_bounds()
+	var/dist = get_dist(parent, bound_to)
+	if(dist >= min_dist && dist <= max_dist)
+		return
+	resolve_stranded()
+
+	dist = get_dist(parent, bound_to)
+	if(dist >= min_dist && dist <= max_dist)
+		return
+	qdel(src)
+
+/datum/component/bounded/rope/on_try_move(datum/source, atom/newLoc, dir)
+	return NONE
+
 #undef BOUNDED_TIP
 #undef BOUNDS_TIP

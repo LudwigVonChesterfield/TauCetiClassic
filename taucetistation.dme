@@ -1045,6 +1045,7 @@
 #include "code\game\objects\items\weapons\paiwire.dm"
 #include "code\game\objects\items\weapons\power_cells.dm"
 #include "code\game\objects\items\weapons\RCD.dm"
+#include "code\game\objects\items\weapons\ropes.dm"
 #include "code\game\objects\items\weapons\RSF.dm"
 #include "code\game\objects\items\weapons\scrolls.dm"
 #include "code\game\objects\items\weapons\shields.dm"
