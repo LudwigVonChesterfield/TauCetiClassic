@@ -143,6 +143,9 @@
 		to_chat(attacker, "<span class='warning'>No attacking people at spawn!</span>")
 		return FALSE
 
+	if(try_dodge(attacker))
+		return
+
 	var/list/attack_obj = attacker.get_unarmed_attack()
 	if((attacker != src) && check_shields(attacker, attack_obj["damage"], attacker.name, get_dir(attacker, src)))
 		attacker.do_attack_animation(src)
