@@ -189,7 +189,10 @@ SUBSYSTEM_DEF(throwing)
 			continue
 		if (isliving(AM))
 			var/mob/living/L = AM
-			if (L.lying)
+			if(L.lying)
+				continue
+
+			if(L.try_dodge(AM))
 				continue
 
 		if (AM.density && !AM.throwpass)
