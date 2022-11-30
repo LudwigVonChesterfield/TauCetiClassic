@@ -332,8 +332,9 @@
 	if(!S.flags[IS_FLYING])
 		return FALSE
 
-	if(falling)
-		return FALSE
+	// WEAKEN should become falling for IS_FLYING mobs
+	//if(falling)
+	//	return FALSE
 
 	// Tycheon's default dodge - 45%
 	if(prob((10 - movement_delay()) * 5))
