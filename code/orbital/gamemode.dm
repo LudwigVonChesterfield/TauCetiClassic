@@ -5,7 +5,7 @@
 
 	minimum_player_count = 1
 
-	var/time_to_awake = 0.5 MINUTES
+	var/time_to_awake = 5 MINUTES
 
 /datum/game_mode/orbital/Setup()
 	addtimer(CALLBACK(src, .proc/awake_traitor), time_to_awake)
