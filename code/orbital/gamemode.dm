@@ -23,8 +23,6 @@
 
 	var/mob/traitor = pick(possible_traitor)
 
-	show_orbital_traitor_blurb(traitor.client)
-
 	sleep(15)
 
 	var/datum/faction/orbital_traitor/O = create_uniq_faction(/datum/faction/orbital_traitor)
