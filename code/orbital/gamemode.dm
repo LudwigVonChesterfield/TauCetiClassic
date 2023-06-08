@@ -1,4 +1,3 @@
-// <orbital>
 /datum/game_mode/orbital
 	name = "Orbital Station"
 	config_name = "orbital"

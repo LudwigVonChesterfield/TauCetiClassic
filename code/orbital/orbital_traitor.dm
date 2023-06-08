@@ -1,4 +1,3 @@
-// <orbital>
 /datum/role/orbital_traitor
 	name = ORBITAL_TRAITOR
 	id = ORBITAL_TRAITOR

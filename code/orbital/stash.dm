@@ -1,5 +1,3 @@
-// <orbital>
-
 /obj/machinery/disposal/tgui_act(action, list/params, datum/tgui/ui, datum/tgui_state/state)
 	. = ..()
 	if(action == "eject")

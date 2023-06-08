@@ -1,4 +1,3 @@
-// <orbital>
 /datum/objective/interrupt
 	explanation_text = "Не позволить данным оказаться у ЦК."
 
