@@ -14,6 +14,8 @@
 /datum/role/orbital_traitor/forgeObjectives()
 	AppendObjective(/datum/objective/interrupt)
 
+	AppendObjective(/datum/objective/provoke_evac)
+
 	AppendObjective(/datum/objective/hijack/orbital)
 
 	return TRUE
