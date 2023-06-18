@@ -208,6 +208,7 @@
 #include "code\_onclick\hud\ui_screens\screen_objects.dm"
 #include "code\_onclick\hud\ui_screens\silicon.dm"
 #include "code\_onclick\hud\ui_screens\storage.dm"
+#include "code\assistant\assistant.dm"
 #include "code\controllers\admin.dm"
 #include "code\controllers\configuration.dm"
 #include "code\controllers\controller.dm"
