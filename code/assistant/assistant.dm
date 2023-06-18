@@ -20,7 +20,7 @@
 
 	is_common = TRUE
 
-	icobase = 'assistant/r_monkey.dmi'
+	icobase = 'code/assistant/r_monkey.dmi'
 
 /datum/job/assistant/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
