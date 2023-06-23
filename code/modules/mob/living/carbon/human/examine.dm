@@ -588,7 +588,7 @@
 			msg += "<span class='notice'>[t_He] has these traits: [get_trait_string()].</span>"
 
 	if(!isobserver(user) && user.IsAdvancedToolUser() && !HAS_TRAIT(src, TRAIT_NATURECHILD) && user != src && !check_covered_bodypart(src, LOWER_TORSO))
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "naked", /datum/mood_event/naked)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "naked", /datum/karmatic_factor/naked)
 
 	to_chat(user, msg)
 

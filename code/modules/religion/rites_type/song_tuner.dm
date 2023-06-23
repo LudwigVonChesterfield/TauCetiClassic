@@ -69,7 +69,7 @@
 	religion.adjust_favor(2)
 
 /datum/religion_rites/song_tuner/evangelism/finish_effect(mob/living/listener, atom/song_source)
-	SEND_SIGNAL(listener, COMSIG_ADD_MOOD_EVENT, "blessing", /datum/mood_event/blessing)
+	listener.add_karmatic_factor("blessing", /datum/karmatic_factor/blessing)
 
 /datum/religion_rites/song_tuner/life
 	name = "Симфония Жизни"

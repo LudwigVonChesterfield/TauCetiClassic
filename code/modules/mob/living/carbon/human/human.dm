@@ -2322,12 +2322,12 @@
 		return
 
 	if(species.flags[IS_SYNTHETIC])
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "wet_clothes", /datum/mood_event/dangerous_clothes, -wet_clothes * 2)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "wet_clothes", /datum/karmatic_factor/dangerous_clothes, -wet_clothes * 2)
 		return
 	if(get_species() in list(SKRELL, DIONA, PODMAN))
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "wet_clothes", /datum/mood_event/refreshing_clothes, wet_clothes)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "wet_clothes", /datum/karmatic_factor/refreshing_clothes, wet_clothes)
 		return
-	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "wet_clothes", /datum/mood_event/wet_clothes, -wet_clothes)
+	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "wet_clothes", /datum/karmatic_factor/wet_clothes, -wet_clothes)
 
 /mob/living/carbon/human/proc/AdjustDirtyClothes(amount)
 	dirty_clothes += amount
@@ -2335,7 +2335,7 @@
 		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "dirty_clothes")
 		return
 
-	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "dirty_clothes", /datum/mood_event/dirty_clothes, -dirty_clothes)
+	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "dirty_clothes", /datum/karmatic_factor/dirty_clothes, -dirty_clothes)
 
 /mob/living/carbon/human/proc/mood_item_equipped(datum/source, obj/item/I, slot)
 	SIGNAL_HANDLER

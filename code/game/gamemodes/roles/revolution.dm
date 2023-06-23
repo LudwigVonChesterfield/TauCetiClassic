@@ -17,7 +17,7 @@
 
 /datum/role/rev/OnPreSetup(greeting, custom)
 	. = ..()
-	SEND_SIGNAL(antag.current, COMSIG_ADD_MOOD_EVENT, "rev_convert", /datum/mood_event/rev)
+	SEND_SIGNAL(antag.current, COMSIG_ADD_MOOD_EVENT, "rev_convert", /datum/karmatic_factor/rev)
 
 /datum/role/rev/RemoveFromRole(datum/mind/M, msg_admins)
 	SEND_SIGNAL(antag.current, COMSIG_CLEAR_MOOD_EVENT, "rev_convert")

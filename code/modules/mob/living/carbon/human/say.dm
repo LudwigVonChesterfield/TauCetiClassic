@@ -29,7 +29,7 @@
 
 		if(SOCIALIZATION_LONELY)
 			social_state = SOCIALIZATION_LONELY
-			SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "no_socialization", /datum/mood_event/lonely)
+			SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "no_socialization", /datum/karmatic_factor/lonely)
 
 			deltimer(conversation_timer)
 			conversation_timer = addtimer(
@@ -40,7 +40,7 @@
 
 		if(SOCIALIZATION_VERY_LONELY)
 			social_state = SOCIALIZATION_VERY_LONELY
-			SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "no_socialization", /datum/mood_event/very_lonely)
+			SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "no_socialization", /datum/karmatic_factor/very_lonely)
 
 /mob/living/carbon/human/proc/handle_prolonged_no_socialization()
 	if(HAS_TRAIT(src, TRAIT_MUTE))

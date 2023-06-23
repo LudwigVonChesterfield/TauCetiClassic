@@ -611,12 +611,12 @@
 					if(mood)
 						if(mood.mood_level >= MOOD_LEVEL_HAPPY2)
 							new /obj/effect/temp_visual/heart(loc)
-							SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/mood_event/besthug, M)
+							SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/karmatic_factor/besthug, M)
 						else if(mood.mood_level >= MOOD_LEVEL_NEUTRAL)
-							SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/mood_event/betterhug, M)
-						SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/mood_event/hug)
+							SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/karmatic_factor/betterhug, M)
+						SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/karmatic_factor/hug)
 				else
-					SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/mood_event/hug)
+					SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "friendly_hug", /datum/karmatic_factor/hug)
 
 			AdjustParalysis(-3)
 			AdjustStunned(-3)

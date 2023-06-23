@@ -148,17 +148,13 @@
 
 	var/faction = "neutral" //Used for checking whether hostile simple animals will attack you, possibly more stuff later
 
-	// Determines how mood affects actionspeed.
+	// Determines how karma affects actionspeed.
+	// If ever used by anything else but karma, please
+	var/karma_multiplicative_actionspeed_modifier = 0.0
+	// Determines how karma affects movespeed.
+	// used only in humans, because karma only is.
 	// If ever used by anything else but mood, please
-	// port /datum/actionspeed_modifier system from /tg.
-	// The value is multiplicative.
-	var/mood_multiplicative_actionspeed_modifier = 0.0
-	// Determines how mood affects movespeed.
-	// used only in humans, because mood only is.
-	// If ever used by anything else but mood, please
-	// port /datum/movespeed_modifier system from /tg.
-	// The value is additive.
-	var/mood_additive_speed_modifier = 0.0
+	var/karma_additive_speed_modifier = 0.0
 
 //The last mob/living/carbon to push/drag/grab this mob (mostly used by slimes friend recognition)
 	var/mob/living/carbon/LAssailant = null

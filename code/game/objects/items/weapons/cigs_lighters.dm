@@ -183,7 +183,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		M.IgniteMob()	//Cigs can ignite mobs splashed with fuel
 	smoketime--
 	smoking_reagents()
-	SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "smoking", /datum/mood_event/smoked)
+	SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "smoking", /datum/karmatic_factor/smoked)
 	if(smoketime < 1)
 		die()
 		return

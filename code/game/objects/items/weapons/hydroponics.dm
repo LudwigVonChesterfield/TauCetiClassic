@@ -169,8 +169,8 @@ var/global/gourd_name = null
 
 	var/bottle_type = /obj/item/weapon/reagent_containers/food/drinks/bottle/gourd
 
-	var/gourd_event = /datum/mood_event/gourd
-	var/unathi_gourd_event = /datum/mood_event/unathi_gourd
+	var/gourd_event = /datum/karmatic_factor/gourd
+	var/unathi_gourd_event = /datum/karmatic_factor/unathi_gourd
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/gourd/atom_init()
 	. = ..()
@@ -193,8 +193,8 @@ var/global/gourd_name = null
 
 	bottle_type = /obj/item/weapon/reagent_containers/food/drinks/bottle/gourd/magic
 
-	gourd_event = /datum/mood_event/magic_gourd
-	unathi_gourd_event = /datum/mood_event/unathi_magic_gourd
+	gourd_event = /datum/karmatic_factor/magic_gourd
+	unathi_gourd_event = /datum/karmatic_factor/unathi_magic_gourd
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/gourd/magic/atom_init()
 	. = ..()
@@ -258,8 +258,8 @@ var/global/gourd_name = null
 	is_glass = FALSE
 	is_transparent = FALSE
 
-	var/gourd_event = /datum/mood_event/gourd
-	var/unathi_gourd_event = /datum/mood_event/unathi_gourd
+	var/gourd_event = /datum/karmatic_factor/gourd
+	var/unathi_gourd_event = /datum/karmatic_factor/unathi_gourd
 
 	var/broken_type = /obj/item/weapon/broken_bottle/gourd
 
@@ -276,8 +276,8 @@ var/global/gourd_name = null
 
 	broken_type = /obj/item/weapon/broken_bottle/gourd/magic
 
-	gourd_event = /datum/mood_event/magic_gourd
-	unathi_gourd_event = /datum/mood_event/unathi_magic_gourd
+	gourd_event = /datum/karmatic_factor/magic_gourd
+	unathi_gourd_event = /datum/karmatic_factor/unathi_magic_gourd
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/gourd/magic/atom_init()
 	. = ..()

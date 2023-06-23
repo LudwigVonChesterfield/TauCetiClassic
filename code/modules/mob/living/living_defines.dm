@@ -72,3 +72,5 @@
 	var/list/spawner_args = null
 
 	COOLDOWN_DECLARE(wc_use_cooldown)
+
+	var/datum/karma/mob_karma

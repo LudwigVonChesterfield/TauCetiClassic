@@ -69,13 +69,13 @@ var/global/cmp_field = "name"
 	else
 		return sorttext(b_name, a_name)
 
-/proc/cmp_abs_mood_asc(datum/mood_event/A, datum/mood_event/B)
+/proc/cmp_abs_mood_asc(datum/karmatic_factor/A, datum/karmatic_factor/B)
 	var/abs_a = abs(A.mood_change)
 	var/abs_b = abs(B.mood_change)
 
 	return abs_a - abs_b
 
-/proc/cmp_abs_mood_dsc(datum/mood_event/A, datum/mood_event/B)
+/proc/cmp_abs_mood_dsc(datum/karmatic_factor/A, datum/karmatic_factor/B)
 	var/abs_a = abs(A.mood_change)
 	var/abs_b = abs(B.mood_change)
 

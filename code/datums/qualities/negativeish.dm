@@ -43,7 +43,7 @@
 	requirement = "Нет."
 
 /datum/quality/negativeish/depression/add_effect(mob/living/carbon/human/H, latespawn)
-	SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "roundstart_depression", /datum/mood_event/depression)
+	SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "roundstart_depression", /datum/karmatic_factor/depression)
 
 
 /datum/quality/negativeish/true_keeper
@@ -65,7 +65,7 @@
 
 /datum/quality/negativeish/true_keeper/proc/on_exit(datum/source, area/A, atom/NewLoc)
 	if(istype(A, /area/station/security))
-		SEND_SIGNAL(source, COMSIG_ADD_MOOD_EVENT, "true_keeper_failure", /datum/mood_event/true_keeper_failure)
+		SEND_SIGNAL(source, COMSIG_ADD_MOOD_EVENT, "true_keeper_failure", /datum/karmatic_factor/true_keeper_failure)
 
 
 /datum/quality/negativeish/rts
@@ -87,7 +87,7 @@
 
 /datum/quality/negativeish/rts/proc/on_exit(datum/source, area/A, atom/NewLoc)
 	if(istype(A, /area/station/bridge))
-		SEND_SIGNAL(source, COMSIG_ADD_MOOD_EVENT, "rts_failure", /datum/mood_event/rts_failure)
+		SEND_SIGNAL(source, COMSIG_ADD_MOOD_EVENT, "rts_failure", /datum/karmatic_factor/rts_failure)
 
 
 /datum/quality/negativeish/soulless

@@ -624,4 +624,4 @@ var/global/list/death_alarm_stealth_areas = list(
 
 	if(world.time > last_examined + 6000)
 		SEND_SIGNAL(imp_in, COMSIG_CLEAR_MOOD_EVENT, "blueshield")
-		SEND_SIGNAL(imp_in, COMSIG_ADD_MOOD_EVENT, "blueshield", /datum/mood_event/blueshield)
+		SEND_SIGNAL(imp_in, COMSIG_ADD_MOOD_EVENT, "blueshield", /datum/karmatic_factor/blueshield)

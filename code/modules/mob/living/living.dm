@@ -1371,7 +1371,7 @@
 				T.add_blood_floor(src)
 			else
 				T.add_vomit_floor(src, getToxLoss() > 0 ? VOMIT_TOXIC : vomit_type)
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "puke", /datum/mood_event/puke)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "puke", /datum/karmatic_factor/puke)
 	return TRUE
 
 /mob/living/get_targetzone()
@@ -1468,11 +1468,11 @@
 		return
 
 	if(drunkenness >= DRUNKENNESS_PASS_OUT)
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/drunk_catharsis)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/karmatic_factor/drunk_catharsis)
 	else if(drunkenness >= DRUNKENNESS_CONFUSED)
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/very_drunk)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/karmatic_factor/very_drunk)
 	else if(drunkenness >= DRUNKENNESS_SLUR)
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/drunk)
+		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/karmatic_factor/drunk)
 
 	if(drowsyness)
 		AdjustDrunkenness(-1)
@@ -1538,7 +1538,7 @@
 		Paralyse(20)
 	if(prob(40))
 		make_dizzy(150)
-	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "scared", /datum/mood_event/scared)
+	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "scared", /datum/karmatic_factor/scared)
 
 /mob/living/carbon/human/trigger_syringe_fear()
 	..()
@@ -1548,3 +1548,13 @@
 		if(BP)
 			BP.take_damage(8, used_weapon = "Syringe") 	//half kithen-knife damage
 			to_chat(src, "<span class='warning'>You got a cut with a syringe.</span>")
+
+/mob/living/proc/add_karmatic_factor(id, type, ...)
+	if(!mob_karma)
+		return
+	mob_karma.add_karmatic_factor(arglist(args))
+
+/mob/living/proc/clear_karmatic_factor(id)
+	if(!mob_karma)
+		return
+	mob_karma.clear_karmatic_factor(id)

@@ -895,7 +895,7 @@
 	M.adjustHalLoss(-1)
 	M.AdjustStunned(-1)
 	M.AdjustWeakened(-1)
-	SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "sauna relax", /datum/mood_event/sauna)
+	M.add_karmatic_factor("sauna relax", /datum/karmatic_factor/sauna)
 
 	playsound(src, 'sound/weapons/sauna_broom.ogg', VOL_EFFECTS_MASTER)
 

@@ -177,7 +177,7 @@
 	requirement = "Нет."
 
 /datum/quality/positiveish/happiness/add_effect(mob/living/carbon/human/H, latespawn)
-	SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "roundstart_happiness", /datum/mood_event/happiness)
+	SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "roundstart_happiness", /datum/karmatic_factor/happiness)
 
 
 /datum/quality/positiveish/polyglot

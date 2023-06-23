@@ -52,7 +52,7 @@
 	if(istype(H))
 		H.fixblood(FALSE) // to add changeling marker
 
-	SEND_SIGNAL(antag.current, COMSIG_ADD_MOOD_EVENT, "changeling", /datum/mood_event/changeling)
+	SEND_SIGNAL(antag.current, COMSIG_ADD_MOOD_EVENT, "changeling", /datum/karmatic_factor/changeling)
 
 /datum/role/changeling/proc/set_changeling_identifications()
 	var/honorific

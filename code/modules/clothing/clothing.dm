@@ -522,7 +522,7 @@ BLIND     // can't see anything
 	..()
 	if(slot == SLOT_W_UNIFORM && fresh_laundered_until > world.time)
 		fresh_laundered_until = world.time
-		SEND_SIGNAL(user, COMSIG_ADD_MOOD_EVENT, "fresh_laundry", /datum/mood_event/fresh_laundry)
+		SEND_SIGNAL(user, COMSIG_ADD_MOOD_EVENT, "fresh_laundry", /datum/karmatic_factor/fresh_laundry)
 
 /obj/item/clothing/under/attackby(obj/item/I, mob/user, params)
 	if(I.sharp && !ishuman(loc)) //you can cut only clothes lying on the floor

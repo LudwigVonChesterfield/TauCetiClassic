@@ -46,7 +46,7 @@
 	equip_common(H)
 	equip_class()
 	H.regenerate_icons()
-	SEND_SIGNAL(antag.current, COMSIG_ADD_MOOD_EVENT, "abductor", /datum/mood_event/abductor)
+	SEND_SIGNAL(antag.current, COMSIG_ADD_MOOD_EVENT, "abductor", /datum/karmatic_factor/abductor)
 	return TRUE
 
 /datum/role/abductor/agent

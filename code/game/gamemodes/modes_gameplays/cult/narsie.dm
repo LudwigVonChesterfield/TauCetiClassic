@@ -36,9 +36,9 @@
 			to_chat(M, "<font size='15' color='red'><b>Н́̿̚Ӓ́̈́Р̔̚͘-̽̔͆С̈́͛͛И̓͊̕ В͒̚͝О̓͒̓С̓̾͑С̔̓͝Т̈́͘̚А͒͑͘Л͐͌̾</b></font>")
 			M.playsound_local(null, pick('sound/hallucinations/im_here1.ogg', 'sound/hallucinations/im_here2.ogg'), VOL_EFFECTS_VOICE_ANNOUNCEMENT, vary = FALSE, frequency = null, ignore_environment = TRUE)
 			if(!iscultist(M))
-				SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "narsie", /datum/mood_event/narsie)
+				SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "narsie", /datum/karmatic_factor/narsie)
 			else
-				SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "narsie", /datum/mood_event/narsie_cultists)
+				SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "narsie", /datum/karmatic_factor/narsie_cultists)
 
 	var/area/A = get_area(src)
 	if(A)
