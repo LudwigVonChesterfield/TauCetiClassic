@@ -5,11 +5,17 @@
 	anchored = TRUE
 	density = FALSE
 
-/obj/effect/falling_effect/atom_init(mapload, type, atom/movable/object)
+	var/fall_duration = 7
+
+/obj/effect/falling_effect/atom_init(mapload, type, atom/movable/object, fall_duration)
 	..()
+
+	if(!isnull(fall_duration))
+		src.fall_duration = fall_duration
+
 	if(object)
 		object.loc = src
-	else 
+	else
 		if(!type)
 			type = /obj/random/scrap/moderate_weighted
 		new type(src)
@@ -27,8 +33,8 @@
 	dropped.pixel_y = 500 //when you think that pixel_z is height but you are wrong
 	dropped.density = FALSE
 	dropped.opacity = 0
-	animate(dropped, pixel_y = initial_y, pixel_x = initial_x , time = 7)
-	addtimer(CALLBACK(dropped, TYPE_PROC_REF(/atom/movable, end_fall)), 7)
+	animate(dropped, pixel_y = initial_y, pixel_x = initial_x , time = src.fall_duration)
+	addtimer(CALLBACK(dropped, TYPE_PROC_REF(/atom/movable, end_fall)), src.fall_duration)
 	qdel(src)
 
 /atom/movable/proc/end_fall()
