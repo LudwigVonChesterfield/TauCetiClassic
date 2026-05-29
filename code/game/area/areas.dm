@@ -381,7 +381,7 @@ var/global/list/ghostteleportlocs = list()
 	if(surplus >= amount)
 		return TRUE
 
-	if(apc && apc.cell * CELLRATE >= amount)
+	if(apc && apc.cell / CELLRATE >= amount)
 		return TRUE
 
 	return FALSE
