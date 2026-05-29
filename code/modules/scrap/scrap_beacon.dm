@@ -33,6 +33,7 @@
 	var/active = FALSE
 
 	var/calibrations_required = 5
+	var/max_calibrations_required = 5
 
 	var/last_activation = 0
 	var/safe_deactivation_cooldown = SCRAPFALL_COOLDOWN_SECONDS * SCRAPFALLS_PER_DEFAULT_APC_CELL
@@ -158,7 +159,7 @@
 	else
 		var/unsafe_activation_coeff = 1.0 - (world.time - last_activation) / safe_deactivation_cooldown
 		if(unsafe_activation_coeff > 0.0)
-			calibrations_required = ceil(unsafe_activation_coeff * 5)
+			calibrations_required = ceil(unsafe_activation_coeff * max_calibrations_required)
 			if(prob(unsafe_activation_coeff * 10.0))
 				crit_fail = TRUE
 				playsound(
