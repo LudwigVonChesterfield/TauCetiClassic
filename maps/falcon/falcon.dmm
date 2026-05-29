@@ -2861,7 +2861,7 @@
 /turf/simulated/floor/airless/ceiling,
 /area/station/cargo/recycler)
 "aeR" = (
-/obj/structure/scrap_beacon,
+/obj/machinery/scrap_beacon,
 /turf/simulated/floor/airless/ceiling,
 /area/station/cargo/recycler)
 "aeS" = (

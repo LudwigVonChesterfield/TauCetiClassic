@@ -2147,7 +2147,7 @@
 /turf/simulated/floor,
 /area/station/cargo/recycler)
 "dM" = (
-/obj/structure/scrap_beacon,
+/obj/machinery/scrap_beacon,
 /turf/simulated/floor,
 /area/station/cargo/recycler)
 "dN" = (

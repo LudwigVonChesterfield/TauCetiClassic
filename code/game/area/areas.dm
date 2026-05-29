@@ -371,6 +371,21 @@ var/global/list/ghostteleportlocs = list()
 	if (fire || eject || party)
 		updateicon()
 
+/area/proc/has_power(chan, amount)
+	if(!requires_power)
+		return TRUE
+	if(always_unpowered)
+		return FALSE
+
+	var/surplus = powered(chan) - usage(chan)
+	if(surplus >= amount)
+		return TRUE
+
+	if(apc && apc.cell * CELLRATE >= amount)
+		return TRUE
+
+	return FALSE
+
 /area/proc/usage(chan)
 	var/used = 0
 	switch(chan)

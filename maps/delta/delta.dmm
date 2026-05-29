@@ -86996,7 +86996,7 @@
 /turf/simulated/floor/wood,
 /area/station/civilian/barbershop)
 "rqZ" = (
-/obj/structure/scrap_beacon,
+/obj/machinery/scrap_beacon,
 /turf/simulated/floor/airless/ceiling,
 /area/station/cargo/recycler)
 "rrj" = (

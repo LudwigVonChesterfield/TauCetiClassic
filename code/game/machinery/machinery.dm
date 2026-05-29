@@ -177,6 +177,14 @@ Class Procs:
 	dropContents()
 	return ..()
 
+/obj/machinery/proc/start_processing()
+	if (speed_process)
+		START_PROCESSING(SSfastprocess, src)
+	else if (process_last)
+		START_PROCESSING_NAMED(SSmachines, src, processing_second)
+	else
+		START_PROCESSING(SSmachines, src)
+
 /obj/machinery/proc/stop_processing()
 	if (speed_process)
 		STOP_PROCESSING(SSfastprocess, src)

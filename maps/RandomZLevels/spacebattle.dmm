@@ -7147,7 +7147,7 @@
 /turf/unsimulated/floor/carpet/red,
 /area/awaymission/spacebattle/secret)
 "sj" = (
-/obj/structure/scrap_beacon,
+/obj/machinery/scrap_beacon,
 /turf/simulated/floor/airless/ceiling,
 /area/awaymission/spacebattle/secret)
 "sk" = (

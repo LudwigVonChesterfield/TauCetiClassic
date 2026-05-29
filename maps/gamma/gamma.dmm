@@ -79270,7 +79270,7 @@
 /turf/environment/space,
 /area/shuttle/supply/station)
 "oQt" = (
-/obj/structure/scrap_beacon,
+/obj/machinery/scrap_beacon,
 /turf/simulated/floor/airless/ceiling,
 /area/station/cargo/recycler)
 "oQF" = (
